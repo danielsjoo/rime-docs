@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rime — A new way to publish data narratives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    /* Slate Mono + Electric */
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --accent: #0891b2;
+    --accent-bright: #06b6d4;
+    --accent-soft: #cffafe;
+    --accent-dark: #164e63;
+    --ink: #0a0e13;
+    --ink-soft: #4a5568;
+    --ink-muted: #718096;
+    --hairline: #e2e8f0;
+    --hairline-strong: #cbd5e0;
+    --code-bg: #0a0e13;
+    --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- nav --- */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 56px;
+    max-width: 1240px; margin: 0 auto;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav img { height: 30px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--ink); color: var(--bg) !important;
+    padding: 7px 14px; border-radius: 6px; font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* --- HERO --- */
+  .hero {
+    max-width: 1240px; margin: 0 auto;
+    padding: 64px 56px 80px;
+    text-align: left;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: inline-block;
+    width: 8px; height: 8px; background: var(--accent-bright); border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  .hero h1 {
+    font-size: 76px; font-weight: 700; letter-spacing: -3px;
+    line-height: 1.02; color: var(--ink);
+    margin: 0 0 28px; max-width: 920px;
+  }
+  .hero h1 em {
+    font-style: normal; font-weight: 700;
+    color: var(--accent);
+    background: linear-gradient(180deg, transparent 65%, var(--accent-soft) 65%);
+    padding: 0 2px;
+  }
+  .hero-lead {
+    font-size: 22px; line-height: 1.5; color: var(--ink-soft);
+    max-width: 720px; margin: 0 0 36px;
+  }
+  .hero-illustration {
+    width: 100%; max-width: 1100px;
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--hairline); background: white;
+    margin-top: 24px;
+  }
+  .hero-illustration img { display: block; width: 100%; height: auto; }
+
+  /* --- body content (single column, editorial) --- */
+  .content {
+    max-width: 720px; margin: 0 auto;
+    padding: 80px 32px 96px;
+  }
+  .content h2 {
+    font-size: 36px; font-weight: 700; letter-spacing: -1px;
+    color: var(--ink); margin: 64px 0 16px;
+    line-height: 1.15;
+  }
+  .content h2:first-of-type { margin-top: 0; }
+  .content p {
+    font-size: 17.5px; color: var(--ink); margin: 0 0 18px;
+    line-height: 1.65;
+  }
+  .content p.lede {
+    font-size: 21px; line-height: 1.55;
+    color: var(--ink-soft); font-weight: 400;
+  }
+  .content em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .content code {
+    background: var(--surface); border: 1px solid var(--hairline);
+    border-radius: 4px;
+    padding: 1px 6px; font-size: 0.88em;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    color: var(--accent-dark);
+  }
+  .content a {
+    color: var(--accent); text-decoration: underline;
+    text-decoration-color: var(--accent-soft); text-underline-offset: 3px;
+  }
+  .content a:hover { text-decoration-color: var(--accent); }
+
+  /* --- pull quote --- */
+  .pull {
+    border-left: 3px solid var(--accent-bright);
+    padding: 4px 0 4px 24px;
+    margin: 32px 0;
+    font-size: 19px; line-height: 1.55;
+    color: var(--ink); font-weight: 500;
+  }
+
+  /* --- code block --- */
+  pre.code {
+    background: var(--code-bg); color: var(--code-ink);
+    border-radius: 10px; padding: 22px 26px;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 13.5px; line-height: 1.7;
+    overflow-x: auto;
+    margin: 28px 0;
+    border: 1px solid var(--ink);
+    position: relative;
+  }
+  pre.code::before {
+    content: 'yaml';
+    position: absolute; top: 10px; right: 14px;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--ink-muted); text-transform: uppercase;
+  }
+  pre.code .k { color: #67e8f9; }
+  pre.code .s { color: #e2e8f0; }
+  pre.code .c { color: #718096; font-style: italic; }
+
+  /* --- language strip --- */
+  .lang-strip {
+    display: flex; gap: 8px; margin: 24px 0 32px;
+    flex-wrap: wrap;
+  }
+  .lang-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--surface); border: 1px solid var(--hairline);
+    color: var(--ink); font-size: 13px; font-weight: 500;
+    padding: 6px 12px; border-radius: 6px;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+  }
+  .lang-pill::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .lang-pill.sql::before    { background: #f59e0b; }
+  .lang-pill.py::before     { background: #3b82f6; }
+  .lang-pill.r::before      { background: #06b6d4; }
+  .lang-pill.js::before     { background: #eab308; }
+
+  /* --- CTA banner --- */
+  .cta-banner {
+    max-width: 1080px; margin: 32px auto;
+    background: var(--ink); color: var(--bg);
+    border-radius: 16px;
+    padding: 56px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-banner::after {
+    content: ''; position: absolute;
+    top: -50%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+    opacity: 0.25;
+  }
+  .cta-banner > * { position: relative; z-index: 1; }
+  .cta-banner h3 { font-size: 28px; margin: 0 0 8px; font-weight: 700; letter-spacing: -0.5px; }
+  .cta-banner p { font-size: 16px; opacity: 0.7; margin: 0; }
+  .cta-btn {
+    background: var(--accent-bright); color: var(--ink);
+    padding: 14px 28px; border-radius: 8px;
+    text-decoration: none; font-weight: 700; font-size: 15px;
+    white-space: nowrap;
+    transition: background .15s;
+  }
+  .cta-btn:hover { background: #67e8f9; }
+
+  footer {
+    max-width: 1240px; margin: 0 auto;
+    padding: 48px 56px;
+    font-size: 13.5px; color: var(--ink-muted);
+    border-top: 1px solid var(--hairline);
+    display: flex; justify-content: space-between;
+  }
+  footer a { color: var(--ink-muted); text-decoration: none; margin-left: 22px; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 800px) {
+    .nav, .hero, footer { padding-left: 24px; padding-right: 24px; }
+    .hero h1 { font-size: 44px; }
+    .hero-lead { font-size: 18px; }
+    .content { padding-left: 24px; padding-right: 24px; }
+    .content h2 { font-size: 28px; }
+    .cta-banner { padding: 32px; flex-direction: column; text-align: center; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <img src="../wordmarks/wordmark-02-frosted-i.svg" alt="Rime"/>
+    <div class="nav-links">
+      <a href="#">Docs</a>
+      <a href="#">Examples</a>
+      <a href="#">Editor</a>
+      <a href="#">GitHub</a>
+      <a href="#" class="nav-cta">Install →</a>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <header class="hero">
+    <div class="hero-eyebrow">RIME · v0.1 · Apache 2.0</div>
+    <h1>Author data narratives <em>the way you actually think about them.</em></h1>
+    <p class="hero-lead">SQL fetches your data. Python embeds it. R fits a model. JavaScript renders the chart.
+      Rime threads all four into one reproducible pipeline — and publishes the story as HTML.</p>
+    <div class="lang-strip">
+      <span class="lang-pill sql">SQL</span>
+      <span class="lang-pill py">Python</span>
+      <span class="lang-pill r">R</span>
+      <span class="lang-pill js">JavaScript</span>
+    </div>
+    <div class="hero-illustration">
+      <img src="../heroes/hero-01-dag-frost.svg" alt="A Rime DAG: sources → transforms → t-test → narrative.html"/>
+    </div>
+  </header>
+
+  <!-- editorial body -->
+  <main class="content">
+
+    <p class="lede">Researchers and data journalists shouldn't have to pick a single language
+      for every step of an analysis. Rime is a small, opinionated tool that lets you write
+      each step in whatever language fits — SQL for the warehouse pull, Python for the math,
+      R for the model, JavaScript for the fetch — and run them as one cached, deterministic
+      pipeline.</p>
+
+    <h2>The pipeline is the document.</h2>
+
+    <p>A Rime project is a single <code>pipeline.dag.yaml</code> file. Each node is a small
+      named step — a SQL query, a Python script, an R model, a t-test, a chart. Edges connect
+      a step's named outputs to the next step's named inputs. When you <code>rime run</code> it,
+      every step executes once, dataframes flow over Arrow IPC, and a single
+      <code>narrative.html</code> is rendered at the end.</p>
+
+    <pre class="code"><span class="c"># pipeline.dag.yaml</span>
+<span class="k">version:</span> <span class="s">'2.1'</span>
+<span class="k">nodes:</span>
+  <span class="k">cars:</span>
+    <span class="k">kind:</span> sql_source
+    <span class="k">source:</span> <span class="s">queries/cars.sql</span>
+  <span class="k">embed:</span>
+    <span class="k">kind:</span> python_script
+    <span class="k">source:</span> <span class="s">scripts/umap.py</span>
+    <span class="k">in:</span> { table: cars }
+  <span class="k">trends:</span>
+    <span class="k">kind:</span> r_script
+    <span class="k">source:</span> <span class="s">scripts/efficiency.R</span>
+    <span class="k">in:</span> { features: embed }
+  <span class="k">test:</span>
+    <span class="k">kind:</span> t_test
+    <span class="k">in:</span> { x: cars.us_mpg, y: cars.japan_mpg }</pre>
+
+    <h2>Why not a notebook?</h2>
+
+    <p>Notebooks invite hidden state and forgotten reruns. A Rime DAG declares its own
+      dependencies — change one node and only the affected downstream rebuilds. The cache
+      key is the content of the script + the inputs. Run it on your laptop today, on CI tomorrow,
+      and the same hash means the same artifact.</p>
+
+    <div class="pull">"The pipeline is the document. The cache is the proof."</div>
+
+    <h2>Why not Snakemake?</h2>
+
+    <p>If you do bioinformatics on Snakemake or Nextflow, keep doing that — they're mature and
+      you have nf-core's library of recipes. Rime is for a different audience: data journalists,
+      social scientists, researchers shipping a study or a blog post. Dataframes instead of
+      file paths. YAML instead of a Python DSL. A visual editor instead of vim. Statistical
+      nodes built in.</p>
+
+    <h2>And the editor?</h2>
+
+    <p>Rime Editor is a desktop app for drag-and-drop authoring of the same DAG. Live
+      validation. Inline data preview. A code editor for the script nodes. It opens the same
+      <code>pipeline.dag.yaml</code> file that the CLI runs — no lock-in, no proprietary
+      format. <a href="#">Download for macOS / Windows / Linux →</a></p>
+
+  </main>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div>
+      <h3>Get started in 90 seconds.</h3>
+      <p>Install via brew or curl. No Node required for the CLI.</p>
+    </div>
+    <a class="cta-btn" href="#">Read the quick start →</a>
+  </section>
+
+  <footer>
+    <span>Rime · Apache 2.0 · 2026</span>
+    <span>
+      <a href="#">Docs</a>
+      <a href="#">GitHub</a>
+      <a href="#">Editor</a>
+      <a href="#">Roadmap</a>
+    </span>
+  </footer>
+
+</body>
+</html>

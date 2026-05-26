@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Rime — isometric pipeline hero">
+  <defs>
+    <!-- background gradient -->
+    <linearGradient id="bg2" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fafcfe"/>
+      <stop offset="100%" stop-color="#eef3f8"/>
+    </linearGradient>
+
+    <!-- iso face fills — three depth tones -->
+    <linearGradient id="face-front" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8eff5"/>
+    </linearGradient>
+    <linearGradient id="face-top" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#d4e7f5"/>
+      <stop offset="100%" stop-color="#bcd6ea"/>
+    </linearGradient>
+
+    <!-- accent lane top (frost blue) -->
+    <linearGradient id="lane-accent" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#5fa4d3"/>
+      <stop offset="100%" stop-color="#2b7cb8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg2)"/>
+
+  <!-- ============================================================
+       Iso geometry helpers:
+       30° isometric. x-axis goes (+1, +tan(30°)/2 ≈ +0.289)
+                       y-axis (along depth) goes (-1, +0.289) inverted
+                       z (up) goes straight up
+       To keep this tractable we hand-place coordinates.
+
+       Each "lane" is a flat parallelogram:
+         front edge: a long bottom rectangle (slightly skewed)
+         top face : parallelogram on top
+         left face: thin parallelogram on the left
+       ============================================================ -->
+
+  <!-- ground shadows (very faint) -->
+  <g fill="#0a3d5f" opacity="0.04">
+    <polygon points="220,790 1380,790 1430,820 270,820"/>
+  </g>
+
+  <!-- ============================================================
+       LANE 4 (bottom): OUTPUT — html.narrative  (drawn first, furthest back visually)
+       ============================================================ -->
+  <g transform="translate(0,640)">
+    <!-- left depth face -->
+    <polygon points="240,40 260,28 260,76 240,88" fill="#0a3d5f"/>
+    <!-- front face -->
+    <polygon points="240,40 1280,40 1280,88 240,88" fill="#0a3d5f"/>
+    <!-- top face -->
+    <polygon points="260,28 1300,28 1280,40 240,40" fill="url(#face-top)"/>
+    <!-- label -->
+    <text x="280" y="72" font-family="Inter Tight, system-ui, sans-serif" font-size="22" font-weight="700" fill="#ffffff">narrative.html</text>
+    <text x="1130" y="22" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#0a3d5f">REPORT</text>
+    <!-- tiny doc lines on the report -->
+    <g stroke="#d4e7f5" stroke-width="2" opacity="0.6" stroke-linecap="round">
+      <line x1="560" y1="60" x2="700" y2="60"/>
+      <line x1="720" y1="60" x2="820" y2="60"/>
+      <line x1="560" y1="74" x2="780" y2="74"/>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       LANE 3: R  efficiency_trends
+       ============================================================ -->
+  <g transform="translate(0,510)">
+    <polygon points="240,40 260,28 260,76 240,88" fill="#3c6f95"/>
+    <polygon points="240,40 1100,40 1100,88 240,88" fill="url(#face-front)"/>
+    <polygon points="260,28 1120,28 1100,40 240,40" fill="url(#face-top)"/>
+    <!-- block tiles sliding right -->
+    <g>
+      <rect x="290" y="48" width="220" height="32" rx="4" fill="#2b7cb8"/>
+      <text x="306" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">efficiency_trends.R</text>
+      <rect x="540" y="48" width="160" height="32" rx="4" fill="#d4e7f5"/>
+      <text x="554" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#0a3d5f">lm() · gam()</text>
+      <rect x="730" y="48" width="140" height="32" rx="4" fill="#ffffff" stroke="#2b7cb8" stroke-width="1"/>
+      <text x="744" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#2b7cb8">trends.parquet</text>
+    </g>
+    <text x="950" y="22" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#0a3d5f">R</text>
+  </g>
+
+  <!-- ============================================================
+       LANE 2: PYTHON  umap_embed
+       ============================================================ -->
+  <g transform="translate(0,380)">
+    <polygon points="240,40 260,28 260,76 240,88" fill="#3c6f95"/>
+    <polygon points="240,40 1100,40 1100,88 240,88" fill="url(#face-front)"/>
+    <polygon points="260,28 1120,28 1100,40 240,40" fill="url(#face-top)"/>
+    <!-- block tiles -->
+    <g>
+      <rect x="290" y="48" width="220" height="32" rx="4" fill="#2b7cb8"/>
+      <text x="306" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">umap_embed.py</text>
+      <rect x="540" y="48" width="160" height="32" rx="4" fill="#d4e7f5"/>
+      <text x="554" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#0a3d5f">UMAP · numpy</text>
+      <rect x="730" y="48" width="160" height="32" rx="4" fill="#ffffff" stroke="#2b7cb8" stroke-width="1"/>
+      <text x="744" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#2b7cb8">embeddings.parquet</text>
+    </g>
+    <text x="950" y="22" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#0a3d5f">PYTHON</text>
+  </g>
+
+  <!-- ============================================================
+       LANE 1 (top, most accented): SQL  cars_source
+       ============================================================ -->
+  <g transform="translate(0,250)">
+    <polygon points="240,40 260,28 260,76 240,88" fill="#0a3d5f"/>
+    <polygon points="240,40 1100,40 1100,88 240,88" fill="url(#face-front)"/>
+    <polygon points="260,28 1120,28 1100,40 240,40" fill="url(#lane-accent)"/>
+    <!-- block tiles -->
+    <g>
+      <rect x="290" y="48" width="220" height="32" rx="4" fill="#0a3d5f"/>
+      <text x="306" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">cars_source.sql</text>
+      <rect x="540" y="48" width="160" height="32" rx="4" fill="#d4e7f5"/>
+      <text x="554" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#0a3d5f">duckdb · arrow</text>
+      <rect x="730" y="48" width="140" height="32" rx="4" fill="#ffffff" stroke="#2b7cb8" stroke-width="1"/>
+      <text x="744" y="68" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="600" fill="#2b7cb8">cars.parquet</text>
+    </g>
+    <text x="950" y="22" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#0a3d5f">SQL</text>
+  </g>
+
+  <!-- ============================================================
+       Vertical connector ribbons between lanes (right side)
+       suggests data piping from one lane to the next
+       ============================================================ -->
+  <g stroke="#2b7cb8" stroke-width="3" fill="none" opacity="0.55" stroke-linecap="round">
+    <path d="M 1080,320 C 1130,360 1130,400 1080,440"/>
+    <path d="M 1080,450 C 1130,490 1130,530 1080,570"/>
+    <path d="M 1080,580 C 1170,620 1230,650 1280,680"/>
+  </g>
+
+  <!-- arrowheads on the ribbons -->
+  <g fill="#2b7cb8" opacity="0.7">
+    <polygon points="1080,440 1075,432 1085,432"/>
+    <polygon points="1080,570 1075,562 1085,562"/>
+    <polygon points="1280,680 1272,672 1282,675"/>
+  </g>
+
+  <!-- ============================================================
+       Wordmark + tagline (top-left)
+       ============================================================ -->
+  <g transform="translate(80,80)">
+    <text font-family="Inter Tight, system-ui, sans-serif" font-size="56" font-weight="700" letter-spacing="-2" fill="#0a3d5f">rime</text>
+    <text y="36" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500" letter-spacing="2" fill="#2b7cb8">POLYGLOT · REPRODUCIBLE · PUBLISHED</text>
+  </g>
+
+  <!-- caption (bottom-right) -->
+  <text x="1500" y="850" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="500" fill="#0a3d5f" opacity="0.55">one pipeline · four languages · one report</text>
+</svg>

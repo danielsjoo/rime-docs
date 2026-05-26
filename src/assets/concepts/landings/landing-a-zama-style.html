@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rime — Polyglot data pipelines and reproducible narratives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #fafcfe;
+    --surface: #ffffff;
+    --accent: #2b7cb8;
+    --accent-dim: #d4e7f5;
+    --dark: #0a3d5f;
+    --text: #1c2a36;
+    --muted: #5a6c7c;
+    --hairline: #e3ecf3;
+    --code-bg: #f1f6fa;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- top nav --- */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 48px;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface);
+  }
+  .nav img { height: 32px; display: block; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a { color: var(--text); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--dark); color: white !important; padding: 8px 16px;
+    border-radius: 6px; font-weight: 600;
+  }
+
+  /* --- hero --- */
+  .hero {
+    text-align: center;
+    padding: 96px 48px 80px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 2.4px;
+    color: var(--accent); text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: 64px; line-height: 1.05; font-weight: 700;
+    letter-spacing: -2px; color: var(--dark);
+    margin: 16px auto 20px; max-width: 900px;
+  }
+  .hero p {
+    font-size: 21px; color: var(--muted); max-width: 720px; margin: 0 auto 36px;
+    line-height: 1.5;
+  }
+  .hero-ctas { display: inline-flex; gap: 12px; }
+  .btn-primary, .btn-secondary {
+    padding: 13px 26px; border-radius: 8px; font-weight: 600; font-size: 15px;
+    text-decoration: none; border: 1px solid transparent;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary { background: var(--dark); color: white; }
+  .btn-primary:hover { background: #07304a; }
+  .btn-secondary { background: white; color: var(--dark); border-color: var(--hairline); }
+  .btn-secondary:hover { border-color: var(--dark); }
+
+  /* --- section block --- */
+  .section { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 2.4px;
+    color: var(--accent); text-transform: uppercase; text-align: center;
+    margin-bottom: 12px;
+  }
+  .section h2 {
+    text-align: center; font-size: 36px; font-weight: 700;
+    letter-spacing: -1px; color: var(--dark);
+    margin: 0 auto 56px; max-width: 700px;
+  }
+
+  /* --- card grid (3 across) --- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color .15s, transform .15s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-dim);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-weight: 700; font-size: 16px;
+    margin-bottom: 18px;
+  }
+  .card h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin: 0 0 6px; }
+  .card p { color: var(--muted); margin: 0; font-size: 14.5px; line-height: 1.55; }
+
+  /* --- example gallery --- */
+  .examples { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .example {
+    background: var(--code-bg); border-radius: 10px; padding: 20px;
+    border: 1px solid transparent;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s;
+  }
+  .example:hover { border-color: var(--accent); }
+  .example-tag {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px;
+    color: var(--accent); text-transform: uppercase;
+  }
+  .example h4 { font-size: 15px; font-weight: 600; color: var(--dark); margin: 6px 0; }
+  .example p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  /* --- code block --- */
+  .code {
+    background: var(--code-bg); border-radius: 10px; padding: 20px 22px;
+    font-family: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+    font-size: 13.5px; line-height: 1.65; color: var(--dark);
+    max-width: 720px; margin: 32px auto 0;
+    text-align: left;
+    border: 1px solid var(--hairline);
+  }
+  .code .prompt { color: var(--accent); }
+  .code .comment { color: var(--muted); font-style: italic; }
+
+  /* --- footer --- */
+  footer {
+    border-top: 1px solid var(--hairline);
+    padding: 48px;
+    font-size: 13.5px; color: var(--muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer a { color: var(--muted); text-decoration: none; margin-left: 24px; }
+  footer a:hover { color: var(--accent); }
+
+  /* --- responsive --- */
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 40px; }
+    .hero p { font-size: 17px; }
+    .nav { padding: 16px 20px; }
+    .nav-links { gap: 16px; }
+    .section { padding: 56px 20px; }
+    .cards, .examples { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- nav -->
+  <nav class="nav">
+    <img src="../wordmarks/wordmark-01-minimal.svg" alt="Rime"/>
+    <div class="nav-links">
+      <a href="#">Docs</a>
+      <a href="#">Examples</a>
+      <a href="#">Editor</a>
+      <a href="#">GitHub</a>
+      <a href="#" class="nav-cta">Install</a>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <header class="hero">
+    <div class="hero-eyebrow">Open-source · Apache 2.0</div>
+    <h1>Polyglot data pipelines<br/>and reproducible narratives.</h1>
+    <p>Author DAGs of SQL, Python, R, and JavaScript transforms. Render publishable HTML reports.
+      One pipeline, four languages, one story.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#">Get started →</a>
+      <a class="btn-secondary" href="#">View on GitHub</a>
+    </div>
+    <pre class="code"><span class="comment"># install (no Node required)</span>
+<span class="prompt">$</span> brew install rimekit/tap/rime
+
+<span class="comment"># run a pipeline</span>
+<span class="prompt">$</span> rime run pipeline.dag.yaml</pre>
+  </header>
+
+  <!-- get started cards -->
+  <section class="section">
+    <div class="section-label">Get started</div>
+    <h2>Three ways in.</h2>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="card-icon">?</div>
+        <h3>What is Rime?</h3>
+        <p>The two-minute pitch. Where Rime fits between Snakemake and Quarto, and what it's for.</p>
+      </a>
+      <a class="card" href="#">
+        <div class="card-icon">↓</div>
+        <h3>Install</h3>
+        <p>One brew command, one curl, or one npm install. Plus Python/R if you want script nodes.</p>
+      </a>
+      <a class="card" href="#">
+        <div class="card-icon">→</div>
+        <h3>Quick start</h3>
+        <p>Author your first DAG in 10 minutes. SQL → Python → R → HTML report end to end.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- build with rime -->
+  <section class="section" style="border-top: 1px solid var(--hairline);">
+    <div class="section-label">Build with Rime</div>
+    <h2>Concepts, CLI, and the Editor.</h2>
+    <div class="cards">
+      <a class="card" href="#">
+        <div class="card-icon">◇</div>
+        <h3>Concepts</h3>
+        <p>DAG specification, node kinds, polyglot runtime, dataframes as the wire format, caching.</p>
+      </a>
+      <a class="card" href="#">
+        <div class="card-icon">▸</div>
+        <h3>CLI</h3>
+        <p><code>rime validate</code>, <code>rime run</code>. Pure command-line — fits any editor or CI.</p>
+      </a>
+      <a class="card" href="#">
+        <div class="card-icon">▣</div>
+        <h3>Rime Editor</h3>
+        <p>Visual DAG authoring desktop app. Drag-drop nodes, live validation, integrated script editor.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- examples gallery -->
+  <section class="section" style="border-top: 1px solid var(--hairline);">
+    <div class="section-label">Examples</div>
+    <h2>Real pipelines you can clone today.</h2>
+    <div class="examples">
+      <a class="example" href="#">
+        <div class="example-tag">Narrative</div>
+        <h4>Cars × CO₂ emissions</h4>
+        <p>SQL source + JS API fetch + Python UMAP + R regression → HTML report.</p>
+      </a>
+      <a class="example" href="#">
+        <div class="example-tag">Tutorial</div>
+        <h4>Penguin classifier</h4>
+        <p>Single-file teaching pipeline. Pivot, derive, t-test, plot.</p>
+      </a>
+      <a class="example" href="#">
+        <div class="example-tag">Headless</div>
+        <h4>Embed in Node</h4>
+        <p>Use <code>@rimekit/runtime</code> programmatically from any Node script.</p>
+      </a>
+      <a class="example" href="#">
+        <div class="example-tag">SQL-only</div>
+        <h4>DuckDB single source</h4>
+        <p>Minimal SQL-only pipeline. Good for ad-hoc warehouse reports.</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Rime · Apache 2.0 · 2026</span>
+    <span>
+      <a href="#">Docs</a>
+      <a href="#">GitHub</a>
+      <a href="#">Discord</a>
+      <a href="#">Roadmap</a>
+    </span>
+  </footer>
+
+</body>
+</html>

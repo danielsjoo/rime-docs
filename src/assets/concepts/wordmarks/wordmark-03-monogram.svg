@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80" role="img" aria-label="rime — monogram + wordmark">
+  <rect width="240" height="80" fill="#ffffff"/>
+
+  <!-- hexagonal monogram mark on the left, standalone-favicon friendly -->
+  <g transform="translate(8, 8)">
+    <!-- regular hexagon, 64x64 bounding box -->
+    <polygon points="32,0  60,16  60,48  32,64  4,48  4,16"
+             fill="#2b7cb8" stroke="#0a3d5f" stroke-width="1.5"/>
+    <!-- uppercase R inside -->
+    <text x="32" y="46" text-anchor="middle"
+          font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif"
+          font-weight="700"
+          font-size="38"
+          fill="#ffffff">R</text>
+  </g>
+
+  <!-- wordmark to the right -->
+  <text x="92" y="54"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif"
+        font-weight="600"
+        font-size="44"
+        letter-spacing="-1"
+        fill="#0a3d5f">rime</text>
+</svg>

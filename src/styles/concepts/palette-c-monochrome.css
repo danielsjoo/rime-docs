@@ -1,0 +1,38 @@
+/* Palette C — Monochrome editorial.
+ * Slate scale only (no blue), with a single muted desaturated-teal accent.
+ * Subtle, editorial — closest to NYT / Bloomberg DV aesthetic.
+ */
+:root {
+  /* Accent — desaturated teal so links are obvious but not "tech blue" */
+  --sl-color-accent-low: #d8e4e3;
+  --sl-color-accent: #4a7c7e;
+  --sl-color-accent-high: #20393a;
+
+  /* Background system — clean off-white, no warmth */
+  --sl-color-bg: #fcfcfb;
+  --sl-color-bg-sidebar: #f4f4f3;
+  --sl-color-bg-nav: #f4f4f3;
+  --sl-color-bg-inline-code: #ececea;
+
+  /* Text + gray scale — pure slate */
+  --sl-color-text: #1c1f22;
+  --sl-color-text-accent: #20393a;
+  --sl-color-gray-1: #34383d;
+  --sl-color-gray-2: #5a6068;
+  --sl-color-gray-3: #7d848d;
+  --sl-color-gray-4: #b3b8be;
+
+  --sl-color-hairline: #e0e0dd;
+  --sl-color-hairline-shade: #c8c8c5;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #20393a;
+  --sl-color-accent: #6e9c9e;
+  --sl-color-accent-high: #d8e4e3;
+
+  --sl-color-bg: #16181a;
+  --sl-color-bg-sidebar: #1d1f22;
+  --sl-color-text: #e5e7ea;
+  --sl-color-text-accent: #d8e4e3;
+}

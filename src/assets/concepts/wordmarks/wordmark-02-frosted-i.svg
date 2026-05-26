@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80" role="img" aria-label="rime — frosted i variant">
+  <rect width="240" height="80" fill="#ffffff"/>
+  <defs>
+    <linearGradient id="frost" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d4e7f5"/>
+      <stop offset="100%" stop-color="#2b7cb8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- "r" -->
+  <text x="34" y="58"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif"
+        font-weight="600"
+        font-size="56"
+        letter-spacing="-2"
+        fill="#0a3d5f">r</text>
+
+  <!-- "i" stem (we draw it as a rect so we can replace the dot with crystalline shapes) -->
+  <rect x="79" y="30" width="9" height="32" rx="1" fill="#0a3d5f"/>
+
+  <!-- crystalline replacement for the "i" dot — three icicle-like spikes -->
+  <polygon points="83.5,4  78,20  89,20" fill="url(#frost)" stroke="#0a3d5f" stroke-width="0.7"/>
+  <polygon points="77,12  74,22  81,22" fill="#d4e7f5" stroke="#0a3d5f" stroke-width="0.5"/>
+  <polygon points="90,12  87,22  94,22" fill="#d4e7f5" stroke="#0a3d5f" stroke-width="0.5"/>
+
+  <!-- "m" -->
+  <text x="100" y="58"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif"
+        font-weight="600"
+        font-size="56"
+        letter-spacing="-2"
+        fill="#0a3d5f">m</text>
+
+  <!-- "e" -->
+  <text x="162" y="58"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif"
+        font-weight="600"
+        font-size="56"
+        letter-spacing="-2"
+        fill="#0a3d5f">e</text>
+</svg>
