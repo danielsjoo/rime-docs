@@ -15,6 +15,10 @@ export default defineConfig({
       },
       favicon: './src/assets/favicon.svg',
       customCss: ['./src/styles/custom.css'],
+      // Top-bar nav (Docs / Editor / Examples) is rendered by SiteTitle override.
+      components: {
+        SiteTitle: './src/components/SiteTitle.astro',
+      },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/danielsjoo/rime' },
       ],
@@ -38,7 +42,16 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Node Reference',
+          label: 'Script nodes (per language)',
+          items: [
+            { label: 'Python', slug: 'scripts/python' },
+            { label: 'R', slug: 'scripts/r' },
+            { label: 'JavaScript', slug: 'scripts/javascript' },
+            { label: 'SQL', slug: 'scripts/sql' },
+          ],
+        },
+        {
+          label: 'Core Nodes',
           items: [{ autogenerate: { directory: 'nodes' } }],
         },
         {

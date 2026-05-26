@@ -1,0 +1,45 @@
+---
+// Overrides Starlight's default SiteTitle to add Docs / Editor / Examples
+// top-bar nav links beside the wordmark.
+import Default from '@astrojs/starlight/components/SiteTitle.astro';
+---
+
+<div class="rime-nav-row">
+  <Default><slot /></Default>
+  <nav class="rime-topnav" aria-label="Primary">
+    <a href="/get-started/quick-start/">Docs</a>
+    <a href="/editor/overview/">Editor</a>
+    <a href="/examples/">Examples</a>
+  </nav>
+</div>
+
+<style>
+  .rime-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    min-width: 0;
+  }
+  .rime-topnav {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+  .rime-topnav a {
+    color: var(--sl-color-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .rime-topnav a:hover {
+    color: var(--sl-color-text-accent);
+  }
+  /* Hide top nav on narrow screens — Starlight's mobile menu already exposes these via sidebar */
+  @media (max-width: 800px) {
+    .rime-topnav {
+      display: none;
+    }
+  }
+</style>

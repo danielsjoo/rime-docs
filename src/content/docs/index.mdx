@@ -1,13 +1,17 @@
 ---
 title: Rime
-description: Nodes are functions over dataframes. Rime owns the rest — I/O, language boundaries, caching, reports.
+description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
 template: splash
 hero:
-  tagline: Nodes are functions over dataframes. Write what each step computes — in SQL, Python, R, or JavaScript — and Rime threads them into a reproducible pipeline that renders as HTML.
+  tagline: Nodes are functions over dataframes. Author them visually in the Rime Editor — or in YAML if that's your thing — and Rime threads them into a reproducible pipeline that renders as HTML.
   actions:
-    - text: Get started
-      link: /get-started/quick-start/
+    - text: Download the Editor
+      link: /editor/overview/
       icon: right-arrow
+    - text: Read the docs
+      link: /get-started/quick-start/
+      icon: open-book
+      variant: minimal
     - text: View on GitHub
       link: https://github.com/danielsjoo/rime
       icon: external
@@ -16,43 +20,47 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Get started
+## Start with the Editor
+
+**Rime Editor** is the easiest way to use Rime. No YAML to learn. No file watching. Drag in a CSV, wire up SQL → Python → R → chart, run, see the report. Reactive, explorative, clean.
+
+<CardGrid>
+  <LinkCard
+    title="Download Rime Editor"
+    description="macOS, Windows, Linux. Free closed beta. Includes the runtime — nothing else to install."
+    href="/editor/install/"
+  />
+  <LinkCard
+    title="UI tour (2 min)"
+    description="Top-down DAG canvas, integrated Monaco editor, live data preview, statistical nodes built in."
+    href="/editor/ui-tour/"
+  />
+  <LinkCard
+    title="Set up Python & R"
+    description="Optional — only if you want script nodes. The built-in 14 node kinds run with no setup."
+    href="/editor/languages/"
+  />
+</CardGrid>
+
+## Or work in YAML + CLI
+
+The Editor and the CLI both consume the same `pipeline.dag.yaml`. Use whichever fits the moment.
 
 <CardGrid>
   <LinkCard
     title="What is Rime?"
-    description="The two-minute pitch. Where Rime fits between Snakemake, dbt, and Quarto — and where it doesn't."
+    description="The two-minute pitch. Where Rime fits between Snakemake, dbt, Hex, and Quarto."
     href="/get-started/what-is-rime/"
   />
   <LinkCard
-    title="Install"
-    description="One brew command, one curl, or one npm install. Plus Python/R if you want script nodes."
+    title="Install the CLI"
+    description="One brew command, one curl, or one npm install. For CI, scripting, or vim-people."
     href="/get-started/install/"
   />
   <LinkCard
     title="Quick start"
     description="Author your first DAG in 10 minutes. SQL → Python → R → HTML report, end to end."
     href="/get-started/quick-start/"
-  />
-</CardGrid>
-
-## Build with Rime
-
-<CardGrid>
-  <LinkCard
-    title="Concepts"
-    description="DAG specification, node kinds, polyglot runtime, dataframes as the wire format, caching."
-    href="/concepts/nodes/"
-  />
-  <LinkCard
-    title="CLI"
-    description="rime validate and rime run. Pure command-line — fits any editor or CI pipeline."
-    href="/cli/run/"
-  />
-  <LinkCard
-    title="Rime Editor"
-    description="Visual DAG authoring desktop app. Top-down canvas, integrated Monaco code editor, live validation."
-    href="/editor/overview/"
   />
 </CardGrid>
 
@@ -63,7 +71,7 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
     A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
   </Card>
   <Card title="One DAG, four languages" icon="puzzle">
-    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC.
+    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC — zero-copy where possible, constant-time cast to pandas / tibble / DuckDB table.
   </Card>
   <Card title="Reproducible by default" icon="seti:lock">
     Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."

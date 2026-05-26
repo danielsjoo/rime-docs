@@ -1,7 +1,23 @@
 ---
-title: "`concat`"
-description: Stack tables row-wise with a label column.
+title: concat
+description: "Stack tables row-wise with a label column distinguishing the source of each row."
 ---
+
+Stack tables row-wise with a label column distinguishing the source of each row.
+
+## When to use
+
+Combining same-shaped tables from different sources (e.g. monthly extracts, multi-site cohorts).
+
+## Inputs
+
+2+ inputs.
+
+## Outputs
+
+`default`: the concatenated table with an added `source:` column (configurable name) indicating which input each row came from.
+
+## Example
 
 ```yaml
 - id: combined
@@ -12,4 +28,13 @@ description: Stack tables row-wise with a label column.
   schemaMode: union               # strict | intersect | union, default strict
 ```
 
-## Stat nodes (terminal — produce stat-shaped object outputs)
+## Common pitfalls
+
+- All inputs must share the same column names. Use `select` first if schemas differ.
+- The label column makes it easy to filter downstream by source: `filter` on `[source] == "site_a"`.
+
+## See also
+
+- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
+- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
