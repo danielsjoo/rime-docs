@@ -291,12 +291,16 @@
     <span class="k">kind:</span> t_test
     <span class="k">in:</span> { x: cars.us_mpg, y: cars.japan_mpg }</pre>
 
-    <h2>Built different from notebooks.</h2>
+    <h2>Built different from Hex and Deepnote.</h2>
 
-    <p>Notebooks invite hidden state and forgotten reruns. A Rime DAG declares its own
-      dependencies — change one node and only the affected downstream rebuilds. The cache
-      key is <code>hash(source + inputs)</code>; same key, same artifact, every time. Run it on
-      your laptop today, on CI tomorrow, in two years on someone else's laptop — same result.</p>
+    <p>Hex and Deepnote both wrap notebooks in modern UIs with reactive cells — fine
+      products for exploration. Rime is different on three axes. Nodes are <em>functions</em>
+      with typed signatures, not cells reaching into a notebook's global scope, so there is
+      no hidden state across steps. The DAG is a first-class declarative artifact — a
+      <code>pipeline.dag.yaml</code> you can diff, commit, and code-review — not implicit cell
+      order or hidden in metadata. And the whole stack is <strong>Apache 2.0</strong>: runs on
+      your laptop, in your CI, in your cluster. No SaaS lock-in. No per-seat licensing.
+      No telemetry.</p>
 
     <div class="pull">"You write the function. The runtime does the rest."</div>
 
