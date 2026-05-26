@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..');
 const REF_PATH = path.join(ROOT, 'NODE_REFERENCE.md');
 const OUT_DIR = path.resolve(__dirname, '..', 'src', 'content', 'docs', 'nodes');
 

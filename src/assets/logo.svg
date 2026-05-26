@@ -1,4 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="Rime">
-  <rect x="6" y="6" width="68" height="68" rx="14" fill="#2b7cb8"/>
-  <text x="40" y="52" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', system-ui, sans-serif" font-weight="700" font-size="36" fill="#ffffff" letter-spacing="-1">R</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80" role="img" aria-label="rime">
+  <rect width="240" height="80" fill="#ffffff"/>
+  <!-- lowercase "rime" in clean geometric sans; "i" dot is a frost-blue square -->
+  <text x="32" y="56"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-weight="700"
+        font-size="56"
+        letter-spacing="-3"
+        fill="#0a3d5f">r</text>
+  <text x="68" y="56"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-weight="700"
+        font-size="56"
+        letter-spacing="-3"
+        fill="#0a3d5f">i</text>
+  <text x="100" y="56"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-weight="700"
+        font-size="56"
+        letter-spacing="-3"
+        fill="#0a3d5f">m</text>
+  <text x="160" y="56"
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-weight="700"
+        font-size="56"
+        letter-spacing="-3"
+        fill="#0a3d5f">e</text>
+  <!-- frost-blue square replacing the "i" dot -->
+  <rect x="76" y="18" width="9" height="9" rx="1" fill="#2b7cb8"/>
 </svg>

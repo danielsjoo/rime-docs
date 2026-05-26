@@ -1,49 +1,39 @@
-# Starlight Starter Kit: Basics
+# rime-docs
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Documentation site for [Rime](https://github.com/danielsjoo/rime) — polyglot data pipelines and reproducible narratives.
 
-```
-npm create astro@latest -- --template starlight
-```
+Built with [Astro](https://astro.build) + [Starlight](https://starlight.astro.build).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Local development
 
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+```bash
+npm install
+npm run dev    # http://localhost:4321
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## Build
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+```bash
+npm run build       # static output → ./dist/
+npm run preview     # serve the built site locally
+```
 
-Static assets, like favicons, can be placed in the `public/` directory.
+## Auto-generated content
 
-## 🧞 Commands
+The node reference pages under `src/content/docs/nodes/` are generated from TypeScript node-kind definitions in the upstream `@rimekit/core` package. Re-run with:
 
-All commands are run from the root of the project, from a terminal:
+```bash
+npm run generate:nodes
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Deploy
 
-## 👀 Want to learn more?
+Designed for Cloudflare Pages, Vercel, or Netlify. Build command: `npm run build`. Output directory: `dist`.
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+## Brand
+
+Brand assets live under `src/assets/` (logo, favicon) and `src/styles/custom.css` (Starlight token overrides). The full design exploration that led to the locked-in combo (wordmark-01 minimal + palette-b slate-tech + hero-01 DAG-frost) is preserved under `src/assets/concepts/` and `src/styles/concepts/`. See [DESIGN_GALLERY.md](DESIGN_GALLERY.md), [BRAND_BRIEF.md](BRAND_BRIEF.md), and [BRAND_INVENTORY.md](BRAND_INVENTORY.md).
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).

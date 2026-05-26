@@ -1,7 +1,7 @@
 {
-  "name": "docs",
+  "name": "rime-docs",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "generate:nodes": "node scripts/generate-node-reference.mjs",
     "predev": "npm run generate:nodes",
@@ -16,5 +16,11 @@
     "@astrojs/starlight": "^0.39.2",
     "astro": "^6.3.1",
     "sharp": "^0.34.5"
-  }
+  },
+  "description": "Documentation site for Rime — polyglot data pipelines and reproducible narratives",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielsjoo/rime-docs"
+  },
+  "license": "Apache-2.0"
 }

@@ -1,22 +1,60 @@
 ---
 title: Rime
-description: Nodes are functions over dataframes. Rime handles the rest — I/O, language boundaries, caching, reports.
+description: Nodes are functions over dataframes. Rime owns the rest — I/O, language boundaries, caching, reports.
 template: splash
 hero:
-  tagline: Write functions over dataframes — in SQL, Python, R, or JavaScript. Rime threads them into a reproducible pipeline and publishes the result as HTML.
-  image:
-    file: ../../assets/logo.svg
+  tagline: Nodes are functions over dataframes. Write what each step computes — in SQL, Python, R, or JavaScript — and Rime threads them into a reproducible pipeline that renders as HTML.
   actions:
     - text: Get started
-      link: /get-started/what-is-rime/
+      link: /get-started/quick-start/
       icon: right-arrow
     - text: View on GitHub
-      link: https://github.com/rimekit/rime
+      link: https://github.com/danielsjoo/rime
       icon: external
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Get started
+
+<CardGrid>
+  <LinkCard
+    title="What is Rime?"
+    description="The two-minute pitch. Where Rime fits between Snakemake, dbt, and Quarto — and where it doesn't."
+    href="/get-started/what-is-rime/"
+  />
+  <LinkCard
+    title="Install"
+    description="One brew command, one curl, or one npm install. Plus Python/R if you want script nodes."
+    href="/get-started/install/"
+  />
+  <LinkCard
+    title="Quick start"
+    description="Author your first DAG in 10 minutes. SQL → Python → R → HTML report, end to end."
+    href="/get-started/quick-start/"
+  />
+</CardGrid>
+
+## Build with Rime
+
+<CardGrid>
+  <LinkCard
+    title="Concepts"
+    description="DAG specification, node kinds, polyglot runtime, dataframes as the wire format, caching."
+    href="/concepts/nodes/"
+  />
+  <LinkCard
+    title="CLI"
+    description="rime validate and rime run. Pure command-line — fits any editor or CI pipeline."
+    href="/cli/run/"
+  />
+  <LinkCard
+    title="Rime Editor"
+    description="Visual DAG authoring desktop app. Top-down canvas, integrated Monaco code editor, live validation."
+    href="/editor/overview/"
+  />
+</CardGrid>
 
 ## Why Rime
 
@@ -33,7 +71,29 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
   <Card title="Publishable narratives" icon="document">
     Pair your DAG with a `report.yaml` and render a publishable HTML report. Tables, stats, prose — one render step, one document, one source of truth.
   </Card>
-  <Card title="Visual editor (preview)" icon="laptop">
-    Rime Editor is a desktop app for authoring pipelines visually. Top-down DAG canvas, integrated Monaco code editor, live validation. Closed beta; download coming soon.
-  </Card>
+</CardGrid>
+
+## Real pipelines you can clone
+
+<CardGrid>
+  <LinkCard
+    title="Cars × CO₂ emissions"
+    description="SQL source + JS API fetch + Python UMAP + R regression → HTML narrative. The canonical multi-language example."
+    href="/examples/cars-emissions/"
+  />
+  <LinkCard
+    title="Penguin classifier"
+    description="Single-file teaching pipeline. Pivot, derive, t-test, plot — the smallest interesting DAG."
+    href="/examples/penguins/"
+  />
+  <LinkCard
+    title="Embed in Node"
+    description="Use @rimekit/runtime programmatically from any Node script. For headless contexts and CI plugins."
+    href="/examples/headless/"
+  />
+  <LinkCard
+    title="DuckDB single source"
+    description="Minimal SQL-only pipeline. Good for ad-hoc warehouse reports without leaving the SQL world."
+    href="/examples/sql-only/"
+  />
 </CardGrid>

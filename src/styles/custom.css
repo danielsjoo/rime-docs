@@ -1,19 +1,44 @@
-/* Palette A — Frost Blue (safe default).
- * The current placeholder. Cold, technical, recognizable.
+/* Palette B — Slate Mono + Electric.
+ * Cool grayscale on near-white, single electric cyan accent does all the work.
+ * Vibe: Vercel / Linear / modern-dev-tool. No warm tones anywhere.
  */
 :root {
-  --sl-color-accent-low: #d4e7f5;
-  --sl-color-accent: #2b7cb8;
-  --sl-color-accent-high: #0a3d5f;
+  /* Accent — bright cyan-leaning, single point of color in the whole UI */
+  --sl-color-accent-low: #cffafe;
+  --sl-color-accent: #0891b2;
+  --sl-color-accent-high: #0a0e13;
+
+  /* Background system — very slightly cool whites */
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-sidebar: #f8fafc;
+  --sl-color-bg-nav: #f8fafc;
+  --sl-color-bg-inline-code: #f1f5f9;
+
+  /* Text system — cool slate grays, near-black headings */
+  --sl-color-text: #1a202c;
+  --sl-color-text-accent: #0a0e13;
+  --sl-color-gray-1: #2d3748;
+  --sl-color-gray-2: #4a5568;
+  --sl-color-gray-3: #718096;
+  --sl-color-gray-4: #a0aec0;
+  --sl-color-gray-5: #cbd5e0;
+  --sl-color-gray-6: #e2e8f0;
+
+  --sl-color-hairline: #e2e8f0;
+  --sl-color-hairline-shade: #cbd5e0;
 }
 
 :root[data-theme='dark'] {
-  --sl-color-accent-low: #0a3d5f;
-  --sl-color-accent: #4a9ed4;
-  --sl-color-accent-high: #d4e7f5;
-}
+  /* Dark variant: near-black bg, bright cyan accent stays the same */
+  --sl-color-accent-low: #164e63;
+  --sl-color-accent: #22d3ee;
+  --sl-color-accent-high: #ecfeff;
 
-/* Tighten the link / brand color slightly in light mode */
-:root[data-theme='light'] {
-  --sl-color-text-accent: #0a3d5f;
+  --sl-color-bg: #0a0e13;
+  --sl-color-bg-sidebar: #11161d;
+  --sl-color-bg-nav: #11161d;
+  --sl-color-bg-inline-code: #1a202c;
+
+  --sl-color-text: #e2e8f0;
+  --sl-color-text-accent: #ffffff;
 }

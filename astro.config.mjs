@@ -4,6 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://rime-docs.pages.dev', // placeholder — update when domain is wired
   integrations: [
     starlight({
       title: 'Rime',
@@ -12,9 +13,10 @@ export default defineConfig({
         src: './src/assets/logo.svg',
         replacesTitle: false,
       },
+      favicon: './src/assets/favicon.svg',
       customCss: ['./src/styles/custom.css'],
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/rimekit/rime' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/danielsjoo/rime' },
       ],
       sidebar: [
         {
