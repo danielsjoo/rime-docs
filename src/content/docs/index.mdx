@@ -1,9 +1,9 @@
 ---
 title: Rime
-description: Polyglot data pipelines and reproducible narratives.
+description: Nodes are functions over dataframes. Rime handles the rest — I/O, language boundaries, caching, reports.
 template: splash
 hero:
-  tagline: Author DAGs of SQL, Python, R, and JavaScript transforms. Render publishable HTML reports. Reproduce them anywhere.
+  tagline: Write functions over dataframes — in SQL, Python, R, or JavaScript. Rime threads them into a reproducible pipeline and publishes the result as HTML.
   image:
     file: ../../assets/logo.svg
   actions:
@@ -21,16 +21,19 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Why Rime
 
 <CardGrid stagger>
+  <Card title="Functions, not jobs" icon="approve-check">
+    A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
+  </Card>
   <Card title="One DAG, four languages" icon="puzzle">
-    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries.
+    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC.
   </Card>
   <Card title="Reproducible by default" icon="seti:lock">
-    Content-addressed caching, deterministic outputs, freeze-able snapshots. No "works on my machine."
+    Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."
   </Card>
   <Card title="Publishable narratives" icon="document">
-    Pair your DAG with a `report.yaml` and render a publishable HTML report. Tables, stats, prose, all in one render step.
+    Pair your DAG with a `report.yaml` and render a publishable HTML report. Tables, stats, prose — one render step, one document, one source of truth.
   </Card>
   <Card title="Visual editor (preview)" icon="laptop">
-    Rime Editor is a desktop app for authoring pipelines visually. Closed beta; download coming soon.
+    Rime Editor is a desktop app for authoring pipelines visually. Top-down DAG canvas, integrated Monaco code editor, live validation. Closed beta; download coming soon.
   </Card>
 </CardGrid>

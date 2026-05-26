@@ -172,18 +172,24 @@
   <!-- hero -->
   <header class="hero">
     <div class="hero-eyebrow">Open-source · Apache 2.0</div>
-    <h1>Polyglot data pipelines<br/>and reproducible narratives.</h1>
-    <p>Author DAGs of SQL, Python, R, and JavaScript transforms. Render publishable HTML reports.
-      One pipeline, four languages, one story.</p>
+    <h1>Nodes are functions<br/>over dataframes.</h1>
+    <p>Write what each step computes — in SQL, Python, R, or JavaScript. Rime owns reading inputs,
+      writing outputs, language boundaries, and caching. You write the function. The runtime does the rest.</p>
     <div class="hero-ctas">
       <a class="btn-primary" href="#">Get started →</a>
       <a class="btn-secondary" href="#">View on GitHub</a>
     </div>
-    <pre class="code"><span class="comment"># install (no Node required)</span>
-<span class="prompt">$</span> brew install rimekit/tap/rime
+    <pre class="code"><span class="comment"># scripts/cohort.py — no read_csv, no to_parquet, no glue</span>
+<span class="prompt">def</span> run(patients):
+    <span class="comment"># `patients` arrives as a pandas DataFrame</span>
+    <span class="prompt">return</span> patients[patients[<span class="prompt">"age"</span>] &gt;= 18]
 
-<span class="comment"># run a pipeline</span>
-<span class="prompt">$</span> rime run pipeline.dag.yaml</pre>
+<span class="comment"># pipeline.dag.yaml — the runtime owns everything else</span>
+- id: cohort
+  kind: script
+  language: python
+  source: scripts/cohort.py
+  in: { patients: raw_patients }</pre>
   </header>
 
   <!-- get started cards -->

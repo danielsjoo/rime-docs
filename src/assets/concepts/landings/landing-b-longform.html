@@ -240,9 +240,10 @@
   <!-- hero -->
   <header class="hero">
     <div class="hero-eyebrow">RIME · v0.1 · Apache 2.0</div>
-    <h1>Author data narratives <em>the way you actually think about them.</em></h1>
-    <p class="hero-lead">SQL fetches your data. Python embeds it. R fits a model. JavaScript renders the chart.
-      Rime threads all four into one reproducible pipeline — and publishes the story as HTML.</p>
+    <h1>Nodes are functions <em>over dataframes.</em></h1>
+    <p class="hero-lead">Not jobs that wire I/O. Not tasks that read from S3 and write to S3.
+      In Rime, you write what each step <em>computes</em> — in SQL, Python, R, or JavaScript —
+      and the runtime owns the rest: reading, writing, serialization, language boundaries, caching.</p>
     <div class="lang-strip">
       <span class="lang-pill sql">SQL</span>
       <span class="lang-pill py">Python</span>
@@ -257,19 +258,20 @@
   <!-- editorial body -->
   <main class="content">
 
-    <p class="lede">Researchers and data journalists shouldn't have to pick a single language
-      for every step of an analysis. Rime is a small, opinionated tool that lets you write
-      each step in whatever language fits — SQL for the warehouse pull, Python for the math,
-      R for the model, JavaScript for the fetch — and run them as one cached, deterministic
-      pipeline.</p>
+    <p class="lede">Researchers and data journalists shouldn't have to write boilerplate just to move
+      a dataframe between two steps of an analysis. Rime treats each node as a function
+      over dataframes — you describe what it computes, and the runtime owns I/O, serialization,
+      language boundaries, and caching. The dbt mental model, extended past SQL into the rest
+      of the data stack.</p>
 
-    <h2>The pipeline is the document.</h2>
+    <h2>The runtime owns the boilerplate.</h2>
 
-    <p>A Rime project is a single <code>pipeline.dag.yaml</code> file. Each node is a small
-      named step — a SQL query, a Python script, an R model, a t-test, a chart. Edges connect
-      a step's named outputs to the next step's named inputs. When you <code>rime run</code> it,
-      every step executes once, dataframes flow over Arrow IPC, and a single
-      <code>narrative.html</code> is rendered at the end.</p>
+    <p>A Rime project is a single <code>pipeline.dag.yaml</code>. Each node names a function
+      and declares which dataframes feed it. There is no <code>read_csv()</code> at the top
+      of a script and no <code>to_parquet()</code> at the bottom — Rime reads each input as a
+      pandas DataFrame, R tibble, DuckDB table, or Arrow table; runs your function; captures
+      the return value; hashes it into a content address; and hands it to the next node. Same
+      protocol across all four languages, no glue code between them.</p>
 
     <pre class="code"><span class="c"># pipeline.dag.yaml</span>
 <span class="k">version:</span> <span class="s">'2.1'</span>
@@ -289,16 +291,24 @@
     <span class="k">kind:</span> t_test
     <span class="k">in:</span> { x: cars.us_mpg, y: cars.japan_mpg }</pre>
 
-    <h2>Why not a notebook?</h2>
+    <h2>Built different from notebooks.</h2>
 
     <p>Notebooks invite hidden state and forgotten reruns. A Rime DAG declares its own
       dependencies — change one node and only the affected downstream rebuilds. The cache
-      key is the content of the script + the inputs. Run it on your laptop today, on CI tomorrow,
-      and the same hash means the same artifact.</p>
+      key is <code>hash(source + inputs)</code>; same key, same artifact, every time. Run it on
+      your laptop today, on CI tomorrow, in two years on someone else's laptop — same result.</p>
 
-    <div class="pull">"The pipeline is the document. The cache is the proof."</div>
+    <div class="pull">"You write the function. The runtime does the rest."</div>
 
-    <h2>Why not Snakemake?</h2>
+    <h2>Built different from Airflow.</h2>
+
+    <p>Airflow, Prefect, and Dagster treat each step as a task that <em>does its own I/O</em>:
+      read from S3, transform, write back. Coordination happens via storage paths — the side
+      effect is the contract. Rime inverts this: side effects are the runtime's job, functions
+      just compute. Dataframes coordinate via typed ports. Reproducibility is a property of
+      the model, not extra work you have to do.</p>
+
+    <h2>Built different from Snakemake.</h2>
 
     <p>If you do bioinformatics on Snakemake or Nextflow, keep doing that — they're mature and
       you have nf-core's library of recipes. Rime is for a different audience: data journalists,
