@@ -1,0 +1,12 @@
+/* Rime — frost-blue placeholder palette. Replace via Phase G concepts. */
+:root {
+  --sl-color-accent-low: #d4e7f5;
+  --sl-color-accent: #2b7cb8;
+  --sl-color-accent-high: #0a3d5f;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #0a3d5f;
+  --sl-color-accent: #4a9ed4;
+  --sl-color-accent-high: #d4e7f5;
+}

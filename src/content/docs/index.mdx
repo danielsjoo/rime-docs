@@ -1,0 +1,36 @@
+---
+title: Rime
+description: Polyglot data pipelines and reproducible narratives.
+template: splash
+hero:
+  tagline: Author DAGs of SQL, Python, R, and JavaScript transforms. Render publishable HTML reports. Reproduce them anywhere.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Get started
+      link: /get-started/what-is-rime/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/rimekit/rime
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why Rime
+
+<CardGrid stagger>
+  <Card title="One DAG, four languages" icon="puzzle">
+    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries.
+  </Card>
+  <Card title="Reproducible by default" icon="seti:lock">
+    Content-addressed caching, deterministic outputs, freeze-able snapshots. No "works on my machine."
+  </Card>
+  <Card title="Publishable narratives" icon="document">
+    Pair your DAG with a `report.yaml` and render a publishable HTML report. Tables, stats, prose, all in one render step.
+  </Card>
+  <Card title="Visual editor (preview)" icon="laptop">
+    Rime Editor is a desktop app for authoring pipelines visually. Closed beta; download coming soon.
+  </Card>
+</CardGrid>
