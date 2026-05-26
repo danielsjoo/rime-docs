@@ -1,143 +1,209 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Rime — DAG flow hero with frost-pattern nodes">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Rime — vertical DAG hero matching the editor's top-down layout">
   <defs>
-    <!-- subtle dot-grid frost pattern for node interiors -->
-    <pattern id="frost-dots" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
-      <circle cx="4" cy="4" r="0.7" fill="#2b7cb8" fill-opacity="0.25"/>
+    <!-- subtle dotted grid background, matches the React Flow canvas in the editor -->
+    <pattern id="grid-dots" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#0a3d5f" fill-opacity="0.08"/>
     </pattern>
 
-    <!-- soft gradient backdrop -->
+    <!-- background gradient — subtle warmth on cool -->
     <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%" stop-color="#fafcfe"/>
-      <stop offset="100%" stop-color="#f1f6fa"/>
+      <stop offset="0%" stop-color="#fcfdfe"/>
+      <stop offset="100%" stop-color="#f3f7fb"/>
     </linearGradient>
 
-    <!-- arrowhead marker for edges -->
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L9,5 L0,10 Z" fill="#2b7cb8"/>
-    </marker>
-
-    <!-- horizon line decoration -->
-    <linearGradient id="horizon" x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0%" stop-color="#2b7cb8" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#2b7cb8" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#2b7cb8" stop-opacity="0"/>
-    </linearGradient>
+    <!-- node card drop shadow -->
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0a3d5f" flood-opacity="0.07"/>
+    </filter>
   </defs>
 
+  <!-- ============================================================
+       Layered background
+       ============================================================ -->
   <rect width="1600" height="900" fill="url(#bg)"/>
-
-  <!-- decorative horizon ridges (subtle frost lines) -->
-  <line x1="0" y1="450" x2="1600" y2="450" stroke="url(#horizon)" stroke-width="1"/>
-  <line x1="0" y1="180" x2="1600" y2="180" stroke="url(#horizon)" stroke-width="0.5"/>
-  <line x1="0" y1="720" x2="1600" y2="720" stroke="url(#horizon)" stroke-width="0.5"/>
+  <rect width="1600" height="900" fill="url(#grid-dots)"/>
 
   <!-- ============================================================
-       EDGES (drawn first so nodes sit on top)
+       Wordmark + tagline (top-left)
        ============================================================ -->
-  <g stroke="#2b7cb8" stroke-width="2.2" fill="none" marker-end="url(#arrow)" opacity="0.85">
-    <!-- sql_cars -> feature_build -->
-    <path d="M 360,250 C 520,250 540,400 690,400"/>
-    <!-- py_co2 -> feature_build -->
-    <path d="M 360,450 C 520,450 540,420 690,420"/>
-    <!-- py_co2 -> umap_embed -->
-    <path d="M 360,470 C 520,470 540,600 690,600"/>
-    <!-- r_efficiency -> umap_embed -->
-    <path d="M 360,670 C 520,670 540,620 690,620"/>
-    <!-- feature_build -> t_test -->
-    <path d="M 870,400 C 1020,400 1040,330 1190,330"/>
-    <!-- umap_embed -> t_test -->
-    <path d="M 870,600 C 1020,600 1040,360 1190,360"/>
-    <!-- feature_build -> report (lower right) -->
-    <path d="M 870,420 C 1020,420 1040,580 1190,580"/>
-    <!-- t_test -> report -->
-    <path d="M 1370,360 C 1430,360 1230,540 1190,580"/>
-  </g>
-
-  <!-- ============================================================
-       NODES — three columns
-       Each node: rounded rect with frost-pattern fill, dark text
-       ============================================================ -->
-
-  <!-- Column 1: sources -->
-  <g>
-    <!-- sql_cars -->
-    <g transform="translate(200,210)">
-      <rect width="160" height="80" rx="10" fill="#ffffff" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect width="160" height="80" rx="10" fill="url(#frost-dots)"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#2b7cb8"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#2b7cb8" letter-spacing="1.5">SQL</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">sql_cars</text>
-    </g>
-    <!-- py_co2 -->
-    <g transform="translate(200,410)">
-      <rect width="160" height="80" rx="10" fill="#ffffff" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect width="160" height="80" rx="10" fill="url(#frost-dots)"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#2b7cb8"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#2b7cb8" letter-spacing="1.5">PYTHON</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">fetch_co2</text>
-    </g>
-    <!-- r_efficiency -->
-    <g transform="translate(200,630)">
-      <rect width="160" height="80" rx="10" fill="#ffffff" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect width="160" height="80" rx="10" fill="url(#frost-dots)"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#2b7cb8"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#2b7cb8" letter-spacing="1.5">R</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">efficiency</text>
-    </g>
-  </g>
-
-  <!-- Column 2: transforms -->
-  <g>
-    <!-- feature_build -->
-    <g transform="translate(690,360)">
-      <rect width="180" height="80" rx="10" fill="#ffffff" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect width="180" height="80" rx="10" fill="url(#frost-dots)"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#0a3d5f"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#2b7cb8" letter-spacing="1.5">TRANSFORM</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">feature_build</text>
-    </g>
-    <!-- umap_embed -->
-    <g transform="translate(690,560)">
-      <rect width="180" height="80" rx="10" fill="#ffffff" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect width="180" height="80" rx="10" fill="url(#frost-dots)"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#0a3d5f"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#2b7cb8" letter-spacing="1.5">PYTHON</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">umap_embed</text>
-    </g>
-  </g>
-
-  <!-- Column 3: terminal nodes (stats + report) -->
-  <g>
-    <!-- t_test (statistical) -->
-    <g transform="translate(1190,300)">
-      <rect width="180" height="80" rx="10" fill="#d4e7f5" stroke="#0a3d5f" stroke-width="1.5"/>
-      <rect x="0" y="0" width="6" height="80" rx="3" fill="#2b7cb8"/>
-      <text x="22" y="34" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#0a3d5f" letter-spacing="1.5">STATISTIC</text>
-      <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0a3d5f">t_test</text>
-    </g>
-    <!-- report (HTML output) -->
-    <g transform="translate(1190,540)">
-      <rect width="200" height="100" rx="12" fill="#0a3d5f"/>
-      <text x="22" y="36" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="600" fill="#d4e7f5" letter-spacing="1.5">REPORT</text>
-      <text x="22" y="64" font-family="Inter Tight, system-ui, sans-serif" font-size="20" font-weight="700" fill="#ffffff">narrative.html</text>
-      <!-- tiny doc lines -->
-      <line x1="22" y1="78" x2="160" y2="78" stroke="#d4e7f5" stroke-width="1.5" opacity="0.6"/>
-      <line x1="22" y1="86" x2="120" y2="86" stroke="#d4e7f5" stroke-width="1.5" opacity="0.4"/>
-    </g>
-  </g>
-
-  <!-- ============================================================
-       Wordmark + tagline (top-left corner)
-       ============================================================ -->
-  <g transform="translate(80,80)">
+  <g transform="translate(72,72)">
     <text font-family="Inter Tight, system-ui, sans-serif" font-size="56" font-weight="700" letter-spacing="-2" fill="#0a3d5f">rime</text>
-    <text y="36" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500" letter-spacing="2" fill="#2b7cb8">DATA · DAGS · NARRATIVES</text>
+    <text y="32" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="500" letter-spacing="2" fill="#2b7cb8" text-transform="uppercase">Data · DAGs · Narratives</text>
   </g>
 
-  <!-- subtle column labels -->
-  <g font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" letter-spacing="2" fill="#2b7cb8" opacity="0.55">
-    <text x="240" y="800">SOURCES</text>
-    <text x="730" y="800">TRANSFORMS</text>
-    <text x="1230" y="800">OUTPUTS</text>
+  <!-- ============================================================
+       Reusable node template — vertical layout matches editor.
+         - rounded card, frost-blue border
+         - header row: title + language badge (right)
+         - stats row: shape + duration
+         - source file row + Sync button
+         - port chip below (output handle name)
+       Inputs come in from the TOP, outputs flow OUT the BOTTOM.
+
+       Layout: 4 rows. Column x-centers at 620, 920 (some at 460/1080).
+       ============================================================ -->
+
+  <!-- soft edge curves — drawn first so nodes sit on top -->
+  <g stroke="#94a3b8" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.65">
+    <!-- ROW 1 -> ROW 2 (both inputs into feature_build) -->
+    <path d="M 620,330 C 620,365 770,365 770,400"/>
+    <path d="M 920,330 C 920,365 770,365 770,400"/>
+    <!-- ROW 1 (right node) -> ROW 3 (umap_embed) directly -->
+    <path d="M 920,330 C 920,380 1080,520 1080,560"/>
+    <!-- ROW 2 -> ROW 3 (left + middle + right downstream nodes) -->
+    <path d="M 770,530 C 770,555 460,560 460,580"/>
+    <path d="M 770,530 C 770,555 740,560 740,580"/>
+    <path d="M 770,530 C 770,560 1080,545 1080,560"/>
   </g>
+
+  <!-- ====================== ROW 1 (sources) ====================== -->
+
+  <!-- Node A: SQL cars source -->
+  <g transform="translate(540,210)" filter="url(#card-shadow)">
+    <rect width="160" height="118" rx="10" fill="#ffffff" stroke="#2b7cb8" stroke-width="1.5"/>
+    <!-- header -->
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">SQL cars source</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#94a3b8">SQL</text>
+    <!-- divider -->
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#e2e8f0" stroke-width="1"/>
+    <!-- stats row -->
+    <text x="14" y="56" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">(392, 9)</text>
+    <text x="146" y="56" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">24ms</text>
+    <!-- source file row -->
+    <rect x="14" y="74" width="100" height="22" rx="4" fill="#f1f5f9"/>
+    <text x="22" y="89" font-family="Menlo, monospace" font-size="10" fill="#0a3d5f">cars_source.sql</text>
+    <rect x="120" y="74" width="28" height="22" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="134" y="89" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#475569">Sync</text>
+    <!-- output port (dot) -->
+    <circle cx="80" cy="118" r="3.5" fill="#0a3d5f"/>
+  </g>
+  <!-- output handle chip "default" -->
+  <g transform="translate(595,340)">
+    <rect width="50" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="25" y="12.5" text-anchor="middle" font-family="Menlo, monospace" font-size="9.5" fill="#475569">default</text>
+  </g>
+
+  <!-- Node B: JS fetch atmospheric CO2 -->
+  <g transform="translate(840,210)" filter="url(#card-shadow)">
+    <rect width="160" height="118" rx="10" fill="#ffffff" stroke="#2b7cb8" stroke-width="1.5"/>
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">JS fetch CO₂</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#94a3b8">JAVASCRIPT</text>
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="14" y="56" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">(63, 3)</text>
+    <text x="146" y="56" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">2.4s</text>
+    <rect x="14" y="74" width="100" height="22" rx="4" fill="#f1f5f9"/>
+    <text x="22" y="89" font-family="Menlo, monospace" font-size="10" fill="#0a3d5f">co2_fetch.js</text>
+    <rect x="120" y="74" width="28" height="22" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="134" y="89" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#475569">Sync</text>
+    <circle cx="80" cy="118" r="3.5" fill="#0a3d5f"/>
+  </g>
+  <g transform="translate(885,340)">
+    <rect width="70" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="35" y="12.5" text-anchor="middle" font-family="Menlo, monospace" font-size="9.5" fill="#475569">co2_by_year</text>
+  </g>
+
+  <!-- ====================== ROW 2 (transform) ====================== -->
+
+  <!-- input handles into Node C -->
+  <g font-family="Menlo, monospace" font-size="9.5" fill="#475569">
+    <rect x="700" y="382" width="36" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="718" y="394.5" text-anchor="middle">cars</text>
+    <rect x="744" y="382" width="60" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="774" y="394.5" text-anchor="middle">co2_yearly</text>
+  </g>
+
+  <!-- Node C: JS feature build -->
+  <g transform="translate(690,400)" filter="url(#card-shadow)">
+    <rect width="160" height="118" rx="10" fill="#ffffff" stroke="#2b7cb8" stroke-width="1.5"/>
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">JS feature build</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#94a3b8">JAVASCRIPT</text>
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="14" y="56" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">(392, 18)</text>
+    <text x="146" y="56" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">368ms</text>
+    <rect x="14" y="74" width="100" height="22" rx="4" fill="#f1f5f9"/>
+    <text x="22" y="89" font-family="Menlo, monospace" font-size="10" fill="#0a3d5f">feature_build.js</text>
+    <rect x="120" y="74" width="28" height="22" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="134" y="89" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" fill="#475569">Sync</text>
+    <circle cx="80" cy="118" r="3.5" fill="#0a3d5f"/>
+  </g>
+  <g transform="translate(745,530)">
+    <rect width="50" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="25" y="12.5" text-anchor="middle" font-family="Menlo, monospace" font-size="9.5" fill="#475569">features</text>
+  </g>
+
+  <!-- ====================== ROW 3 (terminal: stats + outputs) ====================== -->
+
+  <!-- input chip cluster into umap_embed -->
+  <g font-family="Menlo, monospace" font-size="9.5" fill="#475569">
+    <rect x="1055" y="542" width="50" height="18" rx="4" fill="#ffffff" stroke="#cbd5e0" stroke-width="0.8"/>
+    <text x="1080" y="554.5" text-anchor="middle">features</text>
+  </g>
+
+  <!-- Node D: R efficiency trends -->
+  <g transform="translate(380,580)" filter="url(#card-shadow)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#2b7cb8" stroke-width="1.5"/>
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">R efficiency</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#94a3b8">R</text>
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="14" y="56" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">(392, 18)</text>
+    <text x="146" y="56" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">1ms</text>
+    <rect x="14" y="74" width="100" height="18" rx="4" fill="#f1f5f9"/>
+    <text x="22" y="86.5" font-family="Menlo, monospace" font-size="10" fill="#0a3d5f">trends.R</text>
+  </g>
+
+  <!-- Node E: t_test (statistical) — slightly tinted background -->
+  <g transform="translate(660,580)" filter="url(#card-shadow)">
+    <rect width="160" height="100" rx="10" fill="#d4e7f5" stroke="#2b7cb8" stroke-width="1.5"/>
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">USA vs Japan MPG</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#0a3d5f">T_TEST</text>
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#2b7cb8" stroke-width="0.7" opacity="0.4"/>
+    <text x="14" y="58" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">t = −13.03</text>
+    <text x="14" y="74" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">p &lt; 0.001</text>
+    <text x="146" y="74" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#2b7cb8">1ms</text>
+  </g>
+
+  <!-- Node F: Python UMAP embed -->
+  <g transform="translate(1000,580)" filter="url(#card-shadow)">
+    <rect width="160" height="100" rx="10" fill="#ffffff" stroke="#2b7cb8" stroke-width="1.5"/>
+    <text x="14" y="26" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700" fill="#0a3d5f">UMAP embed</text>
+    <text x="146" y="26" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#94a3b8">PYTHON</text>
+    <line x1="14" y1="38" x2="146" y2="38" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="14" y="56" font-family="Inter, system-ui, sans-serif" font-size="11" fill="#64748b">(392, 2)</text>
+    <text x="146" y="56" text-anchor="end" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#0a3d5f">14s</text>
+    <rect x="14" y="74" width="100" height="18" rx="4" fill="#f1f5f9"/>
+    <text x="22" y="86.5" font-family="Menlo, monospace" font-size="10" fill="#0a3d5f">umap.py</text>
+  </g>
+
+  <!-- ====================== ROW 4 (report — visual climax) ====================== -->
+
+  <!-- terminal edges merging into report -->
+  <g stroke="#94a3b8" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.65">
+    <path d="M 460,680 C 460,720 770,725 770,755"/>
+    <path d="M 740,680 C 740,720 770,725 770,755"/>
+    <path d="M 1080,680 C 1080,720 770,725 770,755"/>
+  </g>
+
+  <g transform="translate(620,755)">
+    <rect width="300" height="86" rx="12" fill="#0a3d5f"/>
+    <text x="22" y="32" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="600" letter-spacing="2.4" fill="#d4e7f5">REPORT</text>
+    <text x="22" y="58" font-family="Inter Tight, system-ui, sans-serif" font-size="20" font-weight="700" fill="#ffffff">narrative.html</text>
+    <!-- tiny doc lines -->
+    <line x1="22" y1="70" x2="240" y2="70" stroke="#d4e7f5" stroke-width="1.5" opacity="0.55"/>
+    <line x1="22" y1="76" x2="180" y2="76" stroke="#d4e7f5" stroke-width="1.5" opacity="0.4"/>
+  </g>
+
+  <!-- ============================================================
+       Side notation — small layer labels on the right
+       ============================================================ -->
+  <g font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" letter-spacing="2" fill="#94a3b8">
+    <text x="1280" y="266" text-transform="uppercase">Sources</text>
+    <text x="1280" y="456" text-transform="uppercase">Transforms</text>
+    <text x="1280" y="630" text-transform="uppercase">Stats &amp; Embeddings</text>
+    <text x="1280" y="800" text-transform="uppercase">Output</text>
+  </g>
+
+  <!-- ============================================================
+       Caption bottom-left
+       ============================================================ -->
+  <text x="72" y="850" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="500" fill="#475569" opacity="0.7">one pipeline · four languages · one report</text>
 </svg>

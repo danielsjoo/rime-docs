@@ -42,8 +42,8 @@ Two compositional approaches. SVGs at 1600×900, vector-only.
 
 | Concept | Preview | Notes |
 |---|---|---|
-| **01 — DAG Frost** | ![](src/assets/concepts/screenshots/hero-01-dag-frost.png) | Three-column DAG flow (Sources → Transforms → Outputs) with frost-pattern dot fills on nodes. Shows what a real Rime pipeline looks like. The terminal report node is the visual climax. **My pick** for the landing hero. |
-| **02 — Iso Pipeline** | ![](src/assets/concepts/screenshots/hero-02-iso-pipeline.png) | Isometric stack of language lanes (SQL / Python / R / Output) with stage blocks sliding right. More polished/marketing-y; less "this is how the tool works." |
+| **01 — DAG Frost** *(refined to match editor)* | ![](src/assets/concepts/screenshots/hero-01-dag-frost.png) | **Top-down vertical DAG** matching the actual Vostok/Rime editor layout. Node anatomy mirrors the real product: header row with title + language badge, shape + duration stats, source file pill + Sync button, output port chip below. Edges are soft gray bezier curves on a dotted grid (React Flow style). The `narrative.html` report sits at the bottom as the visual climax. **My pick** for the landing hero — anyone who's used the editor will recognize the layout instantly. |
+| **02 — Iso Pipeline** | ![](src/assets/concepts/screenshots/hero-02-iso-pipeline.png) | Isometric stack of language lanes (SQL / Python / R / Output) with stage blocks sliding right. More polished/marketing-y; less "this is how the tool works." Doesn't match the editor's actual layout. |
 
 Files at `docs/src/assets/concepts/heroes/hero-NN-*.svg`.
 
@@ -76,6 +76,31 @@ Files at `docs/src/assets/concepts/landings/landing-{a,b}-*.html`.
 - The wordmark-02 icicles are slightly cute. A more austere two-spike version might age better.
 - Hero-01 could use a subtle data-shape (a tiny table preview) inside one of the transform nodes to make it less abstract.
 - Landing-b's "Why not a notebook?" / "Why not Snakemake?" Q&A pattern is too rhetorical — would soften it.
+
+---
+
+## What I learned from opening the real editor
+
+After opening the live editor and watching the DAG render, refined the brand to match the actual product:
+
+**DAG orientation: top-down, not left-to-right.** The editor lays out nodes vertically — sources at the top, transforms below, terminal nodes (stats/outputs) at the bottom. The original hero-01 had a horizontal layout (Sources → Transforms → Outputs left-to-right) which would have been a brand-disconnect the moment a user opened the app. **Refreshed hero-01 to vertical** to match. Anyone who's used the editor will recognize the layout.
+
+**Node anatomy is consistent and tight.** Each editor node has:
+- Header row: bold title + language badge in small caps top-right (`SQL`, `JAVASCRIPT`, `PYTHON`, `R`, `T_TEST`, `ANOVA`)
+- Stats row: shape tuple `(rows, cols)` + cached flag + execution duration right-aligned
+- Source row: `filename.ext` in monospace + small "Sync" button on the right
+- Port chip below the node showing the output handle name (`default`, `co2_by_year`, `features`)
+- For statistical terminal nodes (t_test, anova): the actual test result (e.g. `t = −13.03, p < 0.001`) replaces the file-row
+
+The refreshed hero-01 mirrors all of this.
+
+**Edge style: subtle gray bezier curves, no arrowheads.** Edges in the editor are soft #94a3b8-ish gray, not the bold frost-blue I had originally drawn. Arrowheads aren't needed because the top-down flow makes direction obvious.
+
+**Background: dotted grid (React Flow default).** The editor canvas has a subtle light-gray dot pattern. The hero now uses the same.
+
+**Current editor accent is GREEN, not blue.** The live UI (pre-Rime rename) uses a fresh mint-green for node borders and toolbar pills. This will be inconsistent with the wordmark/docs frost-blue once the rename ships. **Recommendation:** when the rename branch lands and you start updating the editor's brand, switch its accent tokens from `#a8dcc1` (mint) to the frost-blue family (`#2b7cb8` accent, `#d4e7f5` soft) so the editor visually matches the docs. This is a one-CSS-file change inside `rime-editor/src/renderer/`.
+
+**Editor IS a two-pane IDE.** Clicking a node opens a right-side panel with tabs: `Node Spotlight | YAML Spec | Review | Version history`. The Node Spotlight tab shows the script source in a Monaco editor with full syntax highlighting. This is a strong asset for the docs `/editor/` section once we capture proper screenshots post-rename — the two-pane IDE structure is a real differentiator vs. Snakemake/Nextflow (which have no UI at all).
 
 ## Next steps
 
