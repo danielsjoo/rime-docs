@@ -1,131 +1,56 @@
 ---
 title: Polyglot runtime
-description: How Rime mixes SQL, Python, R, and JavaScript inside one DAG.
+description: How Rime mixes SQL, Python, R, and JavaScript inside one DAG. Same protocol across all four languages.
 ---
 
 Rime's defining property is its polyglot runtime: a single DAG can use four languages for transforms, each with native-feeling APIs and zero glue code between them.
 
 ## The protocol in one sentence
 
-Each script node declares **named input slots** in YAML; the runtime materializes each upstream output as a **native value** in the target language and passes it as a named function argument; the script returns either a single tabular value (default output `default`) or a map of named outputs.
+Each script node declares **named input slots** in YAML; the runtime materializes each upstream output as a **native value** in the target language (pandas DataFrame, R tibble, Arrow Table, DuckDB temp table) and passes it as a named function argument; the script returns either a single tabular value (default output `default`) or a map of named outputs.
 
-Tabular handoffs use Arrow IPC. Everything is typed at the boundary.
+Tabular handoffs use **Arrow IPC** — the on-wire format is the same across all four languages. Decoding to the native type is constant-time for most numeric/string columns (zero-copy where the language has Arrow-aware buffer sharing).
 
-## Languages
+## The four languages
 
-### Python
+| Language | Native input type | Runtime model | Cold start |
+|---|---|---|---|
+| **Python** | `pandas.DataFrame` | Subprocess (one per node) | ~200ms |
+| **R** | `tibble` | Subprocess (one per node) | ~500ms |
+| **JavaScript** | `{ schema, rows }` + raw `arrow.Table` access | **In-process** (no subprocess) | ~0 |
+| **SQL** | Temp table named by slot key | DuckDB in-memory (warm across nodes) | ~0 |
 
-Minimum: 3.11. Required: `pyarrow` (data interchange). Recommended add-ons: `pandas`, `polars`, `numpy`.
+JavaScript and SQL are effectively free to call (no cold start). Python and R pay a per-node interpreter startup cost — keep that in mind when designing the DAG: prefer one fat Python node over many small ones.
 
-```python
-# scripts/features.py
-def run(cohort, threshold):
-    # `cohort` arrives as a pandas DataFrame
-    # `threshold` arrives as whatever type matches the params declaration
-    return cohort.assign(flag=(cohort["score"] > float(threshold)))
-```
+## Per-language pages
 
-YAML:
+Each language has a dedicated guide describing function signature, input/output handling, and what the YAML node needs to declare:
 
-```yaml
-- id: features
-  kind: script
-  language: python
-  source: scripts/features.py
-  in:
-    cohort:    upstream_node
-    threshold: params.threshold
-```
+- **[Python script nodes](/scripts/python/)** — pandas DataFrame in, dataframe out, matplotlib capture
+- **[R script nodes](/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
+- **[JavaScript script nodes](/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
+- **[SQL script nodes](/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
+- **[HTML output](/scripts/html/)** — *not a script language*, but a guide to producing the final HTML artifact (via `report.yaml` or a JS node that emits HTML)
 
-For multi-output, return a dict:
+## Per-call subprocess model (Python + R)
 
-```python
-def run(cohort):
-    return {"train": train_df, "test": test_df}
-```
+Each Python or R script-node run spawns a fresh subprocess. No warm pool, no shared interpreter state across nodes. This trades raw throughput for isolation and reproducibility.
 
-### R
+If you need warm state (loaded ML model, big initialized session), keep the work inside **one** script node.
 
-Minimum: R 4.0. Required: `arrow`, `jsonlite`, `tibble`.
+## Interpreter resolution
 
-```r
-# scripts/risk_adjust.R
-rime::register(
-  function(cohort, threshold) {
-    cohort$flag <- cohort$score > as.numeric(threshold)
-    cohort
-  },
-  in_slots  = list(cohort = "table", threshold = "any"),
-  out_slots = list(default = "table")
-)
-```
-
-The `rime::register` call wires the function to the runtime's named-slot protocol.
-
-### JavaScript
-
-Runs in Node 22+. The runtime ships a small `defineNode` helper:
-
-```js
-// scripts/enrich.mjs
-import { defineNode } from '@rimekit/runtime'
-
-export default defineNode({
-  in:  { cohort: 'table', threshold: 'any' },
-  out: { default: 'table' },
-  run: async ({ cohort, threshold }) => {
-    return cohort.rows.map((r) => ({
-      ...r,
-      flag: r.score > Number(threshold)
-    }))
-  }
-})
-```
-
-`cohort.rows` is an array of plain JS objects.
-
-### SQL
-
-Runs against an in-memory DuckDB. Each upstream node registers as a temp table named after its YAML slot key:
-
-```sql
--- queries/enrich.sql
-SELECT a.id, a.name, l.label
-FROM cohort a
-LEFT JOIN lookup l ON a.id = l.cohort_id
-```
-
-```yaml
-- id: enriched
-  kind: script
-  language: sql
-  source: queries/enrich.sql
-  in:
-    cohort: upstream_a
-    lookup: upstream_b
-```
-
-**Ingress mode** — a SQL node with no `in:` reads external files directly via DuckDB's file functions:
-
-```sql
-SELECT * FROM 'data/orders.parquet'
-```
-
-This is the fastest path to load Parquet into a DAG.
-
-## Pointing at a conda env or system R
-
-The CLI resolves Python and R via env vars:
+The CLI resolves Python and R via env vars (or inline `interpreters:` in the DAG):
 
 ```bash
 export RIME_PYTHON_BIN=/path/to/conda/envs/myenv/bin/python
 export RIME_RSCRIPT_BIN=$(which Rscript)
-rime build pipeline.dag.yaml
+rime run pipeline.dag.yaml
 ```
 
-CLI flags override env: `--python-bin` and `--rscript-bin`. When neither is set, defaults are `python3` and `Rscript` on PATH.
+CLI flags override env vars: `--python-bin` and `--rscript-bin`. When neither is set, defaults are `python3` and `Rscript` on PATH.
 
-You can also declare interpreters inline in the DAG (handy for one-machine pipelines, ignored if env / flags override):
+You can also declare interpreters inline in the DAG (handy for one-machine pipelines):
 
 ```yaml
 specification_version: "2.1"
@@ -135,18 +60,25 @@ interpreters:
 nodes: [...]
 ```
 
-## Per-call subprocess model
-
-Each script-node run spawns a fresh subprocess (Python / R / Node). There's no warm pool, no shared interpreter state across nodes. This trades raw throughput for isolation and reproducibility.
-
-Heavy-compute paths that need warm state should batch their work inside a single script node.
+CLI / env / flags always override inline `interpreters:`.
 
 ## Captured side effects
 
-The runtime captures, per node:
+The runtime captures per node:
 
-- **stdout** — `print()` / `cat()` output, available under `auditTrail.get(nodeId).stats.captured_stdout`
+- **stdout** — `print()`, `cat()`, `console.log()` output, available via `auditTrail.get(nodeId).stats.captured_stdout`
 - **matplotlib figures** (Python) — call `rime_runner.display_figure(fig)` to embed a PNG in the audit
+- **ggplot / lattice / base R plots** — call `rime::display_figure(p)` from R
 - **error tracebacks** — full subprocess stderr on non-zero exit
 
-These show up in the rendered HTML report when you target a node from a `markdown:` or `stat:` block.
+These surface in the rendered HTML report when you target a node from a `markdown:`, `stat:`, or `plot:` block in `report.yaml`.
+
+## Why Arrow IPC
+
+Three reasons Rime chose Arrow IPC as the wire format across language boundaries:
+
+1. **Constant-time decode.** Arrow is columnar with a fixed binary layout. Decoding to pandas / tibble / DuckDB table is a metadata read + pointer-bind for compatible types — independent of row count.
+2. **Zero-copy where possible.** Python's buffer protocol, R's altrep, and DuckDB's Arrow adapter all let the in-memory representation share buffers with Arrow. You pay one allocation, not one-per-column-per-language.
+3. **Type fidelity.** Arrow's type system is rich enough to round-trip pandas `Categorical`, R factors, DuckDB enum types, and timestamps with timezones — none of the lossiness of CSV/JSON.
+
+For non-tabular outputs (`out: { result: any }`), the runtime falls back to JSON encode/decode. Use `any` sparingly — it's the only place you pay JSON costs.
