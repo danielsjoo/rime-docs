@@ -48,6 +48,7 @@ export default defineConfig({
             { label: 'R', slug: 'scripts/r' },
             { label: 'JavaScript', slug: 'scripts/javascript' },
             { label: 'SQL', slug: 'scripts/sql' },
+            { label: 'HTML output', slug: 'scripts/html' },
           ],
         },
         {
