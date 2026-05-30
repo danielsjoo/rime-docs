@@ -15,7 +15,7 @@ Comparing means of a continuous variable between two groups (control vs treatmen
 
 ## Outputs
 
-`default`: a JSON-shaped result with `t_statistic`, `p_value`, `df`, `mean_a`, `mean_b`, and the sample sizes.
+`default`: a JSON-shaped result with `t_statistic`, `p_value`, `dof`, `meanA`, `meanB`, `mean_diff`, `mean_diff_ci_95`, `effect_size`, and the sample sizes `nA` / `nB`. These are the exact keys a report's `stat:` block accepts in its `show:` list.
 
 ## Example
 

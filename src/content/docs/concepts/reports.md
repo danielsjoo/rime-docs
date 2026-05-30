@@ -86,10 +86,25 @@ This is `rime run` plus the report-render step, atomic per invocation. The outpu
 
 ## Cross-file validation
 
-`rime validate report.yaml` checks:
+Validate the report alongside its DAG by passing it with `--report`:
+
+```bash
+rime validate pipeline.dag.yaml --report report.yaml
+```
+
+This checks:
 
 - `source:` references on every `table:` and `stat:` block resolve to a node in the linked DAG
 - The referenced node's output shape matches the block kind (tabular vs stat)
 - Column names referenced in `columns:` exist on the source's output schema
 
 Catch broken references at validate time, not run time.
+
+`stat:` `show:` keys that don't exist on the stat node's output aren't a hard
+validation error (the renderer can't always know the exact runtime shape), but
+they're easy to typo — `df` instead of `dof`, `mean_a` instead of `meanA`. When
+the rendered report meets a `show:` key the stat object never emitted, it prints
+an inline warning in the stat block listing the unknown keys and the available
+ones, so a typo shows up in the output instead of silently dropping a row. The
+exact keys per stat node are listed under [Outputs](/nodes/t_test/) in each
+node's reference page.
