@@ -34,7 +34,7 @@ npx rime --help
 
 ## Language sidecars
 
-If your DAG includes Python or R script nodes, you need a working interpreter on PATH (or pointed at via `--python-bin` / `--rscript-bin`) with the required packages installed.
+If your DAG includes Python or R language nodes, you need a working interpreter on PATH (or pointed at via `--python-bin` / `--rscript-bin`) with the required packages installed.
 
 ### Python
 

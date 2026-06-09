@@ -7,7 +7,7 @@ Keep a subset of columns by name.
 
 ## When to use
 
-Pruning before joins or expensive script nodes — narrower tables are cheaper to serialize across language boundaries.
+Pruning before joins or expensive language nodes — narrower tables are cheaper to serialize across language boundaries.
 
 ## Inputs
 
@@ -33,6 +33,6 @@ Pruning before joins or expensive script nodes — narrower tables are cheaper t
 
 ## See also
 
-- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

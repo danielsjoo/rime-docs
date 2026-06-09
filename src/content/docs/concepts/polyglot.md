@@ -7,7 +7,7 @@ Rime's defining property is its polyglot runtime: a single DAG can use four lang
 
 ## The protocol in one sentence
 
-Each script node declares **named input slots** in YAML; the runtime materializes each upstream output as a **native value** in the target language (pandas DataFrame, R tibble, Arrow Table, DuckDB temp table) and passes it as a named function argument; the script returns either a single tabular value (default output `default`) or a map of named outputs.
+Each language node declares **named input slots** in YAML; the runtime materializes each upstream output as a **native value** in the target language (pandas DataFrame, R tibble, Arrow Table, DuckDB temp table) and passes it as a named function argument; the script returns either a single tabular value (default output `default`) or a map of named outputs.
 
 Tabular handoffs use **Arrow IPC** — the on-wire format is the same across all four languages. Decoding to the native type is constant-time for most numeric/string columns (zero-copy where the language has Arrow-aware buffer sharing).
 
@@ -26,17 +26,17 @@ JavaScript and SQL are effectively free to call (no cold start). Python and R pa
 
 Each language has a dedicated guide describing function signature, input/output handling, and what the YAML node needs to declare:
 
-- **[Python script nodes](/scripts/python/)** — pandas DataFrame in, dataframe out, matplotlib capture
-- **[R script nodes](/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
-- **[JavaScript script nodes](/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
-- **[SQL script nodes](/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
+- **[Python language nodes](/scripts/python/)** — pandas DataFrame in, dataframe out, matplotlib capture
+- **[R language nodes](/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
+- **[JavaScript language nodes](/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
+- **[SQL language nodes](/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
 - **[HTML output](/scripts/html/)** — *not a script language*, but a guide to producing the final HTML artifact (via `report.yaml` or a JS node that emits HTML)
 
 ## Per-call subprocess model (Python + R)
 
 Each Python or R script-node run spawns a fresh subprocess. No warm pool, no shared interpreter state across nodes. This trades raw throughput for isolation and reproducibility.
 
-If you need warm state (loaded ML model, big initialized session), keep the work inside **one** script node.
+If you need warm state (loaded ML model, big initialized session), keep the work inside **one** language node.
 
 ## Interpreter resolution
 

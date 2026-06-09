@@ -11,8 +11,7 @@ A pure-SQL Rime pipeline — no Python, no R, no JS. Just SQL nodes (and the bui
 
 ```yaml
 - id: orders
-  kind: script
-  language: sql
+  kind: sql
   source: queries/orders.sql
 
 # queries/orders.sql:

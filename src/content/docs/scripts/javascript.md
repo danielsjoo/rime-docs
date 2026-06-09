@@ -1,18 +1,17 @@
 ---
-title: JavaScript script nodes
-description: How JavaScript script nodes work in Rime — defineNode helper, Arrow tables or row arrays in, dataframes out, runs in-process in Node 22+.
+title: JavaScript language nodes
+description: How JavaScript language nodes work in Rime — defineNode helper, Arrow tables or row arrays in, dataframes out, runs in-process in Node 22+.
 ---
 
-A JavaScript script node is a `script` node with `language: javascript`. You write a function via the `defineNode(...)` helper exported from `@rimekit/runtime`; the runtime invokes it with named arguments and captures the return value.
+A JavaScript language node uses `kind: javascript`. You write a function via the `defineNode(...)` helper exported from `@rimekit/runtime`; the runtime invokes it with named arguments and captures the return value.
 
-JavaScript nodes run **in-process** with the runtime — no subprocess spawn. This makes them the cheapest of the four languages.
+JavaLanguage nodes run **in-process** with the runtime — no subprocess spawn. This makes them the cheapest of the four languages.
 
 ## Minimum example
 
 ```yaml
 - id: enriched
-  kind: script
-  language: javascript
+  kind: javascript
   source: scripts/enrich.mjs
   in:
     cohort: features
@@ -85,8 +84,7 @@ YAML must declare matching outputs:
 
 ```yaml
 - id: split
-  kind: script
-  language: javascript
+  kind: javascript
   source: scripts/split.mjs
   in:  { cohort: features }
   out: { train: table, test: table }
@@ -142,15 +140,15 @@ run: async ({ config }) => {
 
 Required: Node 22+ (the same runtime that powers the Rime CLI; nothing extra to install).
 
-JavaScript script nodes are the recommended default for:
+JavaScript language nodes are the recommended default for:
 - External API fetches
 - Lightweight reshaping (row maps, filters, column derives) where SQL would be overkill
 - Anything you'd otherwise write a one-off Python script for, but want zero cold-start cost
 
 ## See also
 
-- [Python script nodes](/scripts/python/) — same protocol, pandas DataFrame native
-- [R script nodes](/scripts/r/) — same protocol, tibble native
-- [SQL script nodes](/scripts/sql/) — runs against DuckDB
-- [`script` node reference](/nodes/script/) — full field list
+- [Python language nodes](/scripts/python/) — same protocol, pandas DataFrame native
+- [R language nodes](/scripts/r/) — same protocol, tibble native
+- [SQL language nodes](/scripts/sql/) — runs against DuckDB
+- [Language node reference](/nodes/script/) — full field list
 - [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design

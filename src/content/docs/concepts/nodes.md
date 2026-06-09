@@ -23,7 +23,7 @@ Rime inverts this. Side effects are the runtime's job; functions just compute.
 | Each task owns its own I/O | Runtime owns I/O |
 | Coordination via storage paths | Coordination via typed dataframe ports |
 | Reproducibility requires hand-rolled idempotency | Caching is automatic (content-addressed) |
-| Multi-language = orchestrating subprocess calls | Multi-language = `language: r` in YAML; dataframes cross via Arrow IPC |
+| Multi-language = orchestrating subprocess calls | Multi-language = `kind: r` in YAML; dataframes cross via Arrow IPC |
 | You write the boilerplate | The runtime owns the boilerplate |
 
 This is the same intuition behind dbt's "you write the SELECT, we handle materialization" — extended past SQL into Python, R, and JavaScript.
@@ -40,8 +40,7 @@ def run(patients):
 
 ```yaml
 - id: cohort
-  kind: script
-  language: python
+  kind: python
   source: scripts/cohort.py
   in:
     patients: raw_patients   # upstream node ID
@@ -57,7 +56,7 @@ That's the whole node. The runtime:
 6. Writes the result to `outputs/cohort/default.parquet`,
 7. Makes it available to any downstream node that references `cohort`.
 
-Switch `language: python` to `language: r` and write the same function in R — same protocol, same caching, no glue code between them.
+Switch `kind: python` to `kind: r` and write the same function in R — same protocol, same caching, no glue code between them.
 
 ## Built-in node kinds
 
@@ -109,14 +108,13 @@ These return a small JSON-shaped result (test statistic, p-value, etc.) rather t
 
 Subgraphs are opaque from the outside; their `bindings:` map outer node refs to inner slot names, and their `outputs:` map exposed names to inner refs.
 
-## The script node — the escape hatch
+## The language node — the escape hatch
 
-Anything you can't express with the built-ins is a `script` node. Same functional contract — you write a function, declare its inputs as **named slots**, return a dataframe (or a dict of named dataframes):
+Anything you can't express with the built-ins is a language node. Same functional contract — you write a function, declare its inputs as **named slots**, return a dataframe (or a dict of named dataframes):
 
 ```yaml
 - id: features
-  kind: script
-  language: python
+  kind: python
   source: scripts/features.py
   in:
     cohort:    upstream_node      # dataframe slot
@@ -137,7 +135,7 @@ metadata:
 
 ## What this buys you
 
-- **Move scripts between languages without rewriting glue.** Switch `language: python` to `language: r`; the function signature stays the same.
+- **Move scripts between languages without rewriting glue.** Switch `kind: python` to `kind: r`; the function signature stays the same.
 - **No serialization decisions in user code.** Arrow IPC and Parquet are runtime concerns, not yours.
 - **Caching is automatic.** Change a script — only it and its downstream re-run. Change an input — same.
 - **Reproducibility is a side effect of the model, not extra work.** The cache key is `hash(source + inputs)`; same key = same result, every time.

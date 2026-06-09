@@ -1,16 +1,15 @@
 ---
-title: SQL script nodes
-description: How SQL script nodes work in Rime — DuckDB execution, upstream tables as temp views, ingress mode for reading external files directly.
+title: SQL language nodes
+description: How SQL language nodes work in Rime — DuckDB execution, upstream tables as temp views, ingress mode for reading external files directly.
 ---
 
-A SQL script node is a `script` node with `language: sql`. It runs against an in-memory DuckDB instance. Upstream node outputs are registered as **temp tables** named after the YAML `in:` slot key; you write a `SELECT` and the result becomes the node's output.
+A SQL language node uses `kind: sql`. It runs against an in-memory DuckDB instance. Upstream node outputs are registered as **temp tables** named after the YAML `in:` slot key; you write a `SELECT` and the result becomes the node's output.
 
 ## Minimum example
 
 ```yaml
 - id: enriched
-  kind: script
-  language: sql
+  kind: sql
   source: queries/enrich.sql
   in:
     orders:    upstream_orders
@@ -83,8 +82,7 @@ A SQL node with **no `in:` slot** is in "ingress mode": it can read external fil
 
 ```yaml
 - id: orders
-  kind: script
-  language: sql
+  kind: sql
   source: queries/orders.sql
 ```
 
@@ -114,7 +112,7 @@ Because DuckDB stays warm across SQL nodes in one run, **SQL nodes have effectiv
 
 - **Joins and aggregations** — DuckDB beats pandas, polars, and definitely R for these.
 - **Reading external files** — `read_parquet`, `read_csv`, `read_json` are first-class.
-- **Pre-shaping data for downstream Python/R script nodes** — the join/filter/aggregate in SQL, then hand off a small table for ML/stats.
+- **Pre-shaping data for downstream Python/R language nodes** — the join/filter/aggregate in SQL, then hand off a small table for ML/stats.
 - **Pure-SQL pipelines** — the `examples/sql-only` example shows what's possible without any other language.
 
 ## DuckDB extensions
@@ -133,9 +131,9 @@ No interpreter setup needed — DuckDB is bundled with the Rime runtime. The min
 
 ## See also
 
-- [Python script nodes](/scripts/python/) — for ML and statistical work
-- [R script nodes](/scripts/r/) — for tidyverse-style analysis
-- [JavaScript script nodes](/scripts/javascript/) — for external API fetches
-- [`script` node reference](/nodes/script/) — full field list
+- [Python language nodes](/scripts/python/) — for ML and statistical work
+- [R language nodes](/scripts/r/) — for tidyverse-style analysis
+- [JavaScript language nodes](/scripts/javascript/) — for external API fetches
+- [Language node reference](/nodes/script/) — full field list
 - [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design
 - [DuckDB documentation](https://duckdb.org/docs/) — the SQL dialect, file functions, extensions

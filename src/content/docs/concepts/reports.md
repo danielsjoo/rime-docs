@@ -82,7 +82,7 @@ This is `rime run` plus the report-render step, atomic per invocation. The outpu
 - A small navigation sidebar if you have multiple sections
 - Tables rendered to clean semantic HTML
 - Stat callouts as styled blocks
-- Captured matplotlib figures (Python script nodes only — see [Polyglot runtime](/concepts/polyglot/))
+- Captured matplotlib figures (Python language nodes only — see [Polyglot runtime](/concepts/polyglot/))
 
 ## Cross-file validation
 

@@ -16,7 +16,7 @@ Rime is a workflow system for authoring **polyglot data pipelines** and turning 
 A pipeline is a DAG (directed acyclic graph) of typed transforms. Each node is one of:
 
 - A **core node** — `filter`, `aggregate`, `join`, `pivot`, `sort`, `select`, `derive`, `concat`, or one of six statistical tests (`t_test`, `anova`, `mann_whitney_u`, `chi_square`, `correlation`, `linear_regression`). The runtime ships these; you don't write code.
-- A **script node** in Python, R, JavaScript, or SQL — for anything the core nodes don't cover. You write a function; the runtime owns I/O, serialization, and language boundaries. See the [per-language script pages](/scripts/python/).
+- A **language node** in Python, R, JavaScript, or SQL — for anything the core nodes don't cover. You write a function; the runtime owns I/O, serialization, and language boundaries. See the [per-language script pages](/scripts/python/).
 
 The DAG runs, outputs are content-addressed and cached, and — if you pair it with a `report.yaml` — the results render as an HTML document with tables, stat callouts, and prose.
 

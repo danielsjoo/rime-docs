@@ -186,8 +186,7 @@
 
 <span class="comment"># pipeline.dag.yaml — the runtime owns everything else</span>
 - id: cohort
-  kind: script
-  language: python
+  kind: python
   source: scripts/cohort.py
   in: { patients: raw_patients }</pre>
   </header>
@@ -205,7 +204,7 @@
       <a class="card" href="#">
         <div class="card-icon">↓</div>
         <h3>Install</h3>
-        <p>One brew command, one curl, or one npm install. Plus Python/R if you want script nodes.</p>
+        <p>One brew command, one curl, or one npm install. Plus Python/R if you want language nodes.</p>
       </a>
       <a class="card" href="#">
         <div class="card-icon">→</div>

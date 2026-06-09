@@ -35,6 +35,6 @@ Combining two tables on a shared key. For more than two inputs, chain multiple j
 
 ## See also
 
-- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

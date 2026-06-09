@@ -1,16 +1,15 @@
 ---
-title: R script nodes
-description: How R script nodes work in Rime — function signature, tibbles in, dataframes out, Arrow IPC under the hood.
+title: R language nodes
+description: How R language nodes work in Rime — function signature, tibbles in, dataframes out, Arrow IPC under the hood.
 ---
 
-An R script node is a `script` node with `language: r`. You write a function via `rime::register(...)`; the runtime hands it tibbles as named arguments and captures whatever you return.
+An R language node uses `kind: r`. You write a function via `rime::register(...)`; the runtime hands it tibbles as named arguments and captures whatever you return.
 
 ## Minimum example
 
 ```yaml
 - id: efficiency
-  kind: script
-  language: r
+  kind: r
   source: scripts/efficiency.R
   in:
     cohort: features
@@ -82,8 +81,7 @@ YAML must declare matching outputs:
 
 ```yaml
 - id: split
-  kind: script
-  language: r
+  kind: r
   source: scripts/split.R
   in:  { cohort: features }
   out: { train: table, test: table }
@@ -168,8 +166,8 @@ rime::register(
 
 ## See also
 
-- [Python script nodes](/scripts/python/) — same protocol, pandas instead of tibble
-- [JavaScript script nodes](/scripts/javascript/) — runs in Node 22+, in-process
-- [SQL script nodes](/scripts/sql/) — runs against DuckDB
-- [`script` node reference](/nodes/script/) — full field list
+- [Python language nodes](/scripts/python/) — same protocol, pandas instead of tibble
+- [JavaScript language nodes](/scripts/javascript/) — runs in Node 22+, in-process
+- [SQL language nodes](/scripts/sql/) — runs against DuckDB
+- [Language node reference](/nodes/script/) — full field list
 - [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design
