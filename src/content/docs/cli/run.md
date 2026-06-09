@@ -40,8 +40,8 @@ rime run pipeline.dag.yaml --isolated $TMPDIR/rime-ci
 
 | Flag | Default | Description |
 |---|---|---|
-| `--python-bin <path>` | `$RIME_PYTHON_BIN` or `python3` on PATH | Python interpreter for `language: python` script nodes |
-| `--rscript-bin <path>` | `$RIME_RSCRIPT_BIN` or `Rscript` on PATH | Rscript binary for `language: r` script nodes |
+| `--python-bin <path>` | `$RIME_PYTHON_BIN` or `python3` on PATH | Python interpreter for `kind: python` language nodes |
+| `--rscript-bin <path>` | `$RIME_RSCRIPT_BIN` or `Rscript` on PATH | Rscript binary for `kind: r` language nodes |
 
 ### Inputs
 

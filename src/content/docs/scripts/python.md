@@ -1,16 +1,15 @@
 ---
-title: Python script nodes
-description: How Python script nodes work in Rime — function signature, pandas DataFrames in, dataframes out, Arrow IPC under the hood, constant-time cast.
+title: Python language nodes
+description: How Python language nodes work in Rime — function signature, pandas DataFrames in, dataframes out, Arrow IPC under the hood, constant-time cast.
 ---
 
-A Python script node is a `script` node with `language: python`. You write a function; the runtime hands it pandas DataFrames as named arguments and captures whatever you return.
+A Python language node uses `kind: python`. You write a function; the runtime hands it pandas DataFrames as named arguments and captures whatever you return.
 
 ## Minimum example
 
 ```yaml
 - id: features
-  kind: script
-  language: python
+  kind: python
   source: scripts/features.py
   in:
     cohort: raw_patients     # upstream node id
@@ -60,8 +59,7 @@ def run(orders):
 
 ```yaml
 - id: filtered
-  kind: script
-  language: python
+  kind: python
   source: scripts/filter.py
   in: { orders: raw_orders }
 # Downstream refers to this as `filtered` (the default output)
@@ -83,8 +81,7 @@ The YAML node needs to declare the outputs it exposes:
 
 ```yaml
 - id: split
-  kind: script
-  language: python
+  kind: python
   source: scripts/split.py
   in:   { cohort: features }
   out:  { train: table, test: table }   # required for multi-output nodes
@@ -129,7 +126,7 @@ The figure is captured as a PNG in the run's audit trail and surfaces in the ren
 
 ## Subprocess model
 
-Each script-node run spawns a fresh Python subprocess — no warm interpreter pool, no module cache shared across nodes. Trade-off: cold-start cost (~200ms per Python node) for isolation and reproducibility. Heavy work that needs warm state (loaded ML model, big initialized pipeline) should fit inside **one** script node.
+Each Python node run spawns a fresh Python subprocess — no warm interpreter pool, no module cache shared across nodes. Trade-off: cold-start cost (~200ms per Python node) for isolation and reproducibility. Heavy work that needs warm state (loaded ML model, big initialized pipeline) should fit inside **one** language node.
 
 ## Environment
 
@@ -151,8 +148,8 @@ interpreters:
 
 ## See also
 
-- [R script nodes](/scripts/r/) — same protocol, different native type (`tibble`)
-- [JavaScript script nodes](/scripts/javascript/) — runs in Node 22+, in-process
-- [SQL script nodes](/scripts/sql/) — runs against DuckDB
-- [`script` node reference](/nodes/script/) — full field list
+- [R language nodes](/scripts/r/) — same protocol, different native type (`tibble`)
+- [JavaScript language nodes](/scripts/javascript/) — runs in Node 22+, in-process
+- [SQL language nodes](/scripts/sql/) — runs against DuckDB
+- [Language node reference](/nodes/script/) — full field list
 - [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design

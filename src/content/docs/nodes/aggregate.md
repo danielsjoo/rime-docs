@@ -7,7 +7,7 @@ Group rows by zero or more keys and reduce with named metrics.
 
 ## When to use
 
-Roll-ups for reports (mean / count / sum by category). For more complex windowed reductions, use a Python `script` node.
+Roll-ups for reports (mean / count / sum by category). For more complex windowed reductions, use a `kind: python` node.
 
 ## Inputs
 
@@ -36,6 +36,6 @@ Roll-ups for reports (mean / count / sum by category). For more complex windowed
 
 ## See also
 
-- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

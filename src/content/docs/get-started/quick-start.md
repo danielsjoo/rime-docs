@@ -7,7 +7,7 @@ This walkthrough takes you from a fresh install to a working pipeline that filte
 
 ## The mental model
 
-1. **Pipeline shape goes in `pipeline.dag.yaml`** — only data flow, no presentation, no execution config. Source nodes carry their data file paths inline (`path: data/foo.csv`); script nodes reference their files via `source:`. All relative paths resolve against the directory holding the DAG.
+1. **Pipeline shape goes in `pipeline.dag.yaml`** — only data flow, no presentation, no execution config. Source nodes carry their data file paths inline (`path: data/foo.csv`); language nodes reference their files via `source:`. All relative paths resolve against the directory holding the DAG.
 2. **Presentation goes in `report.yaml`** — sections, markdown blocks, `table:` and `stat:` blocks that point at DAG node ids.
 3. **Interpreter selection** — pass `--python-bin` / `--rscript-bin` on the CLI, or set `RIME_PYTHON_BIN` / `RIME_RSCRIPT_BIN`, or declare paths inline on the DAG via an optional `interpreters:` block.
 
@@ -55,7 +55,7 @@ Every node has:
 - `kind` (one of 14 — see [Node Reference](/concepts/nodes/))
 - For `kind: source`: `path:` pointing at a CSV / JSON / NDJSON / Parquet file (loaded with type inference; parquet preserves types)
 - For built-in nodes (`filter`/`derive`/`aggregate`/...): `inputs:` (array of upstream node id refs; use `nodeId.outputName` for multi-output nodes)
-- For `kind: script` nodes (v2.1): `in:` map (slot name → ref string; refs may be `nodeId`, `nodeId.outputName`, or `params.<name>`)
+- For language nodes (v2.1): `in:` map (slot name → ref string; refs may be `nodeId`, `nodeId.outputName`, or `params.<name>`)
 - Type-specific fields at the top level (`expr`, `groupBy`, `metrics`, etc. — no `params:` bag)
 
 ## Step 2: declare what to render
@@ -93,9 +93,9 @@ rime build pipeline.dag.yaml --report report.yaml
 
 Runs the DAG, validates the report against it, renders HTML in one atomic invocation. Output lands at `outputs/run_report.html` next to the DAG file (override with `--out`).
 
-## Adding a script node
+## Adding a language node
 
-For anything beyond the built-in transforms, use a script node. v2.1 supports four languages (`python`, `r`, `javascript`, `sql`). Each script declares its inputs as **named slots**; scalar values come from a top-level `params:` block:
+For anything beyond the built-in transforms, use a language node. v2.1 supports four languages (`python`, `r`, `javascript`, `sql`). Each script declares its inputs as **named slots**; scalar values come from a top-level `params:` block:
 
 ```yaml
 specification_version: "2.1"
@@ -110,8 +110,7 @@ nodes:
     expr: "[age] >= 18"
 
   - id: features
-    kind: script
-    language: python
+    kind: python
     source: scripts/features.py
     in:
       adults:    adults              # node ref -> resolves to a Table
@@ -129,8 +128,7 @@ def run(adults, threshold):
 
 ```yaml
 - id: enriched
-  kind: script
-  language: sql
+  kind: sql
   source: queries/enrich.sql
   in:
     adults: adults

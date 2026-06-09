@@ -37,7 +37,7 @@ A node's cache key hashes:
 - **Parent output digests** — so any upstream change invalidates downstream
 - **Spec + runtime versions**
 - **Source file digest** (for `source` nodes, the data file's content hash)
-- **Script body digest** (for `script` nodes, the script file + its declared requirements)
+- **Language source digest** (for `kind: python`, `kind: r`, `kind: javascript`, and `kind: sql` nodes, the source file + its declared requirements)
 
 Two runs produce identical cache keys iff they would produce identical outputs. Outputs are content-addressable.
 

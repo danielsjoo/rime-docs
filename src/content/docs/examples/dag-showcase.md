@@ -3,7 +3,7 @@ title: DAG showcase
 description: A multi-branch demo pipeline mixing SQL, Python, R, and built-in operators.
 ---
 
-The repo's [`examples/dag-showcase/`](https://github.com/rimekit/rime/tree/main/examples/dag-showcase) is the broadest demo: a self-contained DAG-file-mode project that exercises sources, transforms, joins, stat nodes, and script nodes in all four supported languages.
+The repo's [`examples/dag-showcase/`](https://github.com/rimekit/rime/tree/main/examples/dag-showcase) is the broadest demo: a self-contained DAG-file-mode project that exercises sources, transforms, joins, stat nodes, and language nodes in all four supported languages.
 
 ## What's inside
 
@@ -41,8 +41,8 @@ It's the smallest pipeline that hits every interesting Rime feature:
 | Built-in transforms | `filter` / `derive` / `aggregate` chains |
 | SQL nodes (with inputs) | `sql_patient_lab` joining cohort + labs |
 | SQL nodes (ingress-only) | `sql_cohort_refine` reading from parquet directly |
-| Python script node | `py_biomarker_features` |
-| R script node | `r_risk_adjust` |
+| Python language node | `py_biomarker_features` |
+| R language node | `r_risk_adjust` |
 | Stat nodes | `correlation` + `chi_square` over the rolled-up site outcomes |
 | Multi-branch graph | independent feature + risk branches that converge at the site rollup |
 | Report rendering | `report.yaml` pulls tables + stat callouts from named nodes |

@@ -42,7 +42,7 @@ You get:
 
 - Inline CSS, no external stylesheet, no JS framework
 - Clean semantic HTML for tables and stat callouts
-- Captured matplotlib figures from Python script nodes
+- Captured matplotlib figures from Python language nodes
 - Section navigation if you have multiple sections
 - Reproducible — same DAG outputs + same `report.yaml` = byte-identical HTML
 
@@ -50,12 +50,11 @@ You get:
 
 ## Path B — JavaScript emits HTML (escape hatch)
 
-When the [three report block kinds](/concepts/reports/#block-kinds) (markdown / table / stat) aren't enough — custom D3 visualizations, bespoke layouts, embedded interactive widgets — write a JavaScript script node that returns an HTML string and writes it to a file.
+When the [three report block kinds](/concepts/reports/#block-kinds) (markdown / table / stat) aren't enough — custom D3 visualizations, bespoke layouts, embedded interactive widgets — write a JavaScript language node that returns an HTML string and writes it to a file.
 
 ```yaml
 - id: d3_narrative
-  kind: script
-  language: javascript
+  kind: javascript
   source: scripts/d3_narrative.mjs
   in:
     cohort: by_site
@@ -168,5 +167,5 @@ For the simplest distribution story: **inline everything**, ship one `.html` fil
 ## See also
 
 - [Concepts → Reports](/concepts/reports/) — the full `report.yaml` schema reference
-- [JavaScript script nodes](/scripts/javascript/) — function signature, in-process execution model, async support
+- [JavaScript language nodes](/scripts/javascript/) — function signature, in-process execution model, async support
 - [Outputs & caching](/concepts/outputs/) — how Rime writes artifacts to disk

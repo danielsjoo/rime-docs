@@ -7,7 +7,7 @@ File-based ingress: read a CSV / JSON / NDJSON / Parquet file into a tabular val
 
 ## When to use
 
-Whenever your data starts as a file on disk. For SQL-only pipelines, consider a `script` node with `language: sql` in ingress mode instead — it reads files directly via DuckDB and is often faster for large Parquet.
+Whenever your data starts as a file on disk. For SQL-only pipelines, consider a `kind: sql` node in ingress mode instead — it reads files directly via DuckDB and is often faster for large Parquet.
 
 ## Inputs
 
@@ -32,6 +32,6 @@ None — `source` is a root node.
 
 ## See also
 
-- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

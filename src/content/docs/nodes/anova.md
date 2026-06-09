@@ -7,7 +7,7 @@ One-way analysis of variance across N groups.
 
 ## When to use
 
-Comparing means across three or more groups. For exactly two groups, use `t_test`. For non-normal data, consider Kruskal-Wallis (not built in — write a Python `script` node).
+Comparing means across three or more groups. For exactly two groups, use `t_test`. For non-normal data, consider Kruskal-Wallis (not built in — write a `kind: python` node).
 
 ## Inputs
 
@@ -35,6 +35,6 @@ Comparing means across three or more groups. For exactly two groups, use `t_test
 
 ## See also
 
-- [`script` node](/nodes/script/) — the escape hatch when this node isn't enough
+- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

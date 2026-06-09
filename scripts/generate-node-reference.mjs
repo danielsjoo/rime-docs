@@ -23,7 +23,7 @@ const KINDS = [
     blurb: 'File-based ingress: read a CSV / JSON / NDJSON / Parquet file into a tabular value.',
     inputs: 'None — `source` is a root node.',
     outputs: '`default`: the loaded table. Schema is inferred from the file (`.parquet` preserves types; `.csv` infers headers; `.json` / `.ndjson` infer field types).',
-    whenToUse: 'Whenever your data starts as a file on disk. For SQL-only pipelines, consider a `script` node with `language: sql` in ingress mode instead — it reads files directly via DuckDB and is often faster for large Parquet.',
+    whenToUse: 'Whenever your data starts as a file on disk. For SQL-only pipelines, consider a `kind: sql` node in ingress mode instead — it reads files directly via DuckDB and is often faster for large Parquet.',
     pitfalls: [
       'CSV header inference is best-effort — if column names contain non-ASCII or special characters, explicitly cast in a downstream `derive`.',
       'JSON files load as a single table — for ndjson (one record per line), use the `.ndjson` extension.',
@@ -56,7 +56,7 @@ const KINDS = [
     blurb: 'Group rows by zero or more keys and reduce with named metrics.',
     inputs: '1 input. The table to aggregate.',
     outputs: '`default`: one row per group, columns = `groupBy:` keys + `metrics:` results.',
-    whenToUse: 'Roll-ups for reports (mean / count / sum by category). For more complex windowed reductions, use a Python `script` node.',
+    whenToUse: 'Roll-ups for reports (mean / count / sum by category). For more complex windowed reductions, use a `kind: python` node.',
     pitfalls: [
       '`groupBy:` can be empty (`[]`) for a global aggregation that produces exactly one row.',
       'Each metric must be a single named expression: `"[mean_age] = [age].mean()"`. Multiple metrics share one `aggregate` node.',
@@ -67,7 +67,7 @@ const KINDS = [
     blurb: 'Keep a subset of columns by name.',
     inputs: '1 input.',
     outputs: '`default`: the input table restricted to columns listed in `columns:`.',
-    whenToUse: 'Pruning before joins or expensive script nodes — narrower tables are cheaper to serialize across language boundaries.',
+    whenToUse: 'Pruning before joins or expensive language nodes — narrower tables are cheaper to serialize across language boundaries.',
     pitfalls: [
       'Columns are kept in the order you list them. If you care about column ordering in the report, this is the node that controls it.',
       'Selecting a nonexistent column is a hard error (caught at validate time).',
@@ -133,7 +133,7 @@ const KINDS = [
     blurb: 'One-way analysis of variance across N groups.',
     inputs: '1 input. Data with a continuous outcome column and a grouping column.',
     outputs: '`default`: a JSON-shaped result with `F_statistic`, `p_value`, `df_between`, `df_within`, and per-group sample sizes / means.',
-    whenToUse: 'Comparing means across three or more groups. For exactly two groups, use `t_test`. For non-normal data, consider Kruskal-Wallis (not built in — write a Python `script` node).',
+    whenToUse: 'Comparing means across three or more groups. For exactly two groups, use `t_test`. For non-normal data, consider Kruskal-Wallis (not built in — write a `kind: python` node).',
     pitfalls: [
       'ANOVA assumes group variances are roughly equal. If they\'re not, results are less reliable; consider a non-parametric alternative.',
       'A significant overall F doesn\'t tell you which groups differ — follow up with pairwise `t_test` nodes for the comparisons you care about.',
@@ -177,7 +177,7 @@ const KINDS = [
     blurb: 'Single-feature ordinary least squares regression, with optional train/test split.',
     inputs: '1 input.',
     outputs: '`default`: a JSON-shaped result with `intercept`, `slope`, `r_squared`, `p_value`, and (if `splitRatio` set) train/test metrics.',
-    whenToUse: 'Quick single-predictor regression for a report stat callout. For multi-feature regression or non-linear models, use a Python `script` node with statsmodels or scikit-learn.',
+    whenToUse: 'Quick single-predictor regression for a report stat callout. For multi-feature regression or non-linear models, use a `kind: python` node with statsmodels or scikit-learn.',
     pitfalls: [
       'Single feature only. If you need multiple predictors, this is the wrong node.',
       '`splitRatio` defaults to no split (training on all data). Set to e.g. 0.8 if you want a held-out test set.',
@@ -196,14 +196,30 @@ const KINDS = [
   },
   {
     kind: 'script',
-    blurb: 'Custom logic in Python, R, JavaScript, or SQL. The escape hatch when no core node fits.',
+    title: 'language nodes',
+    blurb: 'Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits.',
     inputs: 'Variable — declare named slots in `in:`. Each slot can be a dataframe ref or a `params.*` reference.',
     outputs: '`default` by default, or multiple named outputs declared in `out:`.',
     whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.',
     pitfalls: [
       'Multi-output nodes (`out:`) require the language function to return a dict / list / object whose keys match.',
-      'No `params.*` slots → no params at all. To pass a top-level param to a script, you must wire it through the YAML.',
+      'No `params.*` slots → no params at all. To pass a top-level param to a language node, you must wire it through the YAML.',
     ],
+    example: `specification_version: "2.1"
+
+params:
+  threshold: { type: float, default: 0.5 }
+
+nodes:
+  - id: features
+    kind: python
+    source: scripts/features.py
+    in:
+      cohort: upstream_node
+      threshold: params.threshold
+    out:
+      default: table
+    entrypoint: run`,
   },
 ];
 
@@ -239,7 +255,7 @@ function extractYamlExample(refBody) {
 let written = 0;
 for (const meta of KINDS) {
   const refBody = refByKind.get(meta.kind);
-  const yaml = extractYamlExample(refBody);
+  const yaml = extractYamlExample(refBody) ?? meta.example;
 
   const pitfallsList = meta.pitfalls
     .map((p) => `- ${p}`)
@@ -249,7 +265,7 @@ for (const meta of KINDS) {
   const yamlString = (s) => `"${s.replace(/"/g, '\\"')}"`;
 
   const content = `---
-title: ${meta.kind}
+title: ${meta.title ?? meta.kind}
 description: ${yamlString(meta.blurb)}
 ---
 
@@ -277,7 +293,7 @@ ${pitfallsList}
 
 ## See also
 
-- [\`script\` node](/nodes/script/) — the escape hatch when this node isn't enough
+${meta.kind === 'script' ? '- [Python language nodes](/scripts/python/) — pandas-based transforms\n- [R language nodes](/scripts/r/) — tibble-based transforms\n- [JavaScript language nodes](/scripts/javascript/) — Node-based transforms\n- [SQL language nodes](/scripts/sql/) — DuckDB-backed transforms' : '- [Language node reference](/nodes/script/) — the escape hatch when this node isn\'t enough'}
 - [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
 - [\`packages/core/src/schema.ts\`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
 `;

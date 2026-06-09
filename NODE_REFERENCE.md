@@ -199,10 +199,11 @@ Type-specific fields are **at the top level on the node**, not in a `params:` ba
 
 The inner spec parses as a v2 DAG. Lineage / engine treat the subgraph as opaque from the outside; bindings/outputs are the contract.
 
-## `script` — Python / R / JavaScript / SQL
+## Language nodes — Python / R / JavaScript / SQL
 
-**v2.1**: script nodes use a named **`in:`** map instead of positional `inputs:`. The
-slot keys must match the script's declared/inferred parameters (Python signature, R
+Language nodes use the language as their `kind:`: `python`, `r`, `javascript`, or
+`sql`. They use a named **`in:`** map instead of positional `inputs:`. The
+slot keys must match the language node's declared/inferred parameters (Python signature, R
 `register()` / function args, JS `defineNode`, SQL `FROM`/`JOIN` table identifiers).
 Top-level scalars come from the [top-level `params:` block](#top-level-params-block-v21)
 and are wired via `params.<name>` refs.
@@ -215,8 +216,7 @@ params:
 
 nodes:
   - id: features
-    kind: script
-    language: python              # python | r | javascript | sql
+    kind: python                  # python | r | javascript | sql
     source: scripts/features.py
     in:                           # named slot map: slot → ref
       cohort:    upstream_node    # node ref → resolves to a Table
@@ -241,7 +241,7 @@ DuckDB; Python/R/JS scripts may fetch their own data).
 
 Scalars only: `float`, `int`, `string`, `bool`, `date`, `timestamp`. Immutable for the
 run; defaults at declaration; CLI/env overrides at run-start (`rime run --param
-name=value` or `RIME_PARAM_<NAME>` env). Reachable from any script node's `in:` slot
+name=value` or `RIME_PARAM_<NAME>` env). Reachable from any language node's `in:` slot
 via `params.<name>`. Per-node param refs are tracked precisely — overriding `--param
 threshold=0.7` only busts caches of nodes that actually wire `params.threshold`.
 
@@ -262,13 +262,13 @@ See [`CUSTOM_SCRIPT.md`](CUSTOM_SCRIPT.md) for per-language protocols.
 
 | v1 kind | v2 replacement |
 |---|---|
-| `custom_script` | `kind: script` with `language:` |
-| `sql` | `kind: script, language: sql` (with inputs) |
-| `sql_source` | `kind: script, language: sql` (no inputs) |
-| `predict` | use a `kind: script, language: python` (sklearn) — see [`proposals/v2/dag-grammar.md`](proposals/v2/dag-grammar.md#removed-deferred--see-note-below-predict) |
+| `custom_script` | `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` |
+| `sql` | `kind: sql` (with inputs) |
+| `sql_source` | `kind: sql` (no inputs) |
+| `predict` | use `kind: python` (sklearn) — see [`proposals/v2/dag-grammar.md`](proposals/v2/dag-grammar.md#removed-deferred--see-note-below-predict) |
 | `table` | move to `report.yaml` `table:` block |
 | `html_block` | move to `report.yaml` `markdown:` block |
-| `drop` / `rename` / `distinct` / `window` | `select` + `script` |
+| `drop` / `rename` / `distinct` / `window` | `select` + a language node |
 
 ## Metadata
 
