@@ -14,7 +14,7 @@ The smallest interesting Rime DAG, built step by step:
 3. `derive` — compute body mass index from mass + flipper length.
 4. `aggregate` — group by island, summarize.
 5. `t_test` — compare two islands' mean body mass.
-6. `report.yaml` — render the result as one table + one stat callout.
+6. `rime build` — render the result as auto-report node cards with table and stat outputs.
 
 Good for: first time seeing how the core nodes compose, what the YAML looks like, and how a report rolls up.
 

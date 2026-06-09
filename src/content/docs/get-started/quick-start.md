@@ -7,8 +7,8 @@ This walkthrough takes you from a fresh install to a working pipeline that filte
 
 ## The mental model
 
-1. **Pipeline shape goes in `pipeline.dag.yaml`** — only data flow, no presentation, no execution config. Source nodes carry their data file paths inline (`path: data/foo.csv`); language nodes reference their files via `source:`. All relative paths resolve against the directory holding the DAG.
-2. **Presentation goes in `report.yaml`** — sections, markdown blocks, `table:` and `stat:` blocks that point at DAG node ids.
+1. **Pipeline shape goes in `pipeline.dag.yaml`** — data flow plus default report inclusion. Source nodes carry their data file paths inline (`path: data/foo.csv`); language nodes reference their files via `source:`. All relative paths resolve against the directory holding the DAG.
+2. **Reports are generated from the DAG** — every node appears by default; set `metadata.report: false` to hide raw or intermediate nodes.
 3. **Interpreter selection** — pass `--python-bin` / `--rscript-bin` on the CLI, or set `RIME_PYTHON_BIN` / `RIME_RSCRIPT_BIN`, or declare paths inline on the DAG via an optional `interpreters:` block.
 
 Every node in the DAG takes tabular inputs and is configured by fields hard-coded into the node (expressions, parameters). You're tracing the flow of data through the graph.
@@ -20,7 +20,7 @@ The simplest invocation: one file, one command. No project marker, no scaffoldin
 ```bash
 rime run path/to/pipeline.dag.yaml
 rime run path/to/pipeline.dag.yaml --python-bin ~/conda/envs/foo/bin/python
-rime build path/to/pipeline.dag.yaml --report path/to/report.yaml
+rime build path/to/pipeline.dag.yaml
 ```
 
 The directory containing the DAG file is the root for relative paths and where `outputs/` lands.
@@ -58,40 +58,27 @@ Every node has:
 - For language nodes (v2.1): `in:` map (slot name → ref string; refs may be `nodeId`, `nodeId.outputName`, or `params.<name>`)
 - Type-specific fields at the top level (`expr`, `groupBy`, `metrics`, etc. — no `params:` bag)
 
-## Step 2: declare what to render
+## Step 2: choose what to render
 
 ```yaml
-# report.yaml
-specification_version: "1.0"
-pipeline: pipeline.dag.yaml
-title: "Cohort overview"
-output:
-  format: html
-  path: outputs/run_report.html
-
-sections:
-  - heading: "Cohort summary"
-    blocks:
-      - markdown: |
-          ## Adult cohort
-          Filtered to patients aged 18 and over.
-
-      - table:
-          source: by_site
-          title: "Site-level mean age"
-          columns: [site, mean_age, n]
-          decimals: 2
+- id: patients
+  kind: source
+  path: data/patients.csv
+  metadata:
+    report: false
 ```
 
-Three block kinds: `markdown:` (with `## headings`, **bold**, etc.), `table:` (any tabular DAG node), `stat:` (a stat-producing node — t_test, anova, correlation, chi_square, mann_whitney_u, linear_regression).
+Reports include every node by default. Use `metadata.report: false` for raw
+sources or intermediate steps that should not appear in the HTML output.
 
 ## Step 3: build
 
 ```bash
-rime build pipeline.dag.yaml --report report.yaml
+rime build pipeline.dag.yaml
 ```
 
-Runs the DAG, validates the report against it, renders HTML in one atomic invocation. Output lands at `outputs/run_report.html` next to the DAG file (override with `--out`).
+Runs the DAG and renders HTML in one atomic invocation. Output lands at
+`outputs/run_report.html` next to the DAG file (override with `--out`).
 
 ## Adding a language node
 
@@ -150,7 +137,7 @@ Each upstream node registers as a DuckDB temp table named after the node id.
 rime validate pipeline.dag.yaml
 ```
 
-Checks DAG schema, graph integrity (no cycles, all input refs resolve), and report cross-file refs.
+Checks DAG schema and graph integrity (no cycles, all input refs resolve).
 
 ## Next
 

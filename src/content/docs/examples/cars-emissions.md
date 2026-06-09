@@ -9,7 +9,7 @@ description: A flagship multi-language Rime pipeline — SQL source + JavaScript
 
 - **Four languages in one DAG**: SQL (via DuckDB) for the source query, JavaScript for an external CO₂ API fetch, Python for UMAP embedding, R for an efficiency-trends linear regression.
 - **Dataframes crossing language boundaries** via Arrow IPC — no manual file handoffs, no serialization decisions in user code.
-- **Statistical terminal nodes** (`t_test` for USA vs Japan MPG, `anova` for cylinder counts) feeding `stat:` blocks in `report.yaml`.
+- **Statistical terminal nodes** (`t_test` for USA vs Japan MPG, `anova` for cylinder counts) rendered as stat-style output cells in the auto-report.
 - **A rendered HTML report** weaving tables, statistics, and prose into a publishable narrative.
 
 ## Run it locally

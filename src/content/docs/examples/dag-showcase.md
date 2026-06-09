@@ -25,8 +25,8 @@ rime validate examples/dag-showcase/pipeline.dag.yaml
 # Run (data outputs only)
 rime run examples/dag-showcase/pipeline.dag.yaml
 
-# Build (run + render report.yaml -> HTML)
-rime build examples/dag-showcase/pipeline.dag.yaml --report examples/dag-showcase/report.yaml
+# Build (run + render auto-report -> HTML)
+rime build examples/dag-showcase/pipeline.dag.yaml
 ```
 
 Or open the folder in Rime Editor — it detects the `pipeline.dag.yaml` and treats the directory as the project root.
@@ -45,6 +45,6 @@ It's the smallest pipeline that hits every interesting Rime feature:
 | R language node | `r_risk_adjust` |
 | Stat nodes | `correlation` + `chi_square` over the rolled-up site outcomes |
 | Multi-branch graph | independent feature + risk branches that converge at the site rollup |
-| Report rendering | `report.yaml` pulls tables + stat callouts from named nodes |
+| Report rendering | Auto-report includes DAG nodes unless `metadata.report: false` |
 
 If you want a smaller starting point, see [`examples/single-file/`](https://github.com/rimekit/rime/tree/main/examples/single-file).

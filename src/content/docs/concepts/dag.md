@@ -13,7 +13,7 @@ nodes:                          # required, >=1, acyclic, unique ids
   - ...
 ```
 
-The DAG describes pipeline shape only. Presentation lives in `report.yaml`. Execution config lives in `runtime.yaml` (or inline `interpreters:` block). Data file paths live inline on source nodes (`path: data/foo.csv`). Each file has one job.
+The DAG describes pipeline shape and default report inclusion. Execution config lives in `runtime.yaml` (or inline `interpreters:` block). Data file paths live inline on source nodes (`path: data/foo.csv`). Reports include every node unless `metadata.report: false` is set.
 
 ## Node shape (shared)
 
@@ -25,6 +25,7 @@ The DAG describes pipeline shape only. Presentation lives in `report.yaml`. Exec
   metadata:                     # optional; closed schema
     label: "Friendly label"
     group: "ingest"
+    report: false                # optional; omit or true to include in auto-report
     visual_stats: ["row_count"]
     cache: false                # boolean | { policy: ttl, seconds: N }
 ```
@@ -38,7 +39,7 @@ Wherever a node references an upstream output:
 - `node_id` — the default output of the named node
 - `node_id.output_name` — a named output of a multi-output node
 
-Used in `inputs:`, `subgraph.bindings`, `subgraph.outputs`, and `report.yaml`'s `table.source` / `stat.source`.
+Used in `inputs:`, `subgraph.bindings`, and `subgraph.outputs`.
 
 ## Validation
 
@@ -57,7 +58,6 @@ A pipeline can live as a single `pipeline.dag.yaml` file (no marker required) or
 my-project/
 ├── rime.project.yaml          # marker + optional config
 ├── pipeline.dag.yaml          # the DAG
-├── report.yaml                # optional, rendered by `rime build`
 ├── data/                      # raw data files (relative paths in DAG)
 ├── scripts/                   # python/r/js/sql script files
 ├── outputs/                   # generated outputs (gitignore this)

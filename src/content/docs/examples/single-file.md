@@ -53,4 +53,4 @@ Outputs land under `examples/single-file/outputs/by_island/default.parquet`.
 
 ## Why start here
 
-No language nodes, no Python / R interpreters required, no `report.yaml`. This is the smallest amount of Rime that does something interesting — useful for verifying your install or as the seed of a larger pipeline you grow into.
+No language nodes, no Python / R interpreters required, no companion report file. This is the smallest amount of Rime that does something interesting — useful for verifying your install or as the seed of a larger pipeline you grow into.
