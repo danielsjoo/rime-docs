@@ -3,7 +3,7 @@ title: Rime
 description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
 template: splash
 hero:
-  tagline: Nodes are functions over dataframes. Author them visually in the Rime Editor — or in YAML if that's your thing — and Rime threads them into a reproducible pipeline that renders as HTML.
+  tagline: "Two ways to build reproducible data work: compose core nodes for fast analysis, or write script functions in the language you want. Rime handles the DAG, cache, logs, outputs, and report."
   actions:
     - text: Download the Editor
       link: /editor/overview/
@@ -20,46 +20,37 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Start with the Editor
+## Two ways to use Rime
 
-**Rime Editor** is the easiest way to use Rime. No YAML to learn. No file watching. Drag in a CSV, wire up SQL → Python → R → chart, run, see the report. Reactive, explorative, clean.
+Rime can be a no-code analysis tool, a polyglot scripting runtime, or both in the same DAG.
 
 <CardGrid>
-  <LinkCard
-    title="Download Rime Editor"
-    description="macOS, Windows, Linux. Free closed beta. Includes the runtime — nothing else to install."
-    href="/editor/install/"
-  />
-  <LinkCard
-    title="UI tour (2 min)"
-    description="Top-down DAG canvas, integrated Monaco editor, live data preview, statistical nodes built in."
-    href="/editor/ui-tour/"
-  />
-  <LinkCard
-    title="Set up Python & R"
-    description="Optional — only if you want language nodes. The built-in 14 node kinds run with no setup."
-    href="/editor/languages/"
-  />
+  <Card title="Core nodes" icon="approve-check">
+    Use `filter`, `derive`, `aggregate`, `join`, `pivot`, stats, and other built-ins for simple data analysis. You get automatic logging, content-addressed caching, assumption/statistical testing, Excel-like expressions, data diffs, DAG visualization, no-code editing in Rime Editor, and an HTML report without writing glue code.
+  </Card>
+  <Card title="Script nodes" icon="puzzle">
+    When the built-ins are not enough, define a function in Python, R, JavaScript, or SQL for retrieval or transformation. Name the inputs, return tables or objects, and Rime handles I/O, serialization, cache keys, artifacts, stdout, figures, and downstream wiring.
+  </Card>
 </CardGrid>
 
-## Or work in YAML + CLI
+## Choose your surface
 
-The Editor and the CLI both consume the same `pipeline.dag.yaml`. Use whichever fits the moment.
+The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually, drop to YAML, or run the same project in CI.
 
 <CardGrid>
   <LinkCard
+    title="Rime Editor"
+    description="Visual DAG authoring, live table previews, data diffs, and no-code core-node workflows."
+    href="/editor/overview/"
+  />
+  <LinkCard
     title="What is Rime?"
-    description="The two-minute pitch. Where Rime fits between Snakemake, dbt, Hex, and Quarto."
+    description="The two-minute pitch: core nodes, script functions, reports, and where Rime fits."
     href="/get-started/what-is-rime/"
   />
   <LinkCard
-    title="Install the CLI"
-    description="One brew command, one curl, or one npm install. For CI, scripting, or vim-people."
-    href="/get-started/install/"
-  />
-  <LinkCard
     title="Quick start"
-    description="Author your first DAG in 10 minutes. SQL → Python → R → HTML report, end to end."
+    description="Author your first DAG in 10 minutes. Core nodes, script nodes, and HTML report, end to end."
     href="/get-started/quick-start/"
   />
 </CardGrid>
