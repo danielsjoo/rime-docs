@@ -3,11 +3,14 @@ title: What is Rime?
 description: A high-level overview of Rime — what it is, what it isn't, who it's for. (TL;DR — open the Rime Editor and you're 80% of the way there.)
 ---
 
-## TL;DR — open the Editor
+## TL;DR — two ways to use Rime
 
-The fastest path into Rime is to **download [Rime Editor](/editor/install/)**, open it, drop a CSV in, and wire up a few nodes. No YAML to learn. No CLI. Just reactive blocks that show their data as you connect them.
+Rime has two complementary modes:
 
-The Editor is the front door. Everything below explains what's happening under it.
+1. **Core nodes** — use built-in nodes for simple data analysis: filter rows, derive columns, aggregate, join, pivot, select, sort, run statistical tests, and inspect outputs. Rime gives you automatic logging, content-addressed caching, assumption/statistical testing, Excel-like expressions, data diffs, DAG visualization, no-code authoring in [Rime Editor](/editor/overview/), and an HTML report.
+2. **Script nodes** — define functions in Python, R, JavaScript, or SQL for data retrieval or transformation. You write the function signature and body; Rime handles dataframe I/O, serialization, cache keys, artifacts, stdout, figures, and downstream wiring.
+
+Most projects use both: core nodes for the ordinary data-shaping work, scripts for the parts that need a real language.
 
 ## What Rime is
 
@@ -20,7 +23,7 @@ A pipeline is a DAG (directed acyclic graph) of typed transforms. Each node is o
 
 The DAG runs, outputs are content-addressed and cached, and `rime build` renders the results as an HTML document with node-level status, output previews, stat callouts, stdout, and figures.
 
-## Two ways to author
+## Two ways to author the same DAG
 
 | | Rime Editor | YAML + CLI |
 |---|---|---|
