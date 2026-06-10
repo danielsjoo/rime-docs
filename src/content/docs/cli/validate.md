@@ -7,7 +7,7 @@ description: Validate a DAG (or DAG + report) without running it.
 rime validate <pipeline.dag.yaml> [--source source_id=path]
 ```
 
-Parse the DAG, verify the schema, check graph integrity (no cycles, all input refs resolve), and confirm any companion `report.yaml` block references resolve. No execution.
+Parse the DAG, verify the schema, and check graph integrity (no cycles, all input refs resolve). No execution.
 
 ## What it checks
 
@@ -17,7 +17,7 @@ Parse the DAG, verify the schema, check graph integrity (no cycles, all input re
 4. **Input ref resolution** — every `inputs:` ref points at a known node (`nodeId` or `nodeId.outputName`)
 5. **Acyclic** — no cycles; if one is found, the offending node id is in the error
 6. **Source paths** — `kind: source` `path:` must be resolvable from the DAG directory (unless overridden by `--source`)
-7. **Report cross-refs** — if a `report.yaml` lives next to the DAG, every `table.source` / `stat.source` is checked
+7. **Report metadata** — node `metadata.report` values are checked by the closed DAG schema
 
 ## Flags
 

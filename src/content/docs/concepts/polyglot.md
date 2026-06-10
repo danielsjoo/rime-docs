@@ -30,7 +30,7 @@ Each language has a dedicated guide describing function signature, input/output 
 - **[R language nodes](/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
 - **[JavaScript language nodes](/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
 - **[SQL language nodes](/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
-- **[HTML output](/scripts/html/)** — *not a script language*, but a guide to producing the final HTML artifact (via `report.yaml` or a JS node that emits HTML)
+- **[HTML output](/scripts/html/)** — *not a script language*, but a guide to producing custom HTML artifacts from a JS node
 
 ## Per-call subprocess model (Python + R)
 
@@ -71,7 +71,7 @@ The runtime captures per node:
 - **ggplot / lattice / base R plots** — call `rime::display_figure(p)` from R
 - **error tracebacks** — full subprocess stderr on non-zero exit
 
-These surface in the rendered HTML report when you target a node from a `markdown:`, `stat:`, or `plot:` block in `report.yaml`.
+These surface in the rendered HTML report on that node's card.
 
 ## Why Arrow IPC
 

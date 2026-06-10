@@ -1,56 +1,57 @@
 ---
 title: HTML output
-description: Produce custom HTML from a Rime DAG — for users who want to drive everything up to and including presentation. Covers the recommended report.yaml path plus the JS-emits-HTML escape hatch.
+description: Produce HTML from a Rime DAG, either with the built-in auto-report or a JavaScript html_artifact output.
 ---
 
-> **HTML is not one of Rime's four script languages.** The script enum is strictly `python | r | javascript | sql`. This page covers how to *produce* HTML output as the final artifact of a Rime pipeline — for users who want to drive the whole stack, ingestion through presentation, inside one DAG.
+> **HTML is not one of Rime's four script languages.** The script enum is
+> strictly `python | r | javascript | sql`. This page covers how to produce HTML
+> artifacts from a Rime pipeline.
 
-There are two paths to HTML output. Pick based on how much control you need.
+There are two paths. Use the built-in report unless you need a fully custom
+interactive page.
 
-## Path A — `report.yaml` (recommended)
+## Path A — auto-report
 
-The supported, opinionated path. Pair your DAG with a [`report.yaml`](/concepts/reports/) and `rime build` renders a publishable HTML document automatically.
-
-```yaml
-# report.yaml
-specification_version: "1.0"
-pipeline: pipeline.dag.yaml
-title: "Adult cohort"
-output:
-  format: html
-  path: outputs/cohort_report.html
-sections:
-  - heading: "Summary"
-    blocks:
-      - markdown: |
-          ## Adult cohort
-          Filtered to patients aged 18+, aggregated by site.
-      - table:
-          source: by_site
-          title: "Site-level summary"
-      - stat:
-          source: age_t_test
-          show: [t_statistic, p_value, n]
-```
+The default path is `rime build`:
 
 ```bash
-rime build pipeline.dag.yaml --report report.yaml
-open outputs/cohort_report.html
+rime build pipeline.dag.yaml
+open outputs/run_report.html
+```
+
+Rime renders one section per included node. Each node card shows status, cache
+state, warnings, stdout, figures, and one output cell per runtime output.
+
+Hide raw or noisy nodes with `metadata.report: false`:
+
+```yaml
+- id: raw_events
+  kind: source
+  path: data/events.csv
+  metadata:
+    report: false
+
+- id: by_region
+  kind: aggregate
+  inputs: [clean_events]
+  groupBy: ["[region]"]
+  metrics:
+    - "[revenue] = [revenue].sum()"
 ```
 
 You get:
 
 - Inline CSS, no external stylesheet, no JS framework
-- Clean semantic HTML for tables and stat callouts
-- Captured matplotlib figures from Python language nodes
-- Section navigation if you have multiple sections
-- Reproducible — same DAG outputs + same `report.yaml` = byte-identical HTML
+- Clean semantic HTML for tables and stat/object outputs
+- Captured stdout and matplotlib figures shown once per node
+- Multi-output nodes rendered as one node with multiple output cells
+- Reproducible output driven by the DAG and cached artifacts
 
-**Use this path for 90% of cases.** Reports, papers, internal dashboards, anything where the goal is "communicate the analysis." See [Concepts → Reports](/concepts/reports/) for the full block reference.
+## Path B — JavaScript emits an HTML artifact
 
-## Path B — JavaScript emits HTML (escape hatch)
-
-When the [three report block kinds](/concepts/reports/#block-kinds) (markdown / table / stat) aren't enough — custom D3 visualizations, bespoke layouts, embedded interactive widgets — write a JavaScript language node that returns an HTML string and writes it to a file.
+When the auto-report layout is not enough — custom D3 visualizations, bespoke
+layouts, embedded interactive widgets — write a JavaScript language node that
+returns an `html_artifact` object.
 
 ```yaml
 - id: d3_narrative
@@ -59,21 +60,20 @@ When the [three report block kinds](/concepts/reports/#block-kinds) (markdown / 
   in:
     cohort: by_site
     summary: age_t_test
+  out:
+    default: any
 ```
 
 ```js
 // scripts/d3_narrative.mjs
 import { defineNode } from '@rimekit/runtime'
-import { writeFile } from 'node:fs/promises'
 
 export default defineNode({
-  in:  { cohort: 'table', summary: 'any' },
-  out: { default: 'any' },          // file path or summary object
-  run: async ({ cohort, summary }) => {
+  in: { cohort: 'table', summary: 'any' },
+  out: { default: 'any' },
+  run: ({ cohort, summary }) => {
     const html = renderHtml(cohort.rows, summary)
-    const path = 'outputs/d3_narrative/index.html'
-    await writeFile(path, html)
-    return { rendered_to: path, byte_size: html.length }
+    return { type: 'html_artifact', html }
   },
 })
 
@@ -88,8 +88,7 @@ function renderHtml(rows, summary) {
 </style></head>
 <body>
   <h1>Site summary</h1>
-  <p>t-statistic: <span class="stat">${summary.t_statistic.toFixed(3)}</span>
-     · p = <span class="stat">${summary.p_value.toExponential(2)}</span></p>
+  <p>t-statistic: <span class="stat">${summary.t_statistic.toFixed(3)}</span></p>
   <table>
     <thead><tr><th>Site</th><th>Mean age</th><th>n</th></tr></thead>
     <tbody>${rows.map(r => `<tr>
@@ -102,70 +101,41 @@ function renderHtml(rows, summary) {
 }
 ```
 
-The node writes the HTML to `outputs/d3_narrative/index.html` as a side effect; the function's return value is a small metadata record (path + size). Downstream nodes can chain on the metadata if they want — but most "emit HTML" nodes are terminal.
+The auto-report renders `html_artifact` objects in an iframe on that node's
+output cell.
 
-### When this path makes sense
+## When Path B makes sense
 
-- **D3 / Observable Plot / Vega visualizations** that need to ship with the report
-- **Custom layouts** that don't fit markdown + table + stat (a multi-column dashboard, a card grid, a tabbed interface)
-- **Embedded interactive widgets** (form controls, filters that work without a server)
-- **Pre-rendered HTML for handoff** to a CMS, email template, or static site
+- D3 / Observable Plot / Vega visualizations
+- custom layouts that do not fit the node-card report
+- embedded interactive widgets
+- pre-rendered HTML for handoff to a CMS, email template, or static site
 
-### Combining with `report.yaml`
+## Limitations
 
-The `report.yaml` schema doesn't currently have an `html:` or `iframe:` block — you can't natively embed a Path-B HTML file inside the Path-A report. Options:
+Rime produces HTML files. It does not render them to PNG/PDF, run browser-side
+JavaScript during the build, or lint/accessibility-check custom markup.
 
-1. **Stand it up as a separate page.** The JS-emitted HTML lives at its own path (e.g. `outputs/d3_narrative/index.html`); the `report.yaml` output is the canonical landing. Link between them.
-2. **Reverse the structure.** Make the JS-emitted HTML the canonical output, and pre-render a section of it from the report renderer (use markdown blocks in the JS output to mirror the report's prose).
-3. **Wait for an HTML-block feature.** This is a real gap; a future report-schema revision is likely to add a way to embed JS-emitted HTML chunks.
-
-## Limitations to know about
-
-### HTML can't be rendered without a browser
-
-Rime produces HTML files. It does not:
-
-- **Render them to PNG / PDF.** No headless screenshot step. For that, add a separate Playwright / Puppeteer step downstream of `rime build`.
-- **Run client-side JavaScript** during the build. If your D3 viz computes things at page load, those computations happen when a user opens the file in a browser — not at `rime run` time.
-- **Validate the HTML.** No linter, no rendering check, no accessibility audit. Bad markup will silently render as broken UI.
-
-### No live preview from the CLI
-
-`rime build` writes the file and exits. To view it, open the `.html` in a browser, or serve the output directory:
+To view CLI output:
 
 ```bash
 cd outputs
-python3 -m http.server 8000   # or `npx serve .`
-open http://localhost:8000/cohort_report.html
+python3 -m http.server 8000
+open http://localhost:8000/run_report.html
 ```
 
-The Rime Editor will show an inline preview of the rendered report, but the CLI itself doesn't ship a preview server.
+## Reproducibility caveats for custom HTML
 
-### Reproducibility caveats for Path B
+JS-emitted HTML is only as deterministic as your JS code:
 
-The official report renderer (Path A) is deterministic: same DAG outputs + same `report.yaml` → byte-identical HTML. JS-emitted HTML is **only as deterministic as your JS code**:
-
-- Avoid `Date.now()`, `Math.random()`, unsorted `Object.keys(...)`, or any source of non-determinism in your render function.
-- If you need a timestamp, accept it as a `params.now` value wired from the YAML — that way the input is captured in the cache key.
-
-### Embedded assets
-
-Path B HTML files are self-contained only if you inline everything (CSS in `<style>`, JS in `<script>`, fonts as `data:` URIs, images as base64). External `<link>` / `<script src>` / `<img src>` references will fail when you email the file or open it from a different directory.
-
-For the simplest distribution story: **inline everything**, ship one `.html` file.
-
-## When to choose which path
-
-| Need | Use |
-|---|---|
-| Standard report with tables, stats, prose | **Path A** (`report.yaml`) |
-| Single statistical narrative for publication | **Path A** |
-| Custom D3 viz, bespoke layout, interactive widget | **Path B** (JS emits HTML) |
-| Both a clean report AND a rich viz | **Path A + Path B**, linked from each other |
-| End-to-end ETL → presentation in one DAG | Whichever fits the presentation — both run inside the same `rime build` |
+- avoid `Date.now()`, `Math.random()`, unsorted `Object.keys(...)`, or other
+  nondeterministic inputs
+- if you need a timestamp, accept it as a `params.now` value wired from YAML so
+  the input is captured in the cache key
+- inline CSS, JS, fonts, and images when you need a single portable file
 
 ## See also
 
-- [Concepts → Reports](/concepts/reports/) — the full `report.yaml` schema reference
+- [Concepts → Reports](/concepts/reports/) — auto-report behavior and `metadata.report`
 - [JavaScript language nodes](/scripts/javascript/) — function signature, in-process execution model, async support
 - [Outputs & caching](/concepts/outputs/) — how Rime writes artifacts to disk

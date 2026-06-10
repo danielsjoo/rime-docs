@@ -90,7 +90,7 @@ Most pipelines don't even need to write a custom function for common shapes. Rim
 | `pivot` | Wide-format aggregation |
 
 ### Statistical terminals
-These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. They feed `stat:` blocks in `report.yaml`.
+These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. The auto-report renders them as stat-style key-value output cells.
 
 | Kind | What it does |
 |---|---|

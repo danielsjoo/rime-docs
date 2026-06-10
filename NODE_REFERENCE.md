@@ -6,7 +6,7 @@ Every node has:
 - `id: string` — unique within the DAG, identifier-shaped
 - `kind: <discriminator>` — picks which fields below are valid
 - `inputs?: string[]` — upstream refs (`nodeId` or `nodeId.outputName`); count varies per kind
-- `metadata?: { label?, group?, visual_stats?, cache? }` — optional, strict (no passthrough)
+- `metadata?: { label?, group?, report?, visual_stats?, cache? }` — optional, strict (no passthrough)
 
 Type-specific fields are **at the top level on the node**, not in a `params:` bag.
 
@@ -266,8 +266,8 @@ See [`CUSTOM_SCRIPT.md`](CUSTOM_SCRIPT.md) for per-language protocols.
 | `sql` | `kind: sql` (with inputs) |
 | `sql_source` | `kind: sql` (no inputs) |
 | `predict` | use `kind: python` (sklearn) — see [`proposals/v2/dag-grammar.md`](proposals/v2/dag-grammar.md#removed-deferred--see-note-below-predict) |
-| `table` | move to `report.yaml` `table:` block |
-| `html_block` | move to `report.yaml` `markdown:` block |
+| `table` | generated automatically in the HTML report; set `metadata.report: false` to hide a node |
+| `html_block` | no direct replacement; return an `html_artifact` object from a language node when needed |
 | `drop` / `rename` / `distinct` / `window` | `select` + a language node |
 
 ## Metadata
@@ -276,13 +276,14 @@ See [`CUSTOM_SCRIPT.md`](CUSTOM_SCRIPT.md) for per-language protocols.
 metadata:
   label: "Friendly node label"     # editor display
   group: "feature_engineering"     # editor grouping
+  report: false                    # optional; omit or true to include in auto-report
   visual_stats: ["row_count"]      # engine emits these on each run
   cache:                            # per-node cache override
     policy: ttl
     seconds: 3600
 ```
 
-`metadata` is closed (no passthrough). v1's `includeInConsort`, `outputConsort`, `export`, `customScriptIo`, `inputAliases` are all gone — those were presentation/script concerns, now lifted to `report.yaml` blocks or derived from script `output:`.
+`metadata` is closed (no passthrough). v1's `includeInConsort`, `outputConsort`, `export`, `customScriptIo`, `inputAliases` are all gone — those were presentation/script concerns, now controlled by `metadata.report` or derived from script `out:`.
 
 ## Validation rules (graph-level)
 

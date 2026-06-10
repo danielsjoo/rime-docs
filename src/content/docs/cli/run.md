@@ -78,7 +78,7 @@ Cached nodes show `(cache hit)`; failures abort the run and print the subprocess
 ## Related commands
 
 - [`rime validate`](/cli/validate/) — pre-flight checks without executing
-- `rime build` — `rime run` + render `report.yaml` to HTML, atomic
+- `rime build` — `rime run` + render the DAG-driven HTML report, atomic
 - `rime freeze` — snapshot the current `outputs/` for archival
 
 ## Exit codes
