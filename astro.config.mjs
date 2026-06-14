@@ -4,7 +4,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://rime-docs.pages.dev', // placeholder — update when domain is wired
+  site: 'https://danielsjoo.github.io',
+  base: '/rime-docs',
   integrations: [
     starlight({
       title: 'Rime',
