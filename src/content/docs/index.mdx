@@ -25,11 +25,14 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 Rime can be a no-code analysis tool, a polyglot scripting runtime, or both in the same DAG.
 
 <CardGrid>
-  <Card title="Core nodes" icon="approve-check">
-    Use `filter`, `derive`, `aggregate`, `join`, `pivot`, stats, and other built-ins for simple data analysis. You get automatic logging, content-addressed caching, assumption/statistical testing, Excel-like expressions, data diffs, DAG visualization, no-code editing in Rime Editor, and an HTML report without writing glue code.
+  <Card title="Core nodes for the common path" icon="approve-check">
+    Use built-ins for the work every analysis repeats: load files, filter rows, derive columns, aggregate, join, pivot, sort, select, concatenate, and run statistical checks. The runtime handles validation, caching, previews, and report output.
   </Card>
-  <Card title="Script nodes" icon="puzzle">
-    When the built-ins are not enough, define a function in Python, R, JavaScript, or SQL for retrieval or transformation. Name the inputs, return tables or objects, and Rime handles I/O, serialization, cache keys, artifacts, stdout, figures, and downstream wiring.
+  <Card title="Script nodes for real language work" icon="puzzle">
+    When the built-ins are not enough, write a function in Python, R, JavaScript, or SQL. Name the inputs, return tables or objects, and Rime handles dataframe I/O, artifacts, stdout, figures, and downstream wiring.
+  </Card>
+  <Card title="One report from the whole DAG" icon="document">
+    Both modes feed the same run. Rime records node status, output previews, stats, figures, and logs so the result can be shared as a single HTML narrative instead of a loose pile of files.
   </Card>
 </CardGrid>
 

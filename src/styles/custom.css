@@ -42,3 +42,89 @@
   --sl-color-text: #e2e8f0;
   --sl-color-text-accent: #ffffff;
 }
+
+/* Site chrome */
+header.header {
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.rime-topnav a {
+  border-bottom: 2px solid transparent;
+  padding-block: 0.35rem;
+}
+
+.rime-topnav a:hover {
+  border-bottom-color: var(--sl-color-accent);
+}
+
+/* Splash page rhythm */
+[data-has-hero] .hero {
+  border-bottom: 1px solid var(--sl-color-hairline);
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+[data-has-hero] .hero h1 {
+  letter-spacing: 0;
+}
+
+[data-has-hero] .tagline {
+  max-width: 46rem;
+}
+
+[data-has-hero] .actions {
+  margin-top: 1.25rem;
+}
+
+.sl-link-button.primary {
+  box-shadow: 0 12px 28px rgb(8 145 178 / 18%);
+}
+
+/* Cards */
+.card-grid {
+  gap: 1rem;
+}
+
+.card,
+.sl-link-card {
+  border-color: var(--sl-color-hairline);
+  border-radius: 8px;
+}
+
+.sl-link-card {
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sl-link-card:hover {
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 14px 34px rgb(15 23 42 / 10%);
+  transform: translateY(-1px);
+}
+
+:root[data-theme='dark'] .sl-link-card:hover {
+  box-shadow: 0 14px 34px rgb(0 0 0 / 28%);
+}
+
+.sl-link-card .title {
+  color: var(--sl-color-text-accent);
+}
+
+/* Markdown pages */
+.sl-markdown-content > h2 {
+  margin-top: 2.75rem;
+}
+
+.sl-markdown-content table {
+  font-size: 0.95rem;
+}
+
+.sl-markdown-content thead {
+  background: var(--sl-color-bg-sidebar);
+}
+
+.sl-markdown-content blockquote {
+  border-inline-start-color: var(--sl-color-accent);
+}
