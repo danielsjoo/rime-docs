@@ -148,8 +148,8 @@ interpreters:
 
 ## See also
 
-- [R language nodes](/scripts/r/) — same protocol, different native type (`tibble`)
-- [JavaScript language nodes](/scripts/javascript/) — runs in Node 22+, in-process
-- [SQL language nodes](/scripts/sql/) — runs against DuckDB
-- [Language node reference](/nodes/script/) — full field list
-- [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design
+- [R language nodes](/rime-docs/scripts/r/) — same protocol, different native type (`tibble`)
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) — runs in Node 22+, in-process
+- [SQL language nodes](/rime-docs/scripts/sql/) — runs against DuckDB
+- [Language node reference](/rime-docs/nodes/script/) — full field list
+- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) — the cross-cutting design

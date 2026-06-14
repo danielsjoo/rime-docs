@@ -7,7 +7,7 @@ Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `k
 
 ## When to use
 
-When the 14 core nodes don't cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.
+When the 14 core nodes don't cover your transform. See the per-language pages — [Python](/rime-docs/scripts/python/), [R](/rime-docs/scripts/r/), [JavaScript](/rime-docs/scripts/javascript/), [SQL](/rime-docs/scripts/sql/) — for function-signature details.
 
 ## Inputs
 
@@ -44,9 +44,9 @@ nodes:
 
 ## See also
 
-- [Python language nodes](/scripts/python/) — pandas-based transforms
-- [R language nodes](/scripts/r/) — tibble-based transforms
-- [JavaScript language nodes](/scripts/javascript/) — Node-based transforms
-- [SQL language nodes](/scripts/sql/) — DuckDB-backed transforms
-- [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
+- [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms
+- [R language nodes](/rime-docs/scripts/r/) — tibble-based transforms
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) — Node-based transforms
+- [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms
+- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

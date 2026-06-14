@@ -200,7 +200,7 @@ const KINDS = [
     blurb: 'Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits.',
     inputs: 'Variable — declare named slots in `in:`. Each slot can be a dataframe ref or a `params.*` reference.',
     outputs: '`default` by default, or multiple named outputs declared in `out:`.',
-    whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.',
+    whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/rime-docs/scripts/python/), [R](/rime-docs/scripts/r/), [JavaScript](/rime-docs/scripts/javascript/), [SQL](/rime-docs/scripts/sql/) — for function-signature details.',
     pitfalls: [
       'Multi-output nodes (`out:`) require the language function to return a dict / list / object whose keys match.',
       'No `params.*` slots → no params at all. To pass a top-level param to a language node, you must wire it through the YAML.',
@@ -293,8 +293,8 @@ ${pitfallsList}
 
 ## See also
 
-${meta.kind === 'script' ? '- [Python language nodes](/scripts/python/) — pandas-based transforms\n- [R language nodes](/scripts/r/) — tibble-based transforms\n- [JavaScript language nodes](/scripts/javascript/) — Node-based transforms\n- [SQL language nodes](/scripts/sql/) — DuckDB-backed transforms' : '- [Language node reference](/nodes/script/) — the escape hatch when this node isn\'t enough'}
-- [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
+${meta.kind === 'script' ? '- [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms\n- [R language nodes](/rime-docs/scripts/r/) — tibble-based transforms\n- [JavaScript language nodes](/rime-docs/scripts/javascript/) — Node-based transforms\n- [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms' : '- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node isn\'t enough'}
+- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
 - [\`packages/core/src/schema.ts\`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
 `;
 

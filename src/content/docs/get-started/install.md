@@ -84,4 +84,4 @@ rime --version
 rime validate examples/single-file/pipeline.dag.yaml
 ```
 
-If all three succeed, you're ready. Move on to the [Quick start](/get-started/quick-start/).
+If all three succeed, you're ready. Move on to the [Quick start](/rime-docs/get-started/quick-start/).

@@ -52,7 +52,7 @@ nodes:
 Every node has:
 
 - `id` (unique)
-- `kind` (one of 14 — see [Node Reference](/concepts/nodes/))
+- `kind` (one of 14 — see [Node Reference](/rime-docs/concepts/nodes/))
 - For `kind: source`: `path:` pointing at a CSV / JSON / NDJSON / Parquet file (loaded with type inference; parquet preserves types)
 - For built-in nodes (`filter`/`derive`/`aggregate`/...): `inputs:` (array of upstream node id refs; use `nodeId.outputName` for multi-output nodes)
 - For language nodes (v2.1): `in:` map (slot name → ref string; refs may be `nodeId`, `nodeId.outputName`, or `params.<name>`)
@@ -141,6 +141,6 @@ Checks DAG schema and graph integrity (no cycles, all input refs resolve).
 
 ## Next
 
-- [Concepts: DAG specification](/concepts/dag/)
-- [Concepts: Polyglot runtime](/concepts/polyglot/)
-- [Node Reference](/concepts/nodes/) — every built-in operator
+- [Concepts: DAG specification](/rime-docs/concepts/dag/)
+- [Concepts: Polyglot runtime](/rime-docs/concepts/polyglot/)
+- [Node Reference](/rime-docs/concepts/nodes/) — every built-in operator

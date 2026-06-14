@@ -136,6 +136,6 @@ JS-emitted HTML is only as deterministic as your JS code:
 
 ## See also
 
-- [Concepts → Reports](/concepts/reports/) — auto-report behavior and `metadata.report`
-- [JavaScript language nodes](/scripts/javascript/) — function signature, in-process execution model, async support
-- [Outputs & caching](/concepts/outputs/) — how Rime writes artifacts to disk
+- [Concepts → Reports](/rime-docs/concepts/reports/) — auto-report behavior and `metadata.report`
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) — function signature, in-process execution model, async support
+- [Outputs & caching](/rime-docs/concepts/outputs/) — how Rime writes artifacts to disk
