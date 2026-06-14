@@ -121,7 +121,7 @@ Anything you can't express with the built-ins is a language node. Same functiona
     threshold: params.threshold   # scalar slot
 ```
 
-Native values per language: pandas DataFrame (Python), tibble (R), Arrow Table or row array (JS), temp table (SQL). See [Polyglot runtime](/concepts/polyglot/) for the per-language details.
+Native values per language: pandas DataFrame (Python), tibble (R), Arrow Table or row array (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
 
 ## Metadata (optional, all kinds)
 
@@ -140,4 +140,4 @@ metadata:
 - **Caching is automatic.** Change a script — only it and its downstream re-run. Change an input — same.
 - **Reproducibility is a side effect of the model, not extra work.** The cache key is `hash(source + inputs)`; same key = same result, every time.
 
-Per-kind field reference lives under [Node Reference](/nodes/) in the sidebar.
+Per-kind field reference lives under [Node Reference](/rime-docs/nodes/) in the sidebar.

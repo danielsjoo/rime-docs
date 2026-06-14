@@ -26,11 +26,11 @@ JavaScript and SQL are effectively free to call (no cold start). Python and R pa
 
 Each language has a dedicated guide describing function signature, input/output handling, and what the YAML node needs to declare:
 
-- **[Python language nodes](/scripts/python/)** — pandas DataFrame in, dataframe out, matplotlib capture
-- **[R language nodes](/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
-- **[JavaScript language nodes](/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
-- **[SQL language nodes](/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
-- **[HTML output](/scripts/html/)** — *not a script language*, but a guide to producing custom HTML artifacts from a JS node
+- **[Python language nodes](/rime-docs/scripts/python/)** — pandas DataFrame in, dataframe out, matplotlib capture
+- **[R language nodes](/rime-docs/scripts/r/)** — tibble in, dataframe out, ggplot capture, `rime::register` protocol
+- **[JavaScript language nodes](/rime-docs/scripts/javascript/)** — row arrays or Arrow Table in, in-process execution, ideal for API fetches
+- **[SQL language nodes](/rime-docs/scripts/sql/)** — runs on warm DuckDB, ingress mode for reading files directly
+- **[HTML output](/rime-docs/scripts/html/)** — *not a script language*, but a guide to producing custom HTML artifacts from a JS node
 
 ## Per-call subprocess model (Python + R)
 

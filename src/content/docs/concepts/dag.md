@@ -3,7 +3,7 @@ title: DAG specification
 description: The shape of pipeline.dag.yaml.
 ---
 
-The shape of `pipeline.dag.yaml`. For per-node field reference see the [Node Reference](/concepts/nodes/) section.
+The shape of `pipeline.dag.yaml`. For per-node field reference see the [Node Reference](/rime-docs/concepts/nodes/) section.
 
 ## Top level
 
@@ -70,7 +70,7 @@ For one-off DAGs, drop the marker; everything resolves relative to the DAG file.
 
 `source`, `filter`, `derive`, `aggregate`, `select`, `sort`, `join`, `pivot`, `concat`, `t_test`, `anova`, `mann_whitney_u`, `chi_square`, `correlation`, `linear_regression`, `subgraph`, `script`.
 
-Each has its own per-field reference page under [Node Reference](/concepts/nodes/).
+Each has its own per-field reference page under [Node Reference](/rime-docs/concepts/nodes/).
 
 ## Expression DSL
 

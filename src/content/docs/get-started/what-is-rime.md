@@ -7,7 +7,7 @@ description: A high-level overview of Rime — what it is, what it isn't, who it
 
 Rime has two complementary modes:
 
-1. **Core nodes** — use built-in nodes for simple data analysis: filter rows, derive columns, aggregate, join, pivot, select, sort, run statistical tests, and inspect outputs. Rime gives you automatic logging, content-addressed caching, assumption/statistical testing, Excel-like expressions, data diffs, DAG visualization, no-code authoring in [Rime Editor](/editor/overview/), and an HTML report.
+1. **Core nodes** — use built-in nodes for simple data analysis: filter rows, derive columns, aggregate, join, pivot, select, sort, run statistical tests, and inspect outputs. Rime gives you automatic logging, content-addressed caching, assumption/statistical testing, Excel-like expressions, data diffs, DAG visualization, no-code authoring in [Rime Editor](/rime-docs/editor/overview/), and an HTML report.
 2. **Script nodes** — define functions in Python, R, JavaScript, or SQL for data retrieval or transformation. You write the function signature and body; Rime handles dataframe I/O, serialization, cache keys, artifacts, stdout, figures, and downstream wiring.
 
 Most projects use both: core nodes for the ordinary data-shaping work, scripts for the parts that need a real language.
@@ -19,7 +19,7 @@ Rime is a workflow system for authoring **polyglot data pipelines** and turning 
 A pipeline is a DAG (directed acyclic graph) of typed transforms. Each node is one of:
 
 - A **core node** — `filter`, `aggregate`, `join`, `pivot`, `sort`, `select`, `derive`, `concat`, or one of six statistical tests (`t_test`, `anova`, `mann_whitney_u`, `chi_square`, `correlation`, `linear_regression`). The runtime ships these; you don't write code.
-- A **language node** in Python, R, JavaScript, or SQL — for anything the core nodes don't cover. You write a function; the runtime owns I/O, serialization, and language boundaries. See the [per-language script pages](/scripts/python/).
+- A **language node** in Python, R, JavaScript, or SQL — for anything the core nodes don't cover. You write a function; the runtime owns I/O, serialization, and language boundaries. See the [per-language script pages](/rime-docs/scripts/python/).
 
 The DAG runs, outputs are content-addressed and cached, and `rime build` renders the results as an HTML document with node-level status, output previews, stat callouts, stdout, and figures.
 
@@ -59,6 +59,6 @@ Researchers, data journalists, analysts, and small data teams who want to:
 
 ## Next
 
-- [Download Rime Editor](/editor/install/) — the recommended start
-- [Install the CLI](/get-started/install/) — for scripting and CI
-- [Quick start](/get-started/quick-start/) — 10-minute walkthrough either way
+- [Download Rime Editor](/rime-docs/editor/install/) — the recommended start
+- [Install the CLI](/rime-docs/get-started/install/) — for scripting and CI
+- [Quick start](/rime-docs/get-started/quick-start/) — 10-minute walkthrough either way

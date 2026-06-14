@@ -35,6 +35,6 @@ Sorting for the report renderer, or before a window-like derive. For top-N, sort
 
 ## See also
 
-- [Language node reference](/nodes/script/) — the escape hatch when this node isn't enough
-- [Concepts → Nodes](/concepts/nodes/) — the conceptual tour of the node system
+- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node isn't enough
+- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

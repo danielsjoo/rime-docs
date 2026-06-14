@@ -147,8 +147,8 @@ JavaScript language nodes are the recommended default for:
 
 ## See also
 
-- [Python language nodes](/scripts/python/) — same protocol, pandas DataFrame native
-- [R language nodes](/scripts/r/) — same protocol, tibble native
-- [SQL language nodes](/scripts/sql/) — runs against DuckDB
-- [Language node reference](/nodes/script/) — full field list
-- [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design
+- [Python language nodes](/rime-docs/scripts/python/) — same protocol, pandas DataFrame native
+- [R language nodes](/rime-docs/scripts/r/) — same protocol, tibble native
+- [SQL language nodes](/rime-docs/scripts/sql/) — runs against DuckDB
+- [Language node reference](/rime-docs/nodes/script/) — full field list
+- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) — the cross-cutting design

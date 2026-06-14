@@ -59,7 +59,7 @@ rime run pipeline.dag.yaml --isolated $TMPDIR/rime-ci
 | `--no-cache-write` | Read cache where possible, don't persist new entries |
 | `--isolated <dir>` | Treat `<dir>` as the outputs root; doesn't touch the live `outputs/` |
 
-See [Outputs & caching](/concepts/outputs/) for the full semantics.
+See [Outputs & caching](/rime-docs/concepts/outputs/) for the full semantics.
 
 ## Output
 
@@ -77,7 +77,7 @@ Cached nodes show `(cache hit)`; failures abort the run and print the subprocess
 
 ## Related commands
 
-- [`rime validate`](/cli/validate/) — pre-flight checks without executing
+- [`rime validate`](/rime-docs/cli/validate/) — pre-flight checks without executing
 - `rime build` — `rime run` + render the DAG-driven HTML report, atomic
 - `rime freeze` — snapshot the current `outputs/` for archival
 
