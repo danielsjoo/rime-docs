@@ -14,7 +14,7 @@ export default defineConfig({
         src: './src/assets/logo.svg',
         replacesTitle: false,
       },
-      favicon: './src/assets/favicon.svg',
+      favicon: '/favicon.svg',
       customCss: ['./src/styles/custom.css'],
       // Top-bar nav (Docs / Editor / Examples) is rendered by SiteTitle override.
       components: {
