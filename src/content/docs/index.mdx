@@ -3,7 +3,7 @@ title: Rime
 description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
 template: splash
 hero:
-  tagline: "Two ways to build reproducible data work: compose core nodes for fast analysis, or write script functions in the language you want. Rime handles the DAG, cache, logs, outputs, and report."
+  tagline: "Declare your data retrievals and transforms in one file. The Rime runtime handles caching, logs, validation, outputs, and reports."
   actions:
     - text: Download the Editor
       link: /rime-docs/editor/overview/
@@ -22,17 +22,14 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 ## Two ways to use Rime
 
-Rime can be a no-code analysis tool, a polyglot scripting runtime, or both in the same DAG.
+Rime can be a declarative analysis tool, a polyglot scripting runtime, or both in the same DAG. Either way, the durable artifact is the same: a `pipeline.dag.yaml` file that explains what data enters, what changes, and what each node emits.
 
 <CardGrid>
   <Card title="Core nodes for the common path" icon="approve-check">
-    Use built-ins for the work every analysis repeats: load files, filter rows, derive columns, aggregate, join, pivot, sort, select, concatenate, and run statistical checks. The runtime handles validation, caching, previews, and report output.
+    Use built-ins for the work every analysis repeats: load files, filter rows, derive columns, aggregate, join, pivot, sort, select, concatenate, and run statistical checks. Expressions feel like spreadsheets: `[price] * [quantity]`, `contains([name], "Inc")`, `year([created_at])`.
   </Card>
   <Card title="Script nodes for real language work" icon="puzzle">
-    When the built-ins are not enough, write a function in Python, R, JavaScript, or SQL. Name the inputs, return tables or objects, and Rime handles dataframe I/O, artifacts, stdout, figures, and downstream wiring.
-  </Card>
-  <Card title="One report from the whole DAG" icon="document">
-    Both modes feed the same run. Rime records node status, output previews, stats, figures, and logs so the result can be shared as a single HTML narrative instead of a loose pile of files.
+    When the built-ins are not enough, write a function in Python, R, JavaScript, or SQL. Rime reads the function contract, passes named inputs in native dataframe shapes, captures the return values, and wires them to downstream nodes.
   </Card>
 </CardGrid>
 
@@ -50,6 +47,11 @@ The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually
     title="What is Rime?"
     description="The two-minute pitch: core nodes, script functions, reports, and where Rime fits."
     href="/rime-docs/get-started/what-is-rime/"
+  />
+  <LinkCard
+    title="Two ways to use Rime"
+    description="Learn when to use core nodes, when to use script nodes, and what the YAML file is doing."
+    href="/rime-docs/get-started/two-ways-to-use-rime/"
   />
   <LinkCard
     title="Quick start"
