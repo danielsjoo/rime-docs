@@ -20,6 +20,32 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
+## What is Rime?
+
+Rime is a runtime for reproducible data work. You declare the pipeline once in `pipeline.dag.yaml`: where data comes from, which built-in transforms to apply, and which script functions to call. Rime runs the graph, caches each node, captures logs, validates outputs, and writes artifacts.
+
+```yaml
+nodes:
+  - id: orders
+    kind: source
+    path: data/orders.csv
+
+  - id: shipped_orders
+    kind: filter
+    input: orders
+    where: "[status] == 'shipped'"
+
+  - id: sales_chart
+    kind: python
+    source: scripts/plot_sales.py
+    in:
+      orders: shipped_orders
+    out:
+      chart: html_artifact
+```
+
+That one file says: intake this CSV, keep the shipped rows, then feed the result into a Python graphing function. The Python script focuses on the chart; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
+
 ## Choose your surface
 
 The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually, drop to YAML, or run the same project in CI.
