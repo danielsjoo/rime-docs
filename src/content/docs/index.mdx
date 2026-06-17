@@ -43,7 +43,7 @@ nodes:
       orders: order_metrics
 ```
 
-That one file says: run this SQL retrieval, add spreadsheet-style metrics in a core node, then feed the result into a Python graphing function. The SQL and Python scripts focus on their functions; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
+This file defines how data is retrieved, transformed, and used. SQL imports data, the derive node computes values with a simple expression syntax, and Python decides how to graph the data. Rime handles the cross-language handoff, execution order, caching, logs, and outputs.
 
 ## Choose your surface
 
