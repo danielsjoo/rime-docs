@@ -26,25 +26,27 @@ Rime is a runtime for reproducible data work. You declare the pipeline once in `
 
 ```yaml
 nodes:
-  - id: orders
-    kind: source
-    path: data/orders.csv
+  - id: raw_orders
+    kind: sql
+    source: queries/load_orders.sql
 
-  - id: shipped_orders
-    kind: filter
-    input: orders
-    where: "[status] == 'shipped'"
+  - id: order_metrics
+    kind: derive
+    input: raw_orders
+    columns:
+      revenue: "[unit_price] * [quantity]"
+      shipped_month: "month([shipped_at])"
 
   - id: sales_chart
     kind: python
     source: scripts/plot_sales.py
     in:
-      orders: shipped_orders
+      orders: order_metrics
     out:
       plotted_orders: table
 ```
 
-That one file says: intake this CSV, keep the shipped rows, then feed the result into a Python graphing function. The Python script returns a dataframe for downstream nodes and can capture a figure along the way; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
+That one file says: run this SQL retrieval, add spreadsheet-style metrics in a core node, then feed the result into a Python graphing function. The SQL and Python scripts focus on their functions; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
 
 ## Choose your surface
 
