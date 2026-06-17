@@ -22,28 +22,25 @@ nodes:
     kind: source
     path: data/orders.csv
 
+  - id: paid_items
+    kind: filter
+    input: line_items
+    where: "[status] == 'paid'"
+
   - id: enriched_items
     kind: derive
-    input: line_items
+    input: paid_items
     columns:
       revenue: "[unit_price] * [quantity]"
       order_year: "year([ordered_at])"
-      is_large_order: "[quantity] >= 10"
 
-  - id: store_rollup
-    kind: aggregate
+  - id: review_columns
+    kind: select
     input: enriched_items
-    group_by: [store_id, order_year]
-    metrics:
-      total_revenue:
-        column: revenue
-        op: sum
-      orders:
-        column: order_id
-        op: count
+    columns: [order_id, store_id, order_year, revenue]
 ```
 
-This is language agnostic. You do not need pandas, dplyr, JavaScript arrays, or SQL just to say "make a new column" or "group by these keys." The YAML is the contract, and the runtime decides how to execute it.
+This is language agnostic. You do not need pandas, dplyr, JavaScript arrays, or SQL just to say "keep paid rows," "make these new columns," or "carry forward these fields." The YAML is the contract, and the runtime decides how to execute it.
 
 What to expect when you make this file:
 

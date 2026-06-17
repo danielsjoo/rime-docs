@@ -20,19 +20,6 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Two ways to use Rime
-
-Rime can be a declarative analysis tool, a polyglot scripting runtime, or both in the same DAG. Either way, the durable artifact is the same: a `pipeline.dag.yaml` file that explains what data enters, what changes, and what each node emits.
-
-<CardGrid>
-  <Card title="Core nodes for the common path" icon="approve-check">
-    Use built-ins for the work every analysis repeats: load files, filter rows, derive columns, aggregate, join, pivot, sort, select, concatenate, and run statistical checks. Expressions feel like spreadsheets: `[price] * [quantity]`, `contains([name], "Inc")`, `year([created_at])`.
-  </Card>
-  <Card title="Script nodes for real language work" icon="puzzle">
-    When the built-ins are not enough, write a function in Python, R, JavaScript, or SQL. Rime reads the function contract, passes named inputs in native dataframe shapes, captures the return values, and wires them to downstream nodes.
-  </Card>
-</CardGrid>
-
 ## Choose your surface
 
 The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually, drop to YAML, or run the same project in CI.
