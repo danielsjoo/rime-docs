@@ -41,10 +41,10 @@ nodes:
     in:
       orders: shipped_orders
     out:
-      chart: html_artifact
+      plotted_orders: table
 ```
 
-That one file says: intake this CSV, keep the shipped rows, then feed the result into a Python graphing function. The Python script focuses on the chart; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
+That one file says: intake this CSV, keep the shipped rows, then feed the result into a Python graphing function. The Python script returns a dataframe for downstream nodes and can capture a figure along the way; Rime handles dataframe handoff, execution order, caching, logs, and outputs.
 
 ## Choose your surface
 
