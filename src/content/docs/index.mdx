@@ -19,6 +19,7 @@ hero:
 ---
 
 import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
+import editorDagScreenshot from '../../assets/screenshots/rime-editor-dag-showcase-crop.png';
 
 ## What is Rime?
 
@@ -44,6 +45,11 @@ nodes:
 ```
 
 Here, the SQL node imports data. The derive node computes values with a simple expression syntax. The Python node graphs the data. Rime handles the cross-language handoff, persists and caches all outputs, and creates a runtime dashboard.
+
+<figure className="rime-screenshot">
+  <img src={editorDagScreenshot.src} alt="Rime Editor showing a cached directed acyclic graph with SQL, derive, filter, aggregate, correlation, and chi-square nodes." />
+  <figcaption>The same pipeline can be inspected visually in Rime Editor: every node has status, cache, output shape, and runtime timing.</figcaption>
+</figure>
 
 ## Why Rime
 

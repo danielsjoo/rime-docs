@@ -6,6 +6,8 @@ description: Rime builds HTML reports directly from the DAG, with metadata.repor
 `rime build` runs the DAG and renders an HTML report from the run result. No
 separate report file is required.
 
+![Rime runtime report showing a DAG overview, cached SQL and JavaScript nodes, and persisted dataframe outputs.](../../../assets/screenshots/rime-runtime-report.png)
+
 ```bash
 rime build pipeline.dag.yaml
 ```
