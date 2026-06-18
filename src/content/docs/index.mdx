@@ -22,7 +22,7 @@ import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/comp
 
 ## What is Rime?
 
-Rime is a runtime for reproducible data work. You declare the pipeline once in `pipeline.dag.yaml`: where data comes from, which built-in transforms to apply, and which script functions to call. Rime runs the graph, caches each node, captures logs, validates outputs, and writes artifacts.
+Rime is a runtime for reproducible data work. You declare the pipeline once in `pipeline.dag.yaml`. Rime runs the graph, caches each node, captures logs, validates outputs, and writes artifacts.
 
 ```yaml
 nodes:
@@ -43,7 +43,7 @@ nodes:
       orders: order_metrics
 ```
 
-This file defines how data is retrieved, transformed, and used. SQL imports data, the derive node computes values with a simple expression syntax, and Python decides how to graph the data. Rime handles the cross-language handoff, execution order, caching, logs, and outputs.
+Here, the SQL node imports data. The derive node computes values with a simple expression syntax. The Python node graphs the data. Rime handles the cross-language handoff, persists and caches all outputs, and creates a runtime dashboard.
 
 ## Why Rime
 
