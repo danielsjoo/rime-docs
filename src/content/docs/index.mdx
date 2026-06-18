@@ -18,7 +18,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 import homepageDag from '../../assets/diagrams/homepage-dag.svg';
 
 ## What is Rime?
@@ -52,28 +52,36 @@ Here, SQL imports data, the derive node computes values with a simple expression
 
 ## Why Rime
 
-<CardGrid stagger>
-  <Card title="Functions, not jobs" icon="approve-check">
-    A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
-  </Card>
-  <Card title="One DAG, four languages" icon="puzzle">
-    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC — zero-copy where possible, constant-time cast to pandas / tibble / DuckDB table.
-  </Card>
-  <Card title="Reproducible by default" icon="seti:lock">
-    Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."
-  </Card>
-  <Card title="Publishable narratives" icon="document">
-    Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status — one render step, one document, one source of truth.
-  </Card>
-</CardGrid>
+<div className="rime-why-list">
+  <section>
+    <h3>⚡ Functions, not jobs</h3>
+    <p>A node is a function over dataframes, not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.</p>
+  </section>
+  <section>
+    <h3>🧰 One DAG, four languages</h3>
+    <p>SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC: zero-copy where possible, constant-time cast to pandas, tibble, or DuckDB table.</p>
+  </section>
+  <section>
+    <h3>🔒 Reproducible by default</h3>
+    <p>Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script plus same inputs means the same artifact, every time. No "works on my machine."</p>
+  </section>
+  <section>
+    <h3>📄 Publishable narratives</h3>
+    <p>Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status: one render step, one document, one source of truth.</p>
+  </section>
+</div>
 
 ## How Rime is different
 
 <Tabs>
   <TabItem label="Airflow / Prefect">
+    <div className="rime-compare-panel">
+
     - Airflow and Prefect orchestrate recurring jobs; Rime is local and one run.
     - Reads, writes, retries, errors, and persistence are usually coded inside tasks.
     - Rime owns dataframe handoff, execution order, caching, logs, validation, and outputs.
+
+    <div className="rime-code-toggle">
 
     <Tabs>
       <TabItem label="Airflow / Prefect">
@@ -109,11 +117,18 @@ Here, SQL imports data, the derive node computes values with a simple expression
         ```
       </TabItem>
     </Tabs>
+
+    </div>
+    </div>
   </TabItem>
   <TabItem label="Hex">
+    <div className="rime-compare-panel">
+
     - Hex is a proprietary notebook-style workspace; Rime is open source and file-backed.
     - Rime projects are portable `pipeline.dag.yaml` files.
     - Rime's Directed Acyclic Graph (DAG) is made of functions, not inline notebook modifications.
+
+    <div className="rime-code-toggle">
 
     <Tabs>
       <TabItem label="Hex">
@@ -153,11 +168,18 @@ Here, SQL imports data, the derive node computes values with a simple expression
         ```
       </TabItem>
     </Tabs>
+
+    </div>
+    </div>
   </TabItem>
   <TabItem label="Snakemake">
+    <div className="rime-compare-panel">
+
     - Snakemake dependencies are based on files; Rime dependencies are based on nodes.
     - Reads, writes, errors, and data persistence are usually coded manually in rules or scripts.
     - Snakemake freshness is based mainly on file timestamps and metadata, not runtime-managed node identity.
+
+    <div className="rime-code-toggle">
 
     <Tabs>
       <TabItem label="Snakemake">
@@ -187,6 +209,9 @@ Here, SQL imports data, the derive node computes values with a simple expression
         ```
       </TabItem>
     </Tabs>
+
+    </div>
+    </div>
   </TabItem>
 </Tabs>
 
