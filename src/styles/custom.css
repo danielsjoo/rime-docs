@@ -117,9 +117,6 @@ header.header {
 }
 
 .rime-screenshot img {
-  border: 1px solid var(--sl-color-hairline);
-  border-radius: 8px;
-  box-shadow: 0 18px 42px rgb(15 23 42 / 12%);
   display: block;
   width: 100%;
 }

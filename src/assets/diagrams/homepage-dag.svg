@@ -7,7 +7,6 @@
     </marker>
   </defs>
 
-  <rect width="920" height="280" rx="8" fill="#fafafa" />
   <path d="M 250 140 C 300 140, 320 140, 370 140" fill="none" stroke="#c9ced6" stroke-width="2" marker-end="url(#arrow)" />
   <path d="M 550 140 C 600 140, 620 140, 670 140" fill="none" stroke="#c9ced6" stroke-width="2" marker-end="url(#arrow)" />
 
