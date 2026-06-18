@@ -15,16 +15,15 @@
       <rect width="180" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
       <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
       <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">raw_orders</text>
-      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">sql</text>
-      <text x="22" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.18s</text>
-      <text x="58" y="78" font-size="10" fill="#8b949e">(cached)</text>
+      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">sql (2,418 x 8)</text>
+      <text x="22" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.18s (cached)</text>
     </g>
 
     <g transform="translate(370, 92)">
       <rect width="180" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
       <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
       <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">order_metrics</text>
-      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">derive</text>
+      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">derive (2,418 x 9)</text>
       <text x="22" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.04s</text>
     </g>
 
@@ -32,7 +31,7 @@
       <rect width="180" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
       <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
       <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">sales_chart</text>
-      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">python</text>
+      <text x="22" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">python (12 x 3)</text>
       <text x="22" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.71s</text>
     </g>
   </g>
