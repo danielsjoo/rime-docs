@@ -81,44 +81,35 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Reads, writes, retries, errors, and persistence are usually coded inside tasks.
     - Rime owns dataframe handoff, execution order, caching, logs, validation, and outputs.
 
-    <div className="rime-code-pair">
-      <div className="rime-code-pane">
-        <p>Airflow / Prefect</p>
+    ```python title="Airflow / Prefect"
+    @task
+    def load_orders():
+        orders = read_sql("SELECT * FROM orders")
+        orders.to_parquet("outputs/raw_orders.parquet")
 
-        ```python
-        @task
-        def load_orders():
-            orders = read_sql("SELECT * FROM orders")
-            orders.to_parquet("outputs/raw_orders.parquet")
+    @task
+    def plot_sales():
+        orders = pd.read_parquet("outputs/raw_orders.parquet")
+        plot(orders)
 
-        @task
-        def plot_sales():
-            orders = pd.read_parquet("outputs/raw_orders.parquet")
-            plot(orders)
+    @flow
+    def nightly_sales():
+        load_orders()
+        plot_sales()
+    ```
 
-        @flow
-        def nightly_sales():
-            load_orders()
-            plot_sales()
-        ```
-      </div>
-      <div className="rime-code-pane">
-        <p>Rime</p>
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: sql
+        source: queries/load_orders.sql
 
-        ```yaml
-        nodes:
-          - id: raw_orders
-            kind: sql
-            source: queries/load_orders.sql
-
-          - id: sales_chart
-            kind: python
-            source: scripts/plot_sales.py
-            in:
-              orders: raw_orders
-        ```
-      </div>
-    </div>
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: raw_orders
+    ```
     </div>
   </TabItem>
   <TabItem label="Hex">
@@ -128,48 +119,39 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Rime projects are portable `pipeline.dag.yaml` files.
     - Rime's Directed Acyclic Graph (DAG) is made of functions, not inline notebook modifications.
 
-    <div className="rime-code-pair">
-      <div className="rime-code-pane">
-        <p>Hex</p>
+    ```python title="Hex"
+    # SQL cell: raw_orders
+    SELECT *
+    FROM warehouse.orders
 
-        ```python
-        # SQL cell: raw_orders
-        SELECT *
-        FROM warehouse.orders
+    # Python cell: order_metrics
+    order_metrics = raw_orders.copy()
+    order_metrics["revenue"] = (
+        order_metrics["unit_price"] * order_metrics["quantity"]
+    )
 
-        # Python cell: order_metrics
-        order_metrics = raw_orders.copy()
-        order_metrics["revenue"] = (
-            order_metrics["unit_price"] * order_metrics["quantity"]
-        )
+    # Python cell: sales_chart
+    plot_sales(order_metrics)
+    ```
 
-        # Python cell: sales_chart
-        plot_sales(order_metrics)
-        ```
-      </div>
-      <div className="rime-code-pane">
-        <p>Rime</p>
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: sql
+        source: queries/load_orders.sql
 
-        ```yaml
-        nodes:
-          - id: raw_orders
-            kind: sql
-            source: queries/load_orders.sql
+      - id: order_metrics
+        kind: derive
+        input: raw_orders
+        columns:
+          revenue: "[unit_price] * [quantity]"
 
-          - id: order_metrics
-            kind: derive
-            input: raw_orders
-            columns:
-              revenue: "[unit_price] * [quantity]"
-
-          - id: sales_chart
-            kind: python
-            source: scripts/plot_sales.py
-            in:
-              orders: order_metrics
-        ```
-      </div>
-    </div>
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: order_metrics
+    ```
     </div>
   </TabItem>
   <TabItem label="Snakemake">
@@ -179,38 +161,29 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Reads, writes, errors, and data persistence are usually coded manually in rules or scripts.
     - Snakemake freshness is based mainly on file timestamps and metadata, not runtime-managed node identity.
 
-    <div className="rime-code-pair">
-      <div className="rime-code-pane">
-        <p>Snakemake</p>
+    ```python title="Snakemake"
+    rule load_orders:
+        output: "outputs/raw_orders.parquet"
+        shell: "python scripts/load_orders.py {output}"
 
-        ```python
-        rule load_orders:
-            output: "outputs/raw_orders.parquet"
-            shell: "python scripts/load_orders.py {output}"
+    rule plot_sales:
+        input: "outputs/raw_orders.parquet"
+        output: "outputs/sales.png"
+        shell: "python scripts/plot_sales.py {input} {output}"
+    ```
 
-        rule plot_sales:
-            input: "outputs/raw_orders.parquet"
-            output: "outputs/sales.png"
-            shell: "python scripts/plot_sales.py {input} {output}"
-        ```
-      </div>
-      <div className="rime-code-pane">
-        <p>Rime</p>
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: python
+        source: scripts/load_orders.py
 
-        ```yaml
-        nodes:
-          - id: raw_orders
-            kind: python
-            source: scripts/load_orders.py
-
-          - id: sales_chart
-            kind: python
-            source: scripts/plot_sales.py
-            in:
-              orders: raw_orders
-        ```
-      </div>
-    </div>
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: raw_orders
+    ```
     </div>
   </TabItem>
 </Tabs>

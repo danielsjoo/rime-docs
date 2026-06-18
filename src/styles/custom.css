@@ -151,75 +151,19 @@ header.header {
 }
 
 .rime-compare-panel {
-  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 72%, transparent);
-  border-radius: 8px;
   margin-top: 0.75rem;
-  padding: 1rem;
 }
 
 .rime-compare-panel > ul {
   margin-bottom: 0.85rem;
 }
 
-.rime-code-pair {
-  align-items: stretch;
-  background: var(--sl-color-bg);
-  border: 1px solid var(--sl-color-hairline);
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.rime-compare-panel .expressive-code {
   margin: 1rem 0 0;
-  overflow: hidden;
 }
 
-.rime-code-pane {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-width: 0;
-}
-
-.rime-code-pane + .rime-code-pane {
-  border-left: 1px solid var(--sl-color-hairline);
-}
-
-.rime-code-pane > p {
-  border-bottom: 1px solid var(--sl-color-hairline);
-  color: var(--sl-color-text-accent);
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin: 0;
-  padding: 0.65rem 0.85rem;
-}
-
-.rime-code-pane .expressive-code {
-  flex: 1;
-  margin-bottom: 0;
-}
-
-.rime-code-pane .expressive-code figure,
-.rime-code-pane .expressive-code pre {
-  height: 100%;
-}
-
-.rime-code-pane .expressive-code figure {
-  display: flex;
-  flex-direction: column;
-}
-
-.rime-code-pane .expressive-code pre {
-  flex: 1;
-}
-
-@media (max-width: 52rem) {
-  .rime-code-pair {
-    grid-template-columns: 1fr;
-  }
-
-  .rime-code-pane + .rime-code-pane {
-    border-left: 0;
-    border-top: 1px solid var(--sl-color-hairline);
-  }
+.rime-compare-panel .expressive-code + .expressive-code {
+  margin-top: 1rem;
 }
 
 /* Markdown pages */
