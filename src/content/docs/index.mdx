@@ -89,6 +89,51 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
       </TabItem>
     </Tabs>
   </TabItem>
+  <TabItem label="Hex">
+    - Hex is polyglot and analysis-native: SQL and Python cells can feed each other in one workspace.
+    - Rime is spec-native: the dependency graph lives in `pipeline.dag.yaml`, not in notebook cell order or app state.
+    - In Hex, the project is the workspace. In Rime, the project is a portable runtime artifact you can run locally, in CI, or in the Editor.
+    - Use Hex for collaborative cloud analysis apps. Use Rime when you want a local, file-backed DAG with automatic validation, caching, logs, and outputs.
+
+    <Tabs>
+      <TabItem label="Hex">
+        ```python
+        # SQL cell: raw_orders
+        SELECT *
+        FROM warehouse.orders
+
+        # Python cell: order_metrics
+        order_metrics = raw_orders.copy()
+        order_metrics["revenue"] = (
+            order_metrics["unit_price"] * order_metrics["quantity"]
+        )
+
+        # Python cell: sales_chart
+        plot_sales(order_metrics)
+        ```
+      </TabItem>
+      <TabItem label="Rime">
+        ```yaml
+        nodes:
+          - id: raw_orders
+            kind: sql
+            source: queries/load_orders.sql
+
+          - id: order_metrics
+            kind: derive
+            input: raw_orders
+            columns:
+              revenue: "[unit_price] * [quantity]"
+
+          - id: sales_chart
+            kind: python
+            source: scripts/plot_sales.py
+            in:
+              orders: order_metrics
+        ```
+      </TabItem>
+    </Tabs>
+  </TabItem>
   <TabItem label="Snakemake">
     - Snakemake is file-target oriented: rules declare input files, output files, and shell/script commands.
     - Rime is dataframe-output oriented: nodes return data, and the runtime automatically persists each output for downstream use.
