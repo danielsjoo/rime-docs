@@ -54,22 +54,40 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
     - In Rime, nodes are dataframe transforms. The runtime owns execution order, dataframe handoff, validation, caching, logs, and persisted outputs.
     - Use Airflow or Prefect when you need schedules, workers, retries, and production operations. Use Rime when the pipeline itself should be the readable analysis artifact.
 
-    ```python
-    @task
-    def load_orders():
-        orders = read_sql("SELECT * FROM orders")
-        orders.to_parquet("outputs/raw_orders.parquet")
+    <Tabs>
+      <TabItem label="Airflow / Prefect">
+        ```python
+        @task
+        def load_orders():
+            orders = read_sql("SELECT * FROM orders")
+            orders.to_parquet("outputs/raw_orders.parquet")
 
-    @task
-    def plot_sales():
-        orders = pd.read_parquet("outputs/raw_orders.parquet")
-        plot(orders)
+        @task
+        def plot_sales():
+            orders = pd.read_parquet("outputs/raw_orders.parquet")
+            plot(orders)
 
-    @flow
-    def nightly_sales():
-        load_orders()
-        plot_sales()
-    ```
+        @flow
+        def nightly_sales():
+            load_orders()
+            plot_sales()
+        ```
+      </TabItem>
+      <TabItem label="Rime">
+        ```yaml
+        nodes:
+          - id: raw_orders
+            kind: sql
+            source: queries/load_orders.sql
+
+          - id: sales_chart
+            kind: python
+            source: scripts/plot_sales.py
+            in:
+              orders: raw_orders
+        ```
+      </TabItem>
+    </Tabs>
   </TabItem>
   <TabItem label="Snakemake">
     - Snakemake is file-target oriented: rules declare input files, output files, and shell/script commands.
@@ -77,16 +95,34 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
     - In Snakemake, the side effect is often the contract. In Rime, side effects are the runtime's job.
     - Use Snakemake for file-heavy scientific workflows. Use Rime when you want built-in dataframe transforms, language handoff, and automatic output persistence.
 
-    ```python
-    rule load_orders:
-        output: "outputs/raw_orders.parquet"
-        shell: "python scripts/load_orders.py {output}"
+    <Tabs>
+      <TabItem label="Snakemake">
+        ```python
+        rule load_orders:
+            output: "outputs/raw_orders.parquet"
+            shell: "python scripts/load_orders.py {output}"
 
-    rule plot_sales:
-        input: "outputs/raw_orders.parquet"
-        output: "outputs/sales.png"
-        shell: "python scripts/plot_sales.py {input} {output}"
-    ```
+        rule plot_sales:
+            input: "outputs/raw_orders.parquet"
+            output: "outputs/sales.png"
+            shell: "python scripts/plot_sales.py {input} {output}"
+        ```
+      </TabItem>
+      <TabItem label="Rime">
+        ```yaml
+        nodes:
+          - id: raw_orders
+            kind: python
+            source: scripts/load_orders.py
+
+          - id: sales_chart
+            kind: python
+            source: scripts/plot_sales.py
+            in:
+              orders: raw_orders
+        ```
+      </TabItem>
+    </Tabs>
   </TabItem>
 </Tabs>
 
