@@ -44,7 +44,7 @@ nodes:
       orders: order_metrics
 ```
 
-Here, SQL imports data, the derive node computes values with a simple expression syntax, and Python graphs the result. The report creates a DAG overview like this.
+Here, SQL imports data, the derive node computes values with a simple expression syntax, and Python graphs the result. Rime captures intermediate data and loads side effects like Python plots into an organized directory, then produces a report with a runtime overview like this.
 
 <figure className="rime-screenshot">
   <img src={homepageDag.src} alt="A Rime DAG where a SQL node feeds a derive node, then a Python node." />
