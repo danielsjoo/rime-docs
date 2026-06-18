@@ -81,10 +81,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Reads, writes, retries, errors, and persistence are usually coded inside tasks.
     - Rime owns dataframe handoff, execution order, caching, logs, validation, and outputs.
 
-    <div className="rime-code-toggle">
+    <div className="rime-code-pair">
+      <div className="rime-code-pane">
+        <p>Airflow / Prefect</p>
 
-    <Tabs>
-      <TabItem label="Airflow / Prefect">
         ```python
         @task
         def load_orders():
@@ -101,8 +101,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
             load_orders()
             plot_sales()
         ```
-      </TabItem>
-      <TabItem label="Rime">
+      </div>
+      <div className="rime-code-pane">
+        <p>Rime</p>
+
         ```yaml
         nodes:
           - id: raw_orders
@@ -115,9 +117,7 @@ Here, SQL imports data, the derive node computes values with a simple expression
             in:
               orders: raw_orders
         ```
-      </TabItem>
-    </Tabs>
-
+      </div>
     </div>
     </div>
   </TabItem>
@@ -128,10 +128,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Rime projects are portable `pipeline.dag.yaml` files.
     - Rime's Directed Acyclic Graph (DAG) is made of functions, not inline notebook modifications.
 
-    <div className="rime-code-toggle">
+    <div className="rime-code-pair">
+      <div className="rime-code-pane">
+        <p>Hex</p>
 
-    <Tabs>
-      <TabItem label="Hex">
         ```python
         # SQL cell: raw_orders
         SELECT *
@@ -146,8 +146,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
         # Python cell: sales_chart
         plot_sales(order_metrics)
         ```
-      </TabItem>
-      <TabItem label="Rime">
+      </div>
+      <div className="rime-code-pane">
+        <p>Rime</p>
+
         ```yaml
         nodes:
           - id: raw_orders
@@ -166,9 +168,7 @@ Here, SQL imports data, the derive node computes values with a simple expression
             in:
               orders: order_metrics
         ```
-      </TabItem>
-    </Tabs>
-
+      </div>
     </div>
     </div>
   </TabItem>
@@ -179,10 +179,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
     - Reads, writes, errors, and data persistence are usually coded manually in rules or scripts.
     - Snakemake freshness is based mainly on file timestamps and metadata, not runtime-managed node identity.
 
-    <div className="rime-code-toggle">
+    <div className="rime-code-pair">
+      <div className="rime-code-pane">
+        <p>Snakemake</p>
 
-    <Tabs>
-      <TabItem label="Snakemake">
         ```python
         rule load_orders:
             output: "outputs/raw_orders.parquet"
@@ -193,8 +193,10 @@ Here, SQL imports data, the derive node computes values with a simple expression
             output: "outputs/sales.png"
             shell: "python scripts/plot_sales.py {input} {output}"
         ```
-      </TabItem>
-      <TabItem label="Rime">
+      </div>
+      <div className="rime-code-pane">
+        <p>Rime</p>
+
         ```yaml
         nodes:
           - id: raw_orders
@@ -207,9 +209,7 @@ Here, SQL imports data, the derive node computes values with a simple expression
             in:
               orders: raw_orders
         ```
-      </TabItem>
-    </Tabs>
-
+      </div>
     </div>
     </div>
   </TabItem>

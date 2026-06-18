@@ -161,19 +161,32 @@ header.header {
   margin-bottom: 0.85rem;
 }
 
-.rime-code-toggle {
-  border-top: 1px solid var(--sl-color-hairline);
-  margin: 0.9rem -1rem 0;
-  padding: 0.85rem 1rem 0;
+.rime-code-pair {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1rem 0 0;
 }
 
-.rime-code-toggle .tablist-wrapper,
-.rime-code-toggle [role='tablist'] {
-  margin-top: 0;
+.rime-code-pane {
+  min-width: 0;
 }
 
-.rime-code-toggle .expressive-code {
+.rime-code-pane > p {
+  color: var(--sl-color-text-accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+.rime-code-pane .expressive-code {
   margin-bottom: 0;
+}
+
+@media (max-width: 52rem) {
+  .rime-code-pair {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Markdown pages */
