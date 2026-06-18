@@ -49,10 +49,9 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
 
 <Tabs>
   <TabItem label="Airflow / Prefect">
-    - Airflow and Prefect orchestrate recurring jobs; Rime is built for a single local run you can inspect end to end.
-    - In Airflow and Prefect, tasks usually own their own reads, writes, retries, and side effects.
-    - In Rime, nodes are dataframe transforms. The runtime owns execution order, dataframe handoff, validation, caching, logs, and persisted outputs.
-    - Use Airflow or Prefect when you need schedules, workers, retries, and production operations. Use Rime when the pipeline itself should be the readable analysis artifact.
+    - Airflow and Prefect orchestrate recurring jobs; Rime is local and one run.
+    - Reads, writes, retries, errors, and persistence are usually coded inside tasks.
+    - Rime owns dataframe handoff, execution order, caching, logs, validation, and outputs.
 
     <Tabs>
       <TabItem label="Airflow / Prefect">
@@ -90,10 +89,9 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
     </Tabs>
   </TabItem>
   <TabItem label="Hex">
-    - Hex is polyglot and analysis-native: SQL and Python cells can feed each other in one workspace.
-    - Rime is spec-native: the dependency graph lives in `pipeline.dag.yaml`, not in notebook cell order or app state.
-    - In Hex, the project is the workspace. In Rime, the project is a portable runtime artifact you can run locally, in CI, or in the Editor.
-    - Use Hex for collaborative cloud analysis apps. Use Rime when you want a local, file-backed DAG with automatic validation, caching, logs, and outputs.
+    - Hex is proprietary; Rime is open source and file-backed.
+    - Hex is a single notebook-style workspace; Rime is a portable `pipeline.dag.yaml`.
+    - Hex analysis is mostly linear cell flow; Rime analysis is an explicit DAG.
 
     <Tabs>
       <TabItem label="Hex">
@@ -135,10 +133,9 @@ This file defines how data is retrieved, transformed, and used. SQL imports data
     </Tabs>
   </TabItem>
   <TabItem label="Snakemake">
-    - Snakemake is file-target oriented: rules declare input files, output files, and shell/script commands.
-    - Rime is dataframe-output oriented: nodes return data, and the runtime automatically persists each output for downstream use.
-    - In Snakemake, the side effect is often the contract. In Rime, side effects are the runtime's job.
-    - Use Snakemake for file-heavy scientific workflows. Use Rime when you want built-in dataframe transforms, language handoff, and automatic output persistence.
+    - Snakemake dependencies are based on files; Rime dependencies are based on nodes.
+    - Reads, writes, errors, and data persistence are usually coded manually in rules or scripts.
+    - Snakemake freshness is based mainly on file timestamps and metadata, not runtime-managed node identity.
 
     <Tabs>
       <TabItem label="Snakemake">
