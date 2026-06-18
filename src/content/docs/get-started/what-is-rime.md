@@ -49,14 +49,6 @@ Researchers, data journalists, analysts, and small data teams who want to:
 2. Ship a result someone else can re-run end-to-end with one command (or one click in the Editor).
 3. Publish their analysis as a readable HTML report alongside the raw data.
 
-## Compared to
-
-- **Hex / Deepnote** — closed-source SaaS notebooks with reactive cells. Rime is functional (not cell-scoped) and open source — runs on your laptop, in your CI, no per-seat licensing.
-- **Snakemake / Nextflow** — Rime's closest neighbors in spirit. Same polyglot DAG idea, different ergonomics: Rime ships with built-in transforms and a report layer; Snakemake/Nextflow are lower-level workflow engines tuned for bioinformatics file pipelines.
-- **dbt** — SQL-only, production-oriented. Rime borrows dbt's "you write the SELECT, we handle materialization" mental model and extends it past SQL.
-- **Quarto / R Markdown** — document-first. Rime is pipeline-first; reports are a downstream concern.
-- **Airflow / Prefect / Dagster** — Rime is not in this family. Those tools wire I/O between tasks; Rime treats nodes as pure functions and owns I/O itself.
-
 ## Next
 
 - [Download Rime Editor](/rime-docs/editor/install/) — the recommended start

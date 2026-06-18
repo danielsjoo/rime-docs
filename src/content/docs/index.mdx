@@ -18,7 +18,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## What is Rime?
 
@@ -44,6 +44,23 @@ nodes:
 ```
 
 This file defines how data is retrieved, transformed, and used. SQL imports data, the derive node computes values with a simple expression syntax, and Python decides how to graph the data. Rime handles the cross-language handoff, execution order, caching, logs, and outputs.
+
+## How Rime is different
+
+<Tabs>
+  <TabItem label="Airflow / Prefect">
+    - Airflow and Prefect orchestrate recurring jobs; Rime is built for a single local run you can inspect end to end.
+    - In Airflow and Prefect, tasks usually own their own reads, writes, retries, and side effects.
+    - In Rime, nodes are dataframe transforms. The runtime owns execution order, dataframe handoff, validation, caching, logs, and persisted outputs.
+    - Use Airflow or Prefect when you need schedules, workers, retries, and production operations. Use Rime when the pipeline itself should be the readable analysis artifact.
+  </TabItem>
+  <TabItem label="Snakemake">
+    - Snakemake is file-target oriented: rules declare input files, output files, and shell/script commands.
+    - Rime is dataframe-output oriented: nodes return data, and the runtime automatically persists each output for downstream use.
+    - In Snakemake, the side effect is often the contract. In Rime, side effects are the runtime's job.
+    - Use Snakemake for file-heavy scientific workflows. Use Rime when you want built-in dataframe transforms, language handoff, and automatic output persistence.
+  </TabItem>
+</Tabs>
 
 ## Choose your surface
 
