@@ -3,7 +3,7 @@ title: Rime
 description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
 template: splash
 hero:
-  tagline: "Declare your data retrievals and transforms in one file. The Rime runtime handles caching, logs, validation, outputs, and reports."
+  tagline: "dbt-style pipelines across Python, R, JavaScript, and SQL. Declare your data retrievals and transforms in one file; Rime handles caching, logs, validation, outputs, and reports."
   actions:
     - text: Download the Editor
       link: /rime-docs/editor/overview/
@@ -44,6 +44,23 @@ nodes:
 ```
 
 This file defines how data is retrieved, transformed, and used. SQL imports data, the derive node computes values with a simple expression syntax, and Python decides how to graph the data. Rime handles the cross-language handoff, execution order, caching, logs, and outputs.
+
+## Why Rime
+
+<CardGrid stagger>
+  <Card title="Functions, not jobs" icon="approve-check">
+    A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
+  </Card>
+  <Card title="One DAG, four languages" icon="puzzle">
+    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC — zero-copy where possible, constant-time cast to pandas / tibble / DuckDB table.
+  </Card>
+  <Card title="Reproducible by default" icon="seti:lock">
+    Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."
+  </Card>
+  <Card title="Publishable narratives" icon="document">
+    Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status — one render step, one document, one source of truth.
+  </Card>
+</CardGrid>
 
 ## How Rime is different
 
@@ -193,23 +210,6 @@ The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually
     description="Author your first DAG in 10 minutes. Core nodes, script nodes, and HTML report, end to end."
     href="/rime-docs/get-started/quick-start/"
   />
-</CardGrid>
-
-## Why Rime
-
-<CardGrid stagger>
-  <Card title="Functions, not jobs" icon="approve-check">
-    A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
-  </Card>
-  <Card title="One DAG, four languages" icon="puzzle">
-    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC — zero-copy where possible, constant-time cast to pandas / tibble / DuckDB table.
-  </Card>
-  <Card title="Reproducible by default" icon="seti:lock">
-    Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."
-  </Card>
-  <Card title="Publishable narratives" icon="document">
-    Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status — one render step, one document, one source of truth.
-  </Card>
 </CardGrid>
 
 ## Real pipelines you can clone
