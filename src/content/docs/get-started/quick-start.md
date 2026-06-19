@@ -1,146 +1,177 @@
 ---
 title: Quick start
-description: From zero to a running Rime pipeline in under five minutes.
+description: Run the smallest complete Rime pipeline and inspect the artifacts it writes.
 ---
 
-This walkthrough takes you from a fresh install to a working pipeline that filters, aggregates, and runs a Python script — all driven from a single YAML file.
+This page runs the smallest complete Rime project: one CSV, one
+`pipeline.dag.yaml`, one command. It uses only core nodes, so no Python or R
+interpreter setup is required.
 
-## The mental model
+For a slower tutorial that creates every file from scratch, see the
+[first pipeline workshop](/rime-docs/workshops/first-pipeline/).
 
-1. **Pipeline shape goes in `pipeline.dag.yaml`** — data flow plus default report inclusion. Source nodes carry their data file paths inline (`path: data/foo.csv`); language nodes reference their files via `source:`. All relative paths resolve against the directory holding the DAG.
-2. **Reports are generated from the DAG** — every node appears by default; set `metadata.report: false` to hide raw or intermediate nodes.
-3. **Interpreter selection** — pass `--python-bin` / `--rscript-bin` on the CLI, or set `RIME_PYTHON_BIN` / `RIME_RSCRIPT_BIN`, or declare paths inline on the DAG via an optional `interpreters:` block.
-
-Every node in the DAG takes tabular inputs and is configured by fields hard-coded into the node (expressions, parameters). You're tracing the flow of data through the graph.
-
-## 30-second start
-
-The simplest invocation: one file, one command. No project marker, no scaffolding.
+## Clone an Example
 
 ```bash
-rime run path/to/pipeline.dag.yaml
-rime run path/to/pipeline.dag.yaml --python-bin ~/conda/envs/foo/bin/python
-rime build path/to/pipeline.dag.yaml
+git clone https://github.com/danielsjoo/rime
+cd rime
 ```
 
-The directory containing the DAG file is the root for relative paths and where `outputs/` lands.
+The example lives at `examples/single-file/`:
 
-## Step 1: declare the pipeline shape
+```text
+examples/single-file/
+├── data/
+│   └── penguins.csv
+└── pipeline.dag.yaml
+```
+
+## Read the DAG
 
 ```yaml
-# pipeline.dag.yaml
 specification_version: "2.1"
+
 nodes:
-  - id: patients
+  - id: penguins
     kind: source
-    path: data/patients.csv
+    path: data/penguins.csv
 
-  - id: adults
+  - id: adelie_only
     kind: filter
-    inputs: [patients]
-    expr: "[age] >= 18"
+    inputs: [penguins]
+    expr: '[species] == "Adelie"'
 
-  - id: by_site
+  - id: by_island
     kind: aggregate
-    inputs: [adults]
-    groupBy: ["[site]"]
+    inputs: [adelie_only]
+    groupBy: ["[island]"]
     metrics:
-      - "[mean_age] = [age].mean()"
-      - "[n] = [age].count()"
+      - "[mean_bill_length] = [bill_length_mm].mean()"
+      - "[mean_flipper_length] = [flipper_length_mm].mean()"
+      - "[n] = [bill_length_mm].count()"
 ```
 
-Every node has:
+What each node does:
 
-- `id` (unique)
-- `kind` (one of 14 — see [Node Reference](/rime-docs/concepts/nodes/))
-- For `kind: source`: `path:` pointing at a CSV / JSON / NDJSON / Parquet file (loaded with type inference; parquet preserves types)
-- For built-in nodes (`filter`/`derive`/`aggregate`/...): `inputs:` (array of upstream node id refs; use `nodeId.outputName` for multi-output nodes)
-- For language nodes (v2.1): `in:` map (slot name → ref string; refs may be `nodeId`, `nodeId.outputName`, or `params.<name>`)
-- Type-specific fields at the top level (`expr`, `groupBy`, `metrics`, etc. — no `params:` bag)
+| Node | Kind | Result |
+|---|---|---|
+| `penguins` | `source` | Load `data/penguins.csv`. |
+| `adelie_only` | `filter` | Keep rows where `species` is `Adelie`. |
+| `by_island` | `aggregate` | Summarize the Adelie rows by island. |
 
-## Step 2: choose what to render
+All relative paths resolve from the directory that contains the DAG file.
+
+## Validate
+
+```bash
+rime validate examples/single-file/pipeline.dag.yaml
+```
+
+Validation checks YAML syntax, node schemas, input references, graph cycles, and
+source paths. It does not execute any nodes.
+
+## Run
+
+```bash
+rime run examples/single-file/pipeline.dag.yaml
+```
+
+Rime writes artifacts next to the DAG:
+
+```text
+examples/single-file/outputs/
+├── manifest.json
+├── penguins/
+│   ├── default.parquet
+│   └── default.parquet.meta.json
+├── adelie_only/
+│   ├── default.parquet
+│   └── default.parquet.meta.json
+└── by_island/
+    ├── default.parquet
+    └── default.parquet.meta.json
+```
+
+The final table has three rows:
+
+| island | mean_bill_length | mean_flipper_length | n |
+|---|---:|---:|---:|
+| Biscoe | 40.30 | 195.00 | 1 |
+| Dream | 39.15 | 180.00 | 2 |
+| Torgersen | 39.30 | 183.50 | 2 |
+
+## Build the HTML Report
+
+```bash
+rime build examples/single-file/pipeline.dag.yaml
+```
+
+`rime build` runs the DAG and writes:
+
+```text
+examples/single-file/outputs/run_report.html
+```
+
+Open that file to inspect node status, cache state, schemas, preview rows, and
+the final aggregate output.
+
+## Hide Noisy Nodes
+
+Reports include every node by default. Add `metadata.report: false` to source
+or staging nodes that should stay out of the HTML report:
 
 ```yaml
-- id: patients
+- id: penguins
   kind: source
-  path: data/patients.csv
+  path: data/penguins.csv
   metadata:
     report: false
 ```
 
-Reports include every node by default. Use `metadata.report: false` for raw
-sources or intermediate steps that should not appear in the HTML output.
+## Add a Language Node
 
-## Step 3: build
-
-```bash
-rime build pipeline.dag.yaml
-```
-
-Runs the DAG and renders HTML in one atomic invocation. Output lands at
-`outputs/run_report.html` next to the DAG file (override with `--out`).
-
-## Adding a language node
-
-For anything beyond the built-in transforms, use a language node. v2.1 supports four languages (`python`, `r`, `javascript`, `sql`). Each script declares its inputs as **named slots**; scalar values come from a top-level `params:` block:
+Use a language node when a built-in node does not fit. Language nodes use a
+named `in:` map instead of positional `inputs:`.
 
 ```yaml
-specification_version: "2.1"
-
 params:
-  threshold: { type: float, default: 0.5 }
+  min_mass: { type: float, default: 3500 }
 
 nodes:
-  - id: adults
-    kind: filter
-    inputs: [patients]
-    expr: "[age] >= 18"
-
-  - id: features
+  - id: heavy_penguins
     kind: python
-    source: scripts/features.py
+    source: scripts/heavy.py
     in:
-      adults:    adults              # node ref -> resolves to a Table
-      threshold: params.threshold    # params.<name> -> resolves to a scalar
+      penguins: penguins
+      min_mass: params.min_mass
 ```
-
-Your `scripts/features.py` takes the slots as named args:
 
 ```python
-def run(adults, threshold):
-    return adults.assign(flag=(adults["score"] > float(threshold)))
+# scripts/heavy.py
+def run(penguins, min_mass):
+    return penguins[penguins["body_mass_g"] >= float(min_mass)]
 ```
 
-## Adding a SQL node
-
-```yaml
-- id: enriched
-  kind: sql
-  source: queries/enrich.sql
-  in:
-    adults: adults
-    lookup: lookup
-```
-
-```sql
--- queries/enrich.sql
-SELECT a.*, l.label
-FROM adults a
-LEFT JOIN lookup l ON a.id = l.adult_id
-```
-
-Each upstream node registers as a DuckDB temp table named after the node id.
-
-## Validate before you build
+Then run with a specific interpreter or a param override:
 
 ```bash
-rime validate pipeline.dag.yaml
+rime run pipeline.dag.yaml --python-bin .venv/bin/python
+rime run pipeline.dag.yaml --param min_mass=3800
 ```
 
-Checks DAG schema and graph integrity (no cycles, all input refs resolve).
+## Common Commands
+
+| Command | Use it for |
+|---|---|
+| `rime validate pipeline.dag.yaml` | Check schema and graph integrity before running. |
+| `rime run pipeline.dag.yaml` | Execute the DAG and persist artifacts. |
+| `rime build pipeline.dag.yaml` | Execute the DAG and render HTML. |
+| `rime run pipeline.dag.yaml --no-cache-read` | Force recompute while still writing fresh cache. |
+| `rime run pipeline.dag.yaml --lean` | Recompute without reading or writing cache artifacts. |
 
 ## Next
 
+- [Workshop: build a first pipeline](/rime-docs/workshops/first-pipeline/)
 - [Concepts: DAG specification](/rime-docs/concepts/dag/)
 - [Concepts: Polyglot runtime](/rime-docs/concepts/polyglot/)
-- [Node Reference](/rime-docs/concepts/nodes/) — every built-in operator
+- [Node Reference](/rime-docs/nodes/) — every built-in operator

@@ -46,10 +46,22 @@ nodes:
 ## Running it
 
 ```bash
+rime validate examples/single-file/pipeline.dag.yaml
 rime run examples/single-file/pipeline.dag.yaml
+rime build examples/single-file/pipeline.dag.yaml
 ```
 
 Outputs land under `examples/single-file/outputs/by_island/default.parquet`.
+
+The final aggregate is:
+
+| island | mean_bill_length | mean_flipper_length | n |
+|---|---:|---:|---:|
+| Biscoe | 40.30 | 195.00 | 1 |
+| Dream | 39.15 | 180.00 | 2 |
+| Torgersen | 39.30 | 183.50 | 2 |
+
+`rime build` also writes `examples/single-file/outputs/run_report.html`.
 
 ## Why start here
 

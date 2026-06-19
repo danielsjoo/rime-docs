@@ -28,8 +28,8 @@ That's the whole protocol: declare your inputs in the YAML's `in:` map, declare 
 
 The runtime calls `run(**slots)` — your parameter names must match the keys in `in:`.
 
-> The default entrypoint is `run` (or `transform`, which the Editor emits — both
-> are accepted). To use a different name, set `entrypoint:` on the node.
+> The default entrypoint is `run`. `transform` is also accepted for compatibility.
+> To use a different name, set `entrypoint:` on the node.
 
 | YAML `in:` slot | Native Python type |
 |---|---|

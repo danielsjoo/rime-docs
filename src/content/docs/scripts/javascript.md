@@ -5,7 +5,7 @@ description: How JavaScript language nodes work in Rime — defineNode helper, A
 
 A JavaScript language node uses `kind: javascript`. You write a function via the `defineNode(...)` helper exported from `@rimekit/runtime`; the runtime invokes it with named arguments and captures the return value.
 
-JavaLanguage nodes run **in-process** with the runtime — no subprocess spawn. This makes them the cheapest of the four languages.
+JavaScript language nodes run **in-process** with the runtime — no subprocess spawn. This makes them the cheapest of the four languages.
 
 ## Minimum example
 
@@ -107,7 +107,7 @@ export default defineNode({
 })
 ```
 
-This is the canonical pattern for external API fetches (e.g. the `JS fetch CO₂` node in the cars-emissions example).
+This is the canonical pattern for external API fetches (e.g. the `JS fetch CO2` node in the cars-emissions example).
 
 ## What happens under the hood
 

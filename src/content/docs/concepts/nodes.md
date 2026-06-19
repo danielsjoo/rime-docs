@@ -127,8 +127,8 @@ Native values per language: pandas DataFrame (Python), tibble (R), Arrow Table o
 
 ```yaml
 metadata:
-  label: "Friendly node label"      # editor display
-  group: "feature_engineering"      # editor grouping
+  label: "Friendly node label"      # used in reports and visualizations
+  group: "feature_engineering"      # logical grouping
   visual_stats: ["row_count"]       # engine emits these on each run
   cache: false                      # boolean or { policy: ttl, seconds: N }
 ```

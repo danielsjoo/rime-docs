@@ -7,7 +7,8 @@ Rime ships in two flavors: a single-file binary (no Node required) and a set of 
 
 ## Binary (recommended for end users)
 
-Coming soon. The release pipeline is in place but the first tagged version hasn't shipped yet. Once available:
+Release binaries are not published yet. Once the first tagged build exists, the
+install paths will be:
 
 ```bash
 # macOS / Linux (Homebrew)
@@ -19,6 +20,9 @@ chmod +x /usr/local/bin/rime
 ```
 
 ## npm (for programmatic use)
+
+Use the npm packages when you are embedding Rime or running from a Node-based
+environment:
 
 ```bash
 npm install @rimekit/core         # DAG schema + engine
@@ -84,4 +88,4 @@ rime --version
 rime validate examples/single-file/pipeline.dag.yaml
 ```
 
-If all three succeed, you're ready. Move on to the [Quick start](/rime-docs/get-started/quick-start/).
+If all three succeed, move on to the [Quick start](/rime-docs/get-started/quick-start/).
