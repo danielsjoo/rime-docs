@@ -112,6 +112,60 @@ header.header {
   color: var(--sl-color-text-accent);
 }
 
+.rime-screenshot {
+  margin: 1.75rem 0 2.5rem;
+}
+
+.rime-screenshot img {
+  display: block;
+  width: 100%;
+}
+
+.rime-why-list {
+  display: grid;
+  gap: 1.75rem;
+  margin: 1.5rem 0 2.75rem;
+}
+
+.rime-why-list section {
+  max-width: 52rem;
+}
+
+.rime-why-list h3 {
+  color: var(--sl-color-text-accent);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  letter-spacing: 0;
+  line-height: 1.15;
+  margin: 0 0 0.45rem;
+}
+
+.rime-why-list p {
+  color: var(--sl-color-gray-2);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+:root[data-theme='dark'] .rime-why-list p {
+  color: var(--sl-color-gray-3);
+}
+
+.rime-compare-panel {
+  margin-top: 0.75rem;
+}
+
+.rime-compare-panel > ul {
+  margin-bottom: 0.85rem;
+}
+
+.rime-compare-panel .expressive-code {
+  margin: 1rem 0 0;
+}
+
+.rime-compare-panel .expressive-code + .expressive-code {
+  margin-top: 1rem;
+}
+
 /* Markdown pages */
 .sl-markdown-content > h2 {
   margin-top: 2.75rem;

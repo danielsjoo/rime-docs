@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="280" viewBox="0 0 920 280" role="img" aria-labelledby="title desc">
+  <title id="title">Rime pipeline DAG</title>
+  <desc id="desc">A SQL node feeds a derive node, which feeds a Python node.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c9ced6" />
+    </marker>
+  </defs>
+
+  <path d="M 269 140 C 299 140, 313 140, 343 140" fill="none" stroke="#c9ced6" stroke-width="2" marker-end="url(#arrow)" />
+  <path d="M 577 140 C 607 140, 621 140, 651 140" fill="none" stroke="#c9ced6" stroke-width="2" marker-end="url(#arrow)" />
+
+  <g font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+    <g transform="translate(35, 92)">
+      <rect width="234" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
+      <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
+      <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">raw_orders</text>
+      <text x="212" y="28" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">sql</text>
+      <text x="22" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">(2,418 x 8)</text>
+      <text x="212" y="66" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.18s (cached)</text>
+    </g>
+
+    <g transform="translate(343, 92)">
+      <rect width="234" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
+      <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
+      <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">order_metrics</text>
+      <text x="212" y="28" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">derive</text>
+      <text x="22" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">(2,418 x 9)</text>
+      <text x="212" y="66" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.04s</text>
+    </g>
+
+    <g transform="translate(651, 92)">
+      <rect width="234" height="96" rx="5" fill="#ffffff" stroke="#b8c3cf" stroke-width="1.5" />
+      <circle cx="22" cy="24" r="5" fill="#2c8a4a" />
+      <text x="38" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#1f2328">sales_chart</text>
+      <text x="212" y="28" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#8b949e">python</text>
+      <text x="22" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">(null)</text>
+      <text x="212" y="66" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#69707a">0.71s</text>
+    </g>
+  </g>
+</svg>

@@ -28,6 +28,7 @@ export default defineConfig({
           label: 'Get Started',
           items: [
             { label: 'What is Rime?', slug: 'get-started/what-is-rime' },
+            { label: 'Two ways to use Rime', slug: 'get-started/two-ways-to-use-rime' },
             { label: 'Install', slug: 'get-started/install' },
             { label: 'Quick start', slug: 'get-started/quick-start' },
           ],

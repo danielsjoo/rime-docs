@@ -3,7 +3,7 @@ title: Rime
 description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
 template: splash
 hero:
-  tagline: "Two ways to build reproducible data work: compose core nodes for fast analysis, or write script functions in the language you want. Rime handles the DAG, cache, logs, outputs, and report."
+  tagline: "dbt-style pipelines across Python, R, JavaScript, and SQL. Declare your data retrievals and transforms in one file; Rime handles caching, logs, validation, outputs, and reports."
   actions:
     - text: Download the Editor
       link: /rime-docs/editor/overview/
@@ -18,23 +18,175 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
+import homepageDag from '../../assets/diagrams/homepage-dag.svg';
 
-## Two ways to use Rime
+## What is Rime?
 
-Rime can be a no-code analysis tool, a polyglot scripting runtime, or both in the same DAG.
+Rime is a runtime for reproducible data work. You declare the pipeline once in `pipeline.dag.yaml`. Rime runs the graph, caches each node, captures logs, validates outputs, and writes artifacts.
 
-<CardGrid>
-  <Card title="Core nodes for the common path" icon="approve-check">
-    Use built-ins for the work every analysis repeats: load files, filter rows, derive columns, aggregate, join, pivot, sort, select, concatenate, and run statistical checks. The runtime handles validation, caching, previews, and report output.
-  </Card>
-  <Card title="Script nodes for real language work" icon="puzzle">
-    When the built-ins are not enough, write a function in Python, R, JavaScript, or SQL. Name the inputs, return tables or objects, and Rime handles dataframe I/O, artifacts, stdout, figures, and downstream wiring.
-  </Card>
-  <Card title="One report from the whole DAG" icon="document">
-    Both modes feed the same run. Rime records node status, output previews, stats, figures, and logs so the result can be shared as a single HTML narrative instead of a loose pile of files.
-  </Card>
-</CardGrid>
+```yaml
+nodes:
+  - id: raw_orders
+    kind: sql
+    source: queries/load_orders.sql
+
+  - id: order_metrics
+    kind: derive
+    input: raw_orders
+    columns:
+      revenue: "[unit_price] * [quantity]"
+
+  - id: sales_chart
+    kind: python
+    source: scripts/plot_sales.py
+    in:
+      orders: order_metrics
+```
+
+Here, SQL imports data, the derive node computes values with a simple expression syntax, and Python graphs the result. Rime captures intermediate data and loads side effects like Python plots into an organized directory, then produces a report with a runtime overview like this.
+
+<figure className="rime-screenshot">
+  <img src={homepageDag.src} alt="A Rime DAG where a SQL node feeds a derive node, then a Python node." />
+</figure>
+
+## Why Rime
+
+<div className="rime-why-list">
+  <section>
+    <h3>⚡ Functions, not jobs</h3>
+    <p>A node is a function over dataframes, not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.</p>
+  </section>
+  <section>
+    <h3>🧰 One DAG, four languages</h3>
+    <p>SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC: zero-copy where possible, constant-time cast to pandas, tibble, or DuckDB table.</p>
+  </section>
+  <section>
+    <h3>🔒 Reproducible by default</h3>
+    <p>Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script plus same inputs means the same artifact, every time. No "works on my machine."</p>
+  </section>
+  <section>
+    <h3>📄 Publishable narratives</h3>
+    <p>Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status: one render step, one document, one source of truth.</p>
+  </section>
+</div>
+
+## How Rime is different
+
+<Tabs>
+  <TabItem label="Airflow / Prefect">
+    <div className="rime-compare-panel">
+
+    - Airflow and Prefect orchestrate recurring jobs; Rime is local and one run.
+    - Reads, writes, retries, errors, and persistence are usually coded inside tasks.
+    - Rime owns dataframe handoff, execution order, caching, logs, validation, and outputs.
+
+    ```python title="Airflow / Prefect"
+    @task
+    def load_orders():
+        orders = read_sql("SELECT * FROM orders")
+        orders.to_parquet("outputs/raw_orders.parquet")
+
+    @task
+    def plot_sales():
+        orders = pd.read_parquet("outputs/raw_orders.parquet")
+        plot(orders)
+
+    @flow
+    def nightly_sales():
+        load_orders()
+        plot_sales()
+    ```
+
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: sql
+        source: queries/load_orders.sql
+
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: raw_orders
+    ```
+    </div>
+  </TabItem>
+  <TabItem label="Hex">
+    <div className="rime-compare-panel">
+
+    - Hex is a proprietary notebook-style workspace; Rime is open source and file-backed.
+    - Rime projects are portable `pipeline.dag.yaml` files.
+    - Rime's Directed Acyclic Graph (DAG) is made of functions, not inline notebook modifications.
+
+    ```python title="Hex"
+    # SQL cell: raw_orders
+    SELECT *
+    FROM warehouse.orders
+
+    # Python cell: order_metrics
+    order_metrics = raw_orders.copy()
+    order_metrics["revenue"] = (
+        order_metrics["unit_price"] * order_metrics["quantity"]
+    )
+
+    # Python cell: sales_chart
+    plot_sales(order_metrics)
+    ```
+
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: sql
+        source: queries/load_orders.sql
+
+      - id: order_metrics
+        kind: derive
+        input: raw_orders
+        columns:
+          revenue: "[unit_price] * [quantity]"
+
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: order_metrics
+    ```
+    </div>
+  </TabItem>
+  <TabItem label="Snakemake">
+    <div className="rime-compare-panel">
+
+    - Snakemake dependencies are based on files; Rime dependencies are based on nodes.
+    - Reads, writes, errors, and data persistence are usually coded manually in rules or scripts.
+    - Snakemake freshness is based mainly on file timestamps and metadata, not runtime-managed node identity.
+
+    ```python title="Snakemake"
+    rule load_orders:
+        output: "outputs/raw_orders.parquet"
+        shell: "python scripts/load_orders.py {output}"
+
+    rule plot_sales:
+        input: "outputs/raw_orders.parquet"
+        output: "outputs/sales.png"
+        shell: "python scripts/plot_sales.py {input} {output}"
+    ```
+
+    ```yaml title="Rime"
+    nodes:
+      - id: raw_orders
+        kind: python
+        source: scripts/load_orders.py
+
+      - id: sales_chart
+        kind: python
+        source: scripts/plot_sales.py
+        in:
+          orders: raw_orders
+    ```
+    </div>
+  </TabItem>
+</Tabs>
 
 ## Choose your surface
 
@@ -52,27 +204,15 @@ The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually
     href="/rime-docs/get-started/what-is-rime/"
   />
   <LinkCard
+    title="Two ways to use Rime"
+    description="Learn when to use core nodes, when to use script nodes, and what the YAML file is doing."
+    href="/rime-docs/get-started/two-ways-to-use-rime/"
+  />
+  <LinkCard
     title="Quick start"
     description="Author your first DAG in 10 minutes. Core nodes, script nodes, and HTML report, end to end."
     href="/rime-docs/get-started/quick-start/"
   />
-</CardGrid>
-
-## Why Rime
-
-<CardGrid stagger>
-  <Card title="Functions, not jobs" icon="approve-check">
-    A node is a function over dataframes — not a task that wires I/O. You write what each step computes; the runtime owns reading, writing, serialization, and language boundaries. The dbt mental model, extended past SQL.
-  </Card>
-  <Card title="One DAG, four languages" icon="puzzle">
-    SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC — zero-copy where possible, constant-time cast to pandas / tibble / DuckDB table.
-  </Card>
-  <Card title="Reproducible by default" icon="seti:lock">
-    Content-addressed caching, deterministic outputs, freeze-able snapshots. Same script + same inputs = same artifact, every time. No "works on my machine."
-  </Card>
-  <Card title="Publishable narratives" icon="document">
-    Render a publishable HTML report directly from your DAG. Tables, stats, stdout, figures, and node status — one render step, one document, one source of truth.
-  </Card>
 </CardGrid>
 
 ## Real pipelines you can clone
