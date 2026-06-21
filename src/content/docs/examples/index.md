@@ -1,17 +1,30 @@
 ---
 title: Examples
-description: Real Rime pipelines you can clone, run, and remix. Multi-language narratives, single-file teaching examples, headless embeds.
+description: Real Rime pipelines you can clone, run, and remix.
 ---
 
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-Rime ships with curated example pipelines that double as documentation. Each one is a complete project — DAG, scripts, data, and a rendered HTML report.
+Rime examples are complete projects: DAGs, scripts, data, and the expected
+artifacts they write. Use this section as a cookbook after the
+[quick start](/rime-docs/get-started/quick-start/).
+
+## Choose an Example
+
+| If you want to learn... | Start with |
+|---|---|
+| The minimum DAG shape | [Single-file pipeline](/rime-docs/examples/single-file/) |
+| Built-in nodes over tabular data | [Penguin classifier](/rime-docs/examples/penguins/) |
+| SQL ingress through DuckDB | [DuckDB single source](/rime-docs/examples/sql-only/) |
+| A larger multi-branch graph | [DAG showcase](/rime-docs/examples/dag-showcase/) |
+| Programmatic execution | [Embed in Node](/rime-docs/examples/headless/) |
+| A full polyglot narrative | [Cars x CO2 emissions](/rime-docs/examples/cars-emissions/) |
 
 ## Flagship
 
 <CardGrid>
   <LinkCard
-    title="Cars × CO₂ emissions"
+    title="Cars x CO2 emissions"
     description="SQL source + JS API fetch + Python UMAP + R regression → one HTML narrative. The canonical multi-language example."
     href="/rime-docs/examples/cars-emissions/"
   />
@@ -27,7 +40,7 @@ Rime ships with curated example pipelines that double as documentation. Each one
   />
   <LinkCard
     title="DAG showcase"
-    description="Walk through every core node kind with a tiny example each."
+    description="A compact clinical-style graph that combines sources, SQL, derives, aggregates, and stat nodes."
     href="/rime-docs/examples/dag-showcase/"
   />
   <LinkCard
@@ -52,8 +65,12 @@ Rime ships with curated example pipelines that double as documentation. Each one
   />
 </CardGrid>
 
-## More examples
+## Cookbook Pattern
 
-We're filling these in over time. See [EXAMPLES_PLAN.md](https://github.com/danielsjoo/rime-docs/blob/main/EXAMPLES_PLAN.md) for the porting roadmap and a list of 14 more fixtures that could become examples.
+Each example page follows the same format:
 
-Want to contribute one? Open an issue or PR on [rime-docs](https://github.com/danielsjoo/rime-docs).
+1. What the example teaches.
+2. The project layout.
+3. The important DAG nodes.
+4. How to validate, run, and build.
+5. Which artifacts to inspect.

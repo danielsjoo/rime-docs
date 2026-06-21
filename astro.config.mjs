@@ -34,6 +34,12 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Workshops',
+          items: [
+            { label: 'Build a first pipeline', slug: 'workshops/first-pipeline' },
+          ],
+        },
+        {
           label: 'Concepts',
           items: [
             { label: 'DAG specification', slug: 'concepts/dag' },

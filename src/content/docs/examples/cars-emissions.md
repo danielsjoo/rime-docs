@@ -1,31 +1,150 @@
 ---
-title: Cars × CO₂ emissions
-description: A flagship multi-language Rime pipeline — SQL source + JavaScript API fetch + Python UMAP + R regression → rendered HTML narrative. Demonstrates polyglot DAGs end-to-end.
+title: Cars x CO2 emissions
+description: "A flagship polyglot Rime pipeline: SQL source, JavaScript fetch, Python UMAP, R regression, and report output."
 ---
 
-> 🚧 **This page is a stub.** Real content is being ported from the [`cars-emissions-narrative` fixture](https://github.com/danielsjoo/rime/tree/main/packages/core/test/fixtures/experiments/cars-emissions-narrative) in the rime repo. See [EXAMPLES_PLAN.md](https://github.com/danielsjoo/rime-docs/blob/main/EXAMPLES_PLAN.md) for the porting plan.
+This is the flagship polyglot example. It stitches public vehicle data to a
+CO2 concentration series, fans the unified table into Python, R, and built-in
+stat nodes, then renders an HTML narrative.
 
-## What this example demonstrates
+Source fixture:
+[`packages/core/test/fixtures/experiments/cars-emissions-narrative`](https://github.com/danielsjoo/rime/tree/main/packages/core/test/fixtures/experiments/cars-emissions-narrative).
 
-- **Four languages in one DAG**: SQL (via DuckDB) for the source query, JavaScript for an external CO₂ API fetch, Python for UMAP embedding, R for an efficiency-trends linear regression.
-- **Dataframes crossing language boundaries** via Arrow IPC — no manual file handoffs, no serialization decisions in user code.
-- **Statistical terminal nodes** (`t_test` for USA vs Japan MPG, `anova` for cylinder counts) rendered as stat-style output cells in the auto-report.
-- **A rendered HTML report** weaving tables, statistics, and prose into a publishable narrative.
+## What it Teaches
 
-## Run it locally
+- SQL ingress can read public JSON directly through DuckDB.
+- JavaScript nodes can fetch and normalize external API/CSV data.
+- A single feature table can feed Python, R, and terminal stat nodes.
+- Python and R nodes can emit diagnostics and return tabular results.
+- Stat nodes are terminal report artifacts, not dataframe transforms.
 
-Until the example is fully ported, you can run the source fixture directly:
+## DAG Shape
+
+```text
+sql_cars_source ─┐
+                 ├─► js_feature_build ─┬─► python_umap_embed
+js_co2_fetch ────┘                     ├─► r_efficiency_trends
+                                       ├─► t_test_us_vs_japan
+                                       └─► anova_cylinders
+```
+
+`js_feature_build` is the apex dataframe. Everything downstream consumes the
+same vehicle-plus-CO2 feature table.
+
+## Important Nodes
+
+```yaml
+specification_version: "2.1"
+nodes:
+  - id: sql_cars_source
+    kind: sql
+    source: scripts/sql_cars_source.sql
+
+  - id: js_co2_fetch
+    kind: javascript
+    source: scripts/js_co2_fetch.js
+
+  - id: js_feature_build
+    kind: javascript
+    in:
+      cars: sql_cars_source
+      co2_yearly: js_co2_fetch
+    source: scripts/js_feature_build.js
+
+  - id: python_umap_embed
+    kind: python
+    in:
+      features: js_feature_build
+    source: scripts/python_umap.py
+
+  - id: r_efficiency_trends
+    kind: r
+    in:
+      features: js_feature_build
+    source: scripts/r_efficiency_trends.R
+
+  - id: t_test_us_vs_japan
+    kind: t_test
+    inputs: [js_feature_build]
+    valueColumn: miles_per_gallon
+    groupColumn: origin
+    groupA: USA
+    groupB: Japan
+    equalVariance: false
+```
+
+The SQL source is a DuckDB query:
+
+```sql
+SELECT
+  CAST(Name AS VARCHAR) AS name,
+  CAST(Miles_per_Gallon AS DOUBLE) AS miles_per_gallon,
+  CAST(Cylinders AS INTEGER) AS cylinders,
+  CAST(Horsepower AS DOUBLE) AS horsepower,
+  CAST(Year AS VARCHAR) AS year_str,
+  CAST(Origin AS VARCHAR) AS origin
+FROM read_json_auto(
+  'https://raw.githubusercontent.com/vega/vega-datasets/main/data/cars.json'
+)
+WHERE Miles_per_Gallon IS NOT NULL
+  AND Horsepower IS NOT NULL
+```
+
+The JavaScript CO2 fetch node is ingress-style: it has no `in:` slots and
+returns a named table output.
+
+```js
+export default defineNode({
+  in: {},
+  out: { co2_by_year: 'table' },
+  async run() {
+    const response = await fetch(DEFAULT_URL)
+    const text = await response.text()
+    return { co2_by_year: parseAnnualRows(text) }
+  },
+})
+```
+
+## Run It
+
+Python and R sidecars are required for the full run:
 
 ```bash
 git clone https://github.com/danielsjoo/rime
-cd rime/packages/core/test/fixtures/experiments/cars-emissions-narrative
-cat EXPERIMENT.md   # walkthrough lives here for now
-rime run pipeline.dag.yaml
-open outputs/narrative.html
+cd rime
+
+export RIME_PYTHON_BIN=/path/to/python
+export RIME_RSCRIPT_BIN=/path/to/Rscript
+
+rime validate packages/core/test/fixtures/experiments/cars-emissions-narrative/pipeline.dag.yaml
+rime run packages/core/test/fixtures/experiments/cars-emissions-narrative/pipeline.dag.yaml
 ```
 
-The `EXPERIMENT.md` in that directory is the canonical write-up and contains the same content this docs page will eventually have.
+The fixture also includes a hand-authored report spec:
 
-## Hosted report
+```bash
+rime build \
+  packages/core/test/fixtures/experiments/cars-emissions-narrative/pipeline.dag.yaml \
+  --report packages/core/test/fixtures/experiments/cars-emissions-narrative/report.yaml
+```
 
-Coming soon — once we have a stable build host for example output, this page will link to a live rendering of `narrative.html`.
+The run writes:
+
+- `outputs/js_feature_build/default.parquet`
+- `outputs/python_umap_embed/default.parquet`
+- `outputs/r_efficiency_trends/default.parquet`
+- `outputs/t_test_us_vs_japan/default.json`
+- `outputs/anova_cylinders/default.json`
+- `outputs/cars-emissions-narrative-report.html`
+
+## Requirements
+
+Install the packages expected by the fixture before running the Python/R nodes:
+
+| Runtime | Packages |
+|---|---|
+| Python | `pandas`, `numpy`, `pyarrow`, `matplotlib`, `scikit-learn`, `umap-learn` |
+| R | `jsonlite`, `arrow`, `ggplot2`, `dplyr`, `boot` |
+
+For a no-sidecar example, start with [DuckDB single source](/rime-docs/examples/sql-only/)
+or [Single-file pipeline](/rime-docs/examples/single-file/).

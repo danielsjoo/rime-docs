@@ -34,15 +34,15 @@ The `rime::register(...)` call wires your function into the runtime's named-slot
 
 The runtime calls your registered function with named arguments matching the slot keys.
 
-> The default entrypoint is `run` (or `transform`, which the Editor emits — both
-> are accepted). To use a different name, set `entrypoint:` on the node.
+> The default entrypoint is `run`. `transform` is also accepted for compatibility.
+> To use a different name, set `entrypoint:` on the node.
 
 | YAML `in:` slot | Native R type |
 |---|---|
 | Upstream node ID (e.g. `cohort: features`) | **`tibble`** (`tbl_df`) |
 | `params.<name>` (e.g. `threshold: params.threshold`) | Native R scalar (numeric, character, logical, list) |
 
-`in_slots` and `out_slots` in `rime::register(...)` are how R communicates the schema back to the runtime — they enable type checking and editor autocomplete. Use `"table"` for tibbles and `"any"` for non-tabular values.
+`in_slots` and `out_slots` in `rime::register(...)` are how R communicates the schema back to the runtime. Use `"table"` for tibbles and `"any"` for non-tabular values.
 
 ## Outputs
 

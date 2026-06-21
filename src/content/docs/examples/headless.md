@@ -1,42 +1,102 @@
 ---
 title: Embed in Node
-description: Use @rimekit/runtime programmatically from any Node script. For CI plugins, custom dashboards, and headless execution.
+description: Use Rime programmatically from a Node script for CI plugins, custom dashboards, and headless execution.
 ---
 
-> 🚧 **This page is a stub.** Real content is being ported from [`examples/headless-runner`](https://github.com/danielsjoo/rime/tree/main/examples/headless-runner) in the rime repo. See [EXAMPLES_PLAN.md](https://github.com/danielsjoo/rime-docs/blob/main/EXAMPLES_PLAN.md) for the porting plan.
+The `examples/headless-runner` package shows how to call Rime from Node instead
+of shelling out to `rime run`. Use this pattern for CI plugins, custom
+dashboards, and local automation that wants structured run results.
 
-## What this example will demonstrate
+Source:
+[`examples/headless-runner`](https://github.com/danielsjoo/rime/tree/main/examples/headless-runner).
 
-How to call Rime as a library from Node, instead of via the CLI:
+## What it Teaches
 
 - Loading a `pipeline.dag.yaml` programmatically
-- Running the DAG and capturing per-node lifecycle events
-- Reading outputs as in-memory dataframes (Parquet decode optional)
-- Use cases: CI plugins, custom UIs, scheduled jobs that don't want to shell out
+- Validating a DAG before execution
+- Passing source data directly as in-memory rows
+- Reading ordered node IDs and audit data from the run result
+- Building a lineage graph from the run audit
 
-## Skeleton
+## Package
 
-```js
-import { runDag, parseRimeYaml } from '@rimekit/runtime'
-
-const spec = parseRimeYaml(await fs.readFile('pipeline.dag.yaml', 'utf8'))
-
-const result = await runDag(spec, {
-  onNodeStart:    (nodeId) => console.log('start', nodeId),
-  onNodeComplete: (nodeId, output) => console.log('done', nodeId, output),
-  onNodeError:    (nodeId, err) => console.error('failed', nodeId, err),
-})
-
-console.log('all done', Object.keys(result.outputs))
+```json
+{
+  "name": "headless-runner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "run": "node src/cli.js"
+  },
+  "dependencies": {
+    "@rimekit/core": "file:../../packages/core",
+    "@rimekit/lineage": "file:../../packages/lineage"
+  }
+}
 ```
 
-(Real signature will be filled in from the actual `@rimekit/runtime` exports once the package is finalized.)
+## Runner
 
-## Run the working example
+```js
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { parseRimeYaml, runDag, validateDagSpec } from '@rimekit/core'
+import { buildSimplifiedLineageDag } from '@rimekit/lineage'
+
+const fixturePath = join(
+  process.cwd(),
+  'packages',
+  'core',
+  'test',
+  'fixtures',
+  'simple-filter.dag.yaml'
+)
+
+const spec = validateDagSpec(parseRimeYaml(readFileSync(fixturePath, 'utf8')))
+
+const run = await runDag(spec, {
+  source_csv: [{ age: 14 }, { age: 18 }, { age: 29 }],
+})
+
+const lineage = buildSimplifiedLineageDag({
+  spec,
+  auditTrail: run.auditTrail,
+  lineage: {
+    annotations: [
+      {
+        id: 'adults_retained',
+        transition: {
+          sourceNodeId: 'source_csv',
+          targetNodeId: 'adults',
+          targetInputIndex: 0,
+        },
+        label: 'Adults retained',
+      },
+    ],
+  },
+})
+
+console.log('ordered nodes:', run.orderedNodeIds.join(' -> '))
+console.log('lineage nodes:', lineage.nodes.length)
+```
+
+## Run It
+
+Run from the repo root so the fixture path resolves:
 
 ```bash
 git clone https://github.com/danielsjoo/rime
-cd rime/examples/headless-runner
-npm install
-node index.js
+cd rime
+npm --prefix examples/headless-runner install
+node examples/headless-runner/src/cli.js
 ```
+
+The script prints the topological execution order and the number of lineage
+nodes produced from the run audit.
+
+## When to Use This Pattern
+
+- You need a Node API instead of a subprocess.
+- You want to feed test rows directly without writing a source CSV.
+- You want structured run metadata for a dashboard or CI annotation.
+- You want to build lineage views or custom reports from the audit trail.
