@@ -10,13 +10,9 @@ export default defineConfig({
     starlight({
       title: 'Rime',
       description: 'Polyglot data pipelines and reproducible narratives',
-      logo: {
-        src: './src/assets/logo.svg',
-        replacesTitle: false,
-      },
       favicon: '/favicon.svg',
       customCss: ['./src/styles/custom.css'],
-      // Top-bar nav (Docs / Editor / Examples) is rendered by SiteTitle override.
+      // Top-bar nav (Docs / Editor / Examples) is rendered beside the text title.
       components: {
         SiteTitle: './src/components/SiteTitle.astro',
       },
