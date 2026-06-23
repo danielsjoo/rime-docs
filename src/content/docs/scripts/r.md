@@ -165,8 +165,8 @@ interpreters:
 
 ## See Also
 
-- [Python language nodes](/rime-docs/scripts/python/) - same slot protocol, pandas native
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode` and row arrays
-- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB temp tables
-- [Language node reference](/rime-docs/nodes/script/) - full field list
-- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) - cross-language design
+- [Python language nodes](/scripts/python/) - same slot protocol, pandas native
+- [JavaScript language nodes](/scripts/javascript/) - `defineNode` and row arrays
+- [SQL language nodes](/scripts/sql/) - DuckDB temp tables
+- [Language node reference](/nodes/script/) - full field list
+- [Polyglot runtime overview](/concepts/polyglot/) - cross-language design

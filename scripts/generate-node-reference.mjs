@@ -200,7 +200,7 @@ const KINDS = [
     blurb: 'Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits.',
     inputs: 'Variable — declare named slots in `in:`. Each slot can be a dataframe ref or a `params.*` reference.',
     outputs: '`default` by default, or multiple named outputs declared in `out:`.',
-    whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/rime-docs/scripts/python/), [R](/rime-docs/scripts/r/), [JavaScript](/rime-docs/scripts/javascript/), [SQL](/rime-docs/scripts/sql/) — for function-signature details.',
+    whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.',
     pitfalls: [
       'Multi-output nodes (`out:`) require the language function to return a dict / list / object whose keys match.',
       'No `params.*` slots → no params at all. To pass a top-level param to a language node, you must wire it through the YAML.',
@@ -395,8 +395,8 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [SQL language nodes](/rime-docs/scripts/sql/) - use DuckDB when ingestion is query-shaped',
-        '- [Dataset scanning](/rime-docs/editor/dataset-scanning/) - how the editor previews loaded tables'
+        '- [SQL language nodes](/scripts/sql/) - use DuckDB when ingestion is query-shaped',
+        '- [Dataset scanning](/editor/dataset-scanning/) - how the editor previews loaded tables'
       ]
     }
   ],
@@ -426,7 +426,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [Expression language](/rime-docs/concepts/expressions/) - syntax for row predicates']
+      links: ['- [Expression language](/concepts/expressions/) - syntax for row predicates']
     }
   ],
   derive: [
@@ -456,8 +456,8 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [Expression language](/rime-docs/concepts/expressions/) - supported operators and functions',
-        '- [select](/rime-docs/nodes/select/) - narrow or reorder columns after deriving'
+        '- [Expression language](/concepts/expressions/) - supported operators and functions',
+        '- [select](/nodes/select/) - narrow or reorder columns after deriving'
       ]
     }
   ],
@@ -487,7 +487,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [Expression language](/rime-docs/concepts/expressions/) - group and metric expressions']
+      links: ['- [Expression language](/concepts/expressions/) - group and metric expressions']
     }
   ],
   select: [
@@ -510,8 +510,8 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [derive](/rime-docs/nodes/derive/) - create named features before selecting them',
-        '- [Expression language](/rime-docs/concepts/expressions/) - projection syntax notes'
+        '- [derive](/nodes/derive/) - create named features before selecting them',
+        '- [Expression language](/concepts/expressions/) - projection syntax notes'
       ]
     }
   ],
@@ -540,7 +540,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [Expression language](/rime-docs/concepts/expressions/) - sort key expressions']
+      links: ['- [Expression language](/concepts/expressions/) - sort key expressions']
     }
   ],
   join: [
@@ -570,8 +570,8 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [derive](/rime-docs/nodes/derive/) - normalize keys before joining',
-        '- [Expression language](/rime-docs/concepts/expressions/) - expression join keys'
+        '- [derive](/nodes/derive/) - normalize keys before joining',
+        '- [Expression language](/concepts/expressions/) - expression join keys'
       ]
     }
   ],
@@ -600,7 +600,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [aggregate](/rime-docs/nodes/aggregate/) - grouped summaries without widening']
+      links: ['- [aggregate](/nodes/aggregate/) - grouped summaries without widening']
     }
   ],
   concat: [
@@ -628,7 +628,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [t_test](/rime-docs/nodes/t_test/) - grouped tests often start by concatenating two cohorts']
+      links: ['- [t_test](/nodes/t_test/) - grouped tests often start by concatenating two cohorts']
     }
   ],
   t_test: [
@@ -657,8 +657,8 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [concat](/rime-docs/nodes/concat/) - stack two cohorts before testing',
-        '- [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) - rank-based alternative'
+        '- [concat](/nodes/concat/) - stack two cohorts before testing',
+        '- [mann_whitney_u](/nodes/mann_whitney_u/) - rank-based alternative'
       ]
     }
   ],
@@ -688,7 +688,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [t_test](/rime-docs/nodes/t_test/) - planned pairwise mean comparisons']
+      links: ['- [t_test](/nodes/t_test/) - planned pairwise mean comparisons']
     }
   ],
   mann_whitney_u: [
@@ -717,7 +717,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [t_test](/rime-docs/nodes/t_test/) - mean-based alternative when assumptions are credible']
+      links: ['- [t_test](/nodes/t_test/) - mean-based alternative when assumptions are credible']
     }
   ],
   chi_square: [
@@ -746,7 +746,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [Reports](/rime-docs/concepts/reports/) - warning callouts in generated reports']
+      links: ['- [Reports](/concepts/reports/) - warning callouts in generated reports']
     }
   ],
   correlation: [
@@ -775,7 +775,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [linear_regression](/rime-docs/nodes/linear_regression/) - model a directional single-feature relationship']
+      links: ['- [linear_regression](/nodes/linear_regression/) - model a directional single-feature relationship']
     }
   ],
   linear_regression: [
@@ -804,7 +804,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [correlation](/rime-docs/nodes/correlation/) - lighter-weight association check']
+      links: ['- [correlation](/nodes/correlation/) - lighter-weight association check']
     }
   ],
   subgraph: [
@@ -832,7 +832,7 @@ const NODE_PAGE_SECTIONS = {
     { type: 'example' },
     {
       type: 'related',
-      links: ['- [Concepts: DAG specification](/rime-docs/concepts/dag/) - how refs and DAG boundaries work']
+      links: ['- [Concepts: DAG specification](/concepts/dag/) - how refs and DAG boundaries work']
     }
   ],
   script: [
@@ -870,10 +870,10 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: [
-        '- [Python language nodes](/rime-docs/scripts/python/) - pandas-based transforms',
-        '- [R language nodes](/rime-docs/scripts/r/) - data.frame/tibble-style transforms',
-        '- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode` and row-array transforms',
-        '- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB-backed transforms'
+        '- [Python language nodes](/scripts/python/) - pandas-based transforms',
+        '- [R language nodes](/scripts/r/) - data.frame/tibble-style transforms',
+        '- [JavaScript language nodes](/scripts/javascript/) - `defineNode` and row-array transforms',
+        '- [SQL language nodes](/scripts/sql/) - DuckDB-backed transforms'
       ]
     }
   ]

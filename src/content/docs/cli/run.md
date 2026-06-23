@@ -9,7 +9,7 @@ rime run <pipeline.dag.yaml> [options]
 
 Run the DAG end-to-end. Reads cache where keys match, executes nodes whose
 inputs have changed, and persists outputs under `outputs/`. It does not render
-a report; use [`rime build`](/rime-docs/cli/build/) for that.
+a report; use [`rime build`](/cli/build/) for that.
 
 ## Common usage
 
@@ -61,7 +61,7 @@ rime run pipeline.dag.yaml --isolated $TMPDIR/rime-ci
 | `--no-cache-write` | Read cache where possible, don't persist new entries |
 | `--isolated <dir>` | Treat `<dir>` as the outputs root; doesn't touch the live `outputs/` |
 
-See [Outputs & caching](/rime-docs/concepts/outputs/) for the full semantics.
+See [Outputs & caching](/concepts/outputs/) for the full semantics.
 
 ## Output
 
@@ -87,10 +87,10 @@ traceback, or executor error to stderr.
 
 ## Related commands
 
-- [`rime validate`](/rime-docs/cli/validate/) — pre-flight checks without executing
-- [`rime check`](/rime-docs/cli/check/) — pre-flight checks plus optional report spec validation
-- [`rime build`](/rime-docs/cli/build/) — `rime run` plus render the DAG-driven HTML report
-- [`rime verify`](/rime-docs/cli/verify/) — check whether existing cached outputs are still current
+- [`rime validate`](/cli/validate/) — pre-flight checks without executing
+- [`rime check`](/cli/check/) — pre-flight checks plus optional report spec validation
+- [`rime build`](/cli/build/) — `rime run` plus render the DAG-driven HTML report
+- [`rime verify`](/cli/verify/) — check whether existing cached outputs are still current
 - `rime freeze` — snapshot the current `outputs/` for archival
 
 ## Exit codes

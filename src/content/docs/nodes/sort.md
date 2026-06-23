@@ -39,4 +39,4 @@ Use it before report tables, deterministic previews, or downstream work where th
 
 ## Related
 
-- [Expression language](/rime-docs/concepts/expressions/) - sort key expressions
+- [Expression language](/concepts/expressions/) - sort key expressions

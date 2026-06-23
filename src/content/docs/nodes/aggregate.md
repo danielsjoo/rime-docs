@@ -41,4 +41,4 @@ For more complex windowed reductions or custom statistics, move to a Python, R, 
 
 ## Related
 
-- [Expression language](/rime-docs/concepts/expressions/) - group and metric expressions
+- [Expression language](/concepts/expressions/) - group and metric expressions

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.rimekit.dev" }],
+      "destination": "https://rimekit.dev/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "docs.rimekit.dev" }],
+      "destination": "/cli/",
+      "permanent": true
+    },
+    {
+      "source": "/editor/:path*",
+      "has": [{ "type": "host", "value": "docs.rimekit.dev" }],
+      "destination": "https://editor.rimekit.dev/:path*",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/_astro/:path*",
+      "has": [{ "type": "host", "value": "editor.rimekit.dev" }],
+      "destination": "/_astro/:path*"
+    },
+    {
+      "source": "/pagefind/:path*",
+      "has": [{ "type": "host", "value": "editor.rimekit.dev" }],
+      "destination": "/pagefind/:path*"
+    },
+    {
+      "source": "/editor/:path*",
+      "has": [{ "type": "host", "value": "editor.rimekit.dev" }],
+      "destination": "/editor/:path*"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "editor.rimekit.dev" }],
+      "destination": "/editor/:path*"
+    }
+  ]
+}

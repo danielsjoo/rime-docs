@@ -156,5 +156,5 @@ Install the packages expected by the fixture before running the Python/R nodes:
 | Python | `pandas`, `numpy`, `pyarrow`, `matplotlib`, `scikit-learn`, `umap-learn` |
 | R | `jsonlite`, `arrow`, `ggplot2`, `dplyr`, `boot` |
 
-For a no-sidecar example, start with [DuckDB single source](/rime-docs/examples/sql-only/)
-or [Single-file pipeline](/rime-docs/examples/single-file/).
+For a no-sidecar example, start with [DuckDB single source](/examples/sql-only/)
+or [Single-file pipeline](/examples/single-file/).

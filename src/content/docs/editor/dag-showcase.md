@@ -5,7 +5,7 @@ description: A small Rime Editor walkthrough with sources, SQL, expression nodes
 
 `dag-showcase` is the best first project to open in Rime Editor because it is small enough to understand in one sitting and broad enough to show the product.
 
-![Rime Editor canvas focused on the dag-showcase DAG.](/rime-docs/editor/assets/hero-dag-focus.jpg)
+![Rime Editor canvas focused on the dag-showcase DAG.](/editor/assets/hero-dag-focus.jpg)
 
 ## Project Shape
 
@@ -44,7 +44,7 @@ It then rolls labs up per patient, joins demographics to lab features with SQL, 
 6. Select `site_outcomes` and check that the aggregate output is one row per site.
 7. Open the report preview and inspect the output sizes and statistical sections.
 
-![Rime Editor table preview for the joined patient/lab dataset.](/rime-docs/editor/assets/table-scan-focus.jpg)
+![Rime Editor table preview for the joined patient/lab dataset.](/editor/assets/table-scan-focus.jpg)
 
 ## What To Notice
 
@@ -68,11 +68,11 @@ The feature-building nodes are deliberately readable:
   expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
 ```
 
-This is a good dividing line for Rime Editor: if a formula is readable in the [expression language](/rime-docs/concepts/expressions/), keep it as a core node so reviewers can inspect it directly. If it becomes multi-step logic, promote it to SQL/Python/R/JavaScript.
+This is a good dividing line for Rime Editor: if a formula is readable in the [expression language](/concepts/expressions/), keep it as a core node so reviewers can inspect it directly. If it becomes multi-step logic, promote it to SQL/Python/R/JavaScript.
 
 ## Report Output
 
-![Rime Editor report preview for dag-showcase.](/rime-docs/editor/assets/report-dag-focus.jpg)
+![Rime Editor report preview for dag-showcase.](/editor/assets/report-dag-focus.jpg)
 
 The report should make the pipeline reviewable without reopening the editor:
 

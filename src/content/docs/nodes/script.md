@@ -57,7 +57,7 @@ nodes:
 
 ## Related
 
-- [Python language nodes](/rime-docs/scripts/python/) - pandas-based transforms
-- [R language nodes](/rime-docs/scripts/r/) - data.frame/tibble-style transforms
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode` and row-array transforms
-- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB-backed transforms
+- [Python language nodes](/scripts/python/) - pandas-based transforms
+- [R language nodes](/scripts/r/) - data.frame/tibble-style transforms
+- [JavaScript language nodes](/scripts/javascript/) - `defineNode` and row-array transforms
+- [SQL language nodes](/scripts/sql/) - DuckDB-backed transforms

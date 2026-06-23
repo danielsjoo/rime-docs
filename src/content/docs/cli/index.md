@@ -10,12 +10,12 @@ script paths, and outputs resolve from the directory that contains that DAG.
 
 | Command | Use it for |
 |---|---|
-| [`rime validate`](/rime-docs/cli/validate/) | Parse the DAG, validate node schemas, resolve graph references, and check source bindings without executing nodes. |
-| [`rime check`](/rime-docs/cli/check/) | Do everything `validate` does, plus validate an optional `report.yaml` against the DAG. |
-| [`rime run`](/rime-docs/cli/run/) | Execute nodes and persist outputs under `outputs/`. |
-| [`rime build`](/rime-docs/cli/build/) | Run the DAG and render an HTML report. |
-| [`rime verify`](/rime-docs/cli/verify/) | Check whether cached artifacts still match the current DAG, source files, params, and output digests. |
-| [`rime introspect`](/rime-docs/cli/introspect/) | Generate a starter node block from a Python, R, JavaScript, or SQL script. |
+| [`rime validate`](/cli/validate/) | Parse the DAG, validate node schemas, resolve graph references, and check source bindings without executing nodes. |
+| [`rime check`](/cli/check/) | Do everything `validate` does, plus validate an optional `report.yaml` against the DAG. |
+| [`rime run`](/cli/run/) | Execute nodes and persist outputs under `outputs/`. |
+| [`rime build`](/cli/build/) | Run the DAG and render an HTML report. |
+| [`rime verify`](/cli/verify/) | Check whether cached artifacts still match the current DAG, source files, params, and output digests. |
+| [`rime introspect`](/cli/introspect/) | Generate a starter node block from a Python, R, JavaScript, or SQL script. |
 
 ## Common Flow
 

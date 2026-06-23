@@ -42,4 +42,4 @@ The null is rank/stochastic balance: values from group A are not systematically 
 
 ## Related
 
-- [t_test](/rime-docs/nodes/t_test/) - mean-based alternative when assumptions are credible
+- [t_test](/nodes/t_test/) - mean-based alternative when assumptions are credible

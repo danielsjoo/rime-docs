@@ -89,8 +89,8 @@ Researchers, data journalists, analysts, and small data teams who want to:
 
 ## Next
 
-- [Open Rime Editor](/rime-docs/editor/) — the recommended start
-- [Install the CLI](/rime-docs/get-started/install/)
-- [Quick start](/rime-docs/get-started/quick-start/)
-- [Workshop: build a first pipeline](/rime-docs/workshops/first-pipeline/)
-- [Concepts: nodes](/rime-docs/concepts/nodes/)
+- [Open Rime Editor](/editor/) — the recommended start
+- [Install the CLI](/get-started/install/)
+- [Quick start](/get-started/quick-start/)
+- [Workshop: build a first pipeline](/workshops/first-pipeline/)
+- [Concepts: nodes](/concepts/nodes/)

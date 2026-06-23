@@ -7,7 +7,7 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 Rime examples are complete projects: DAGs, scripts, data, and the expected
 artifacts they write. Use this section as a cookbook after the
-[quick start](/rime-docs/get-started/quick-start/).
+[quick start](/get-started/quick-start/).
 
 ![Rime report preview showing the DAG overview, cached nodes, and persisted table outputs.](../../../assets/screenshots/rime-runtime-report.png)
 
@@ -15,12 +15,12 @@ artifacts they write. Use this section as a cookbook after the
 
 | If you want to learn... | Start with |
 |---|---|
-| The minimum DAG shape | [Single-file pipeline](/rime-docs/examples/single-file/) |
-| Built-in nodes over tabular data | [Penguin classifier](/rime-docs/examples/penguins/) |
-| SQL ingress through DuckDB | [DuckDB single source](/rime-docs/examples/sql-only/) |
-| A larger multi-branch graph | [DAG showcase](/rime-docs/examples/dag-showcase/) |
-| Programmatic execution | [Embed in Node](/rime-docs/examples/headless/) |
-| A full polyglot narrative | [Cars x CO2 emissions](/rime-docs/examples/cars-emissions/) |
+| The minimum DAG shape | [Single-file pipeline](/examples/single-file/) |
+| Built-in nodes over tabular data | [Penguin classifier](/examples/penguins/) |
+| SQL ingress through DuckDB | [DuckDB single source](/examples/sql-only/) |
+| A larger multi-branch graph | [DAG showcase](/examples/dag-showcase/) |
+| Programmatic execution | [Embed in Node](/examples/headless/) |
+| A full polyglot narrative | [Cars x CO2 emissions](/examples/cars-emissions/) |
 
 ## Flagship
 
@@ -28,7 +28,7 @@ artifacts they write. Use this section as a cookbook after the
   <LinkCard
     title="Cars x CO2 emissions"
     description="SQL source + JS API fetch + Python UMAP + R regression → one HTML narrative. The canonical multi-language example."
-    href="/rime-docs/examples/cars-emissions/"
+    href="/examples/cars-emissions/"
   />
 </CardGrid>
 
@@ -38,17 +38,17 @@ artifacts they write. Use this section as a cookbook after the
   <LinkCard
     title="Penguin classifier"
     description="Smallest interesting DAG. Pivot, derive, t-test, plot. Best place to start after the Quick start."
-    href="/rime-docs/examples/penguins/"
+    href="/examples/penguins/"
   />
   <LinkCard
     title="DAG showcase"
     description="A compact clinical-style graph that combines sources, SQL, derives, aggregates, and stat nodes."
-    href="/rime-docs/examples/dag-showcase/"
+    href="/examples/dag-showcase/"
   />
   <LinkCard
     title="Single-file pipeline"
     description="A DAG that lives in one YAML file with no project marker. The smallest possible Rime project."
-    href="/rime-docs/examples/single-file/"
+    href="/examples/single-file/"
   />
 </CardGrid>
 
@@ -58,12 +58,12 @@ artifacts they write. Use this section as a cookbook after the
   <LinkCard
     title="Embed in Node"
     description="Use @rimekit/runtime programmatically from any Node script. For CI plugins and custom dashboards."
-    href="/rime-docs/examples/headless/"
+    href="/examples/headless/"
   />
   <LinkCard
     title="DuckDB single source"
     description="Pure-SQL pipeline using DuckDB ingress mode. No Python or R required."
-    href="/rime-docs/examples/sql-only/"
+    href="/examples/sql-only/"
   />
 </CardGrid>
 

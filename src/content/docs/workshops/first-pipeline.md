@@ -184,6 +184,6 @@ recomputes the changed branch.
 
 ## Next
 
-- [Quick start](/rime-docs/get-started/quick-start/)
-- [Concepts: DAG specification](/rime-docs/concepts/dag/)
-- [Examples: DAG showcase](/rime-docs/examples/dag-showcase/)
+- [Quick start](/get-started/quick-start/)
+- [Concepts: DAG specification](/concepts/dag/)
+- [Examples: DAG showcase](/examples/dag-showcase/)

@@ -9,12 +9,12 @@ Rime's expression language is the shared formula syntax behind core transform no
 
 | Node | Fields | Meaning |
 | --- | --- | --- |
-| [`filter`](/rime-docs/nodes/filter/) | `expr` | Keep rows where the expression is truthy |
-| [`derive`](/rime-docs/nodes/derive/) | `expr` | Compute one new column named by `as` |
-| [`aggregate`](/rime-docs/nodes/aggregate/) | `groupBy`, `metrics` | Define grouping keys and named reductions |
-| [`select`](/rime-docs/nodes/select/) | `columns` | Runtime projection expressions; schema currently restricts these to identifiers |
-| [`sort`](/rime-docs/nodes/sort/) | `by[].expr` | Compute sort keys |
-| [`join`](/rime-docs/nodes/join/) | `leftKey`, `rightKey` | Bare column names, or expressions when the key is not a bare identifier |
+| [`filter`](/nodes/filter/) | `expr` | Keep rows where the expression is truthy |
+| [`derive`](/nodes/derive/) | `expr` | Compute one new column named by `as` |
+| [`aggregate`](/nodes/aggregate/) | `groupBy`, `metrics` | Define grouping keys and named reductions |
+| [`select`](/nodes/select/) | `columns` | Runtime projection expressions; schema currently restricts these to identifiers |
+| [`sort`](/nodes/sort/) | `by[].expr` | Compute sort keys |
+| [`join`](/nodes/join/) | `leftKey`, `rightKey` | Bare column names, or expressions when the key is not a bare identifier |
 
 ## Column References
 

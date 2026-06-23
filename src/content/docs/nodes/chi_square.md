@@ -39,4 +39,4 @@ A significant result means the variables are not independent. It does not identi
 
 ## Related
 
-- [Reports](/rime-docs/concepts/reports/) - warning callouts in generated reports
+- [Reports](/concepts/reports/) - warning callouts in generated reports

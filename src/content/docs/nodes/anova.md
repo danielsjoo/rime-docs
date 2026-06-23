@@ -41,4 +41,4 @@ Use `groupLabels` when group order or display names matter in a report.
 
 ## Related
 
-- [t_test](/rime-docs/nodes/t_test/) - planned pairwise mean comparisons
+- [t_test](/nodes/t_test/) - planned pairwise mean comparisons

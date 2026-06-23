@@ -44,7 +44,7 @@ metrics:
   - "[mean_age] = [age].mean()"
 ```
 
-See [Expression language](/rime-docs/concepts/expressions/) for supported
+See [Expression language](/concepts/expressions/) for supported
 operators and methods.
 
 ## Python Dependency Missing

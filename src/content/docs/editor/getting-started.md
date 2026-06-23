@@ -5,7 +5,7 @@ description: Open a Rime project, run the DAG, inspect node outputs, and preview
 
 Rime Editor is the visual workbench for the same `pipeline.dag.yaml` the CLI runs. The app is not a separate project format: it opens a Rime folder, renders the DAG, lets you inspect every node output, and keeps the YAML/spec close enough that you can always drop back to files.
 
-![Rime Editor showing the dag-showcase pipeline canvas and selected node inspector.](/rime-docs/editor/assets/hero-dag-focus.jpg)
+![Rime Editor showing the dag-showcase pipeline canvas and selected node inspector.](/editor/assets/hero-dag-focus.jpg)
 
 ## The First Five Minutes
 
@@ -27,7 +27,7 @@ The canvas is the pipeline:
 - statistical nodes produce object outputs for reports
 - selected nodes open a right-side inspector
 
-![Focused Rime Editor DAG canvas with table-producing and statistical nodes.](/rime-docs/editor/assets/table-scan-focus.jpg)
+![Focused Rime Editor DAG canvas with table-producing and statistical nodes.](/editor/assets/table-scan-focus.jpg)
 
 The inspector is where the editor earns its keep. It should answer:
 
@@ -41,7 +41,7 @@ The inspector is where the editor earns its keep. It should answer:
 
 The editor keeps the YAML visible because the spec is still the source of truth.
 
-![Rime Editor showing the selected node YAML/spec view.](/rime-docs/editor/assets/yaml-spec-focus.jpg)
+![Rime Editor showing the selected node YAML/spec view.](/editor/assets/yaml-spec-focus.jpg)
 
 Use the spec view when:
 
@@ -54,7 +54,7 @@ Use the spec view when:
 
 Reports are generated from the current run. The editor preview is for review; the browser view is the artifact you can share or archive.
 
-![Rime Editor report preview with the report DAG and node output sections.](/rime-docs/editor/assets/report-dag-focus.jpg)
+![Rime Editor report preview with the report DAG and node output sections.](/editor/assets/report-dag-focus.jpg)
 
 Report preview is especially useful after statistical nodes, because warnings and assumptions sit next to the result instead of being buried in logs.
 

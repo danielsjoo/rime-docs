@@ -5,7 +5,7 @@ const ROOT = process.cwd()
 const DOCS_DIR = join(ROOT, 'src', 'content', 'docs')
 const PAGES_DIR = join(ROOT, 'src', 'pages')
 const PUBLIC_DIR = join(ROOT, 'public')
-const BASE = '/rime-docs'
+const BASE = ''
 
 const TEXT_EXTENSIONS = new Set(['.md', '.mdx', '.astro'])
 
@@ -118,12 +118,13 @@ function routeForFile(abs) {
   return `${BASE}/`
 }
 
-function checkRelativeAsset(abs, href, routes) {
+function checkRelativeAsset(abs, href, routes, assets) {
   const clean = stripHashAndQuery(href)
   if (isExternal(clean) || isAnchorOnly(clean) || clean.startsWith('/')) return null
+  const baseRoute = routeForFile(abs)
+  const resolvedPath = new URL(clean, `https://rime.local${baseRoute}`).pathname
+  if (assets.has(resolvedPath)) return null
   if (!extname(clean) || clean.endsWith('/')) {
-    const baseRoute = routeForFile(abs)
-    const resolvedPath = new URL(clean, `https://rime.local${baseRoute}`).pathname
     if (routes.has(resolvedPath)) return null
     if (routes.has(resolvedPath.endsWith('/') ? resolvedPath : `${resolvedPath}/`)) return null
   }
@@ -179,7 +180,7 @@ function main() {
         problems.push(`${rel}:${lineForOffset(text, target.offset)} ${absoluteProblem}`)
         continue
       }
-      const relativeProblem = checkRelativeAsset(file, target.href, routes)
+      const relativeProblem = checkRelativeAsset(file, target.href, routes, assets)
       if (relativeProblem) {
         problems.push(`${rel}:${lineForOffset(text, target.offset)} ${relativeProblem}`)
       }

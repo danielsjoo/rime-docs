@@ -5,7 +5,7 @@ description: Preview the current generated report, inspect output sizes, warning
 
 The Report tab is the editor-facing view of the current generated report. It should feel like evidence, not a second authoring format: one current spec, one current run, one report preview.
 
-![Rime Editor report preview showing a report DAG and output sections.](/rime-docs/editor/assets/report-dag-focus.jpg)
+![Rime Editor report preview showing a report DAG and output sections.](/editor/assets/report-dag-focus.jpg)
 
 ## What The Report Preview Is For
 

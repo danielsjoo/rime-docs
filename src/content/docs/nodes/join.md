@@ -41,5 +41,5 @@ The editor/report should make left-vs-right order and row-count expansion visibl
 
 ## Related
 
-- [derive](/rime-docs/nodes/derive/) - normalize keys before joining
-- [Expression language](/rime-docs/concepts/expressions/) - expression join keys
+- [derive](/nodes/derive/) - normalize keys before joining
+- [Expression language](/concepts/expressions/) - expression join keys
