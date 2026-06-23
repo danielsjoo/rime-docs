@@ -3,17 +3,11 @@ title: t_test
 description: "Two-sample t-test with either pooled equal-variance or Welch-style unequal-variance standard errors."
 ---
 
-Two-sample t-test with either pooled equal-variance or Welch-style unequal-variance standard errors.
+`t_test` compares the mean of one numeric outcome across two named groups in one tidy table. It returns a statistical object, not a transformed table.
 
-## Mental model
+Use it when a mean comparison is the honest question and the data is roughly compatible with a t-test story. If the outcome is ordinal, heavily skewed, or dominated by outliers, consider `mann_whitney_u` or a custom Python/R node.
 
-A `t_test` node consumes one tidy table and emits a stat object, not another table. It compares two named groups inside one `groupColumn`.
-
-## When to use
-
-Comparing means of a continuous variable between two groups (control vs treatment, region A vs region B). `equalVariance: true` is the schema default; set `equalVariance: false` when you want the Welch-style unequal-variance calculation. For ordinal or heavily non-normal data, use `mann_whitney_u` instead.
-
-## Fields
+## Test contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -23,23 +17,16 @@ Comparing means of a continuous variable between two groups (control vs treatmen
 | `groupA`, `groupB` | yes | The two group values to compare. |
 | `equalVariance` | no | `true` by default; set `false` for Welch-style unequal-variance standard errors. |
 
-## Inputs
+## How to read the result
 
-1 input. The data must contain both a value column and a grouping column.
+`default` reports group sizes, group means, mean difference, t statistic, degrees of freedom, p-value, a 95% confidence interval, and effect size.
 
-## Outputs
+`equalVariance: false` uses Welch-style unequal-variance standard errors. The schema default is `true`, so set it deliberately when variances may differ.
 
-`default`: an object with `type`, `valueColumn`, `groupColumn`, `groupA`, `groupB`, `equalVariance`, `nA`, `nB`, `meanA`, `meanB`, `mean_diff`, `t_statistic`, `dof`, `p_value`, `mean_diff_ci_95`, and `effect_size`.
+## Warnings that matter
 
-## Editor and report behavior
-
-- In reports, this renders as a stat object rather than a table. Surface `p_value`, `mean_diff`, confidence interval, and warnings together.
-- In the editor, show the two group sizes before the statistic; a significant p-value with tiny groups should feel suspicious.
-
-## Warnings and assumptions
-
-- Warnings include `TT_GROUP_SAMPLE_VERY_SMALL`, `TT_GROUP_SAMPLE_SMALL`, `TT_GROUP_NON_NORMAL_SHAPE`, `TT_GROUP_OUTLIER_RATE_MODERATE`, `TT_GROUP_OUTLIER_RATE_HIGH`, and `TT_VARIANCE_RATIO_HIGH`.
-- `TT_VARIANCE_RATIO_HIGH` only applies when `equalVariance: true` and the group variance ratio is at least 4.
+- Small groups, non-normal shape, outlier rates, and high variance ratios can all produce warnings.
+- `TT_VARIANCE_RATIO_HIGH` only fires for the equal-variance variant, because that is where unequal variances undercut the assumption.
 
 ## Example
 
@@ -54,16 +41,7 @@ Comparing means of a continuous variable between two groups (control vs treatmen
   equalVariance: false            # default true
 ```
 
-## Modeling notes
+## Related
 
-- Welch-style t-test (`equalVariance: false`) is more robust to unequal variances. Use the equal-variance variant only if you have strong reason to assume homogeneity.
-- The `groupA` and `groupB` values must exist in `groupColumn`; otherwise validation fails at run time.
-- Use one tidy table with a grouping column instead of two separate inputs.
-- Use `concat` to stack two cohorts first when the cohorts start in separate branches.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [concat](/rime-docs/nodes/concat/) — stack cohorts before running a grouped test
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [concat](/rime-docs/nodes/concat/) - stack two cohorts before testing
+- [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) - rank-based alternative

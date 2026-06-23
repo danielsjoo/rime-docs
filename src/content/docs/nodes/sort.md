@@ -3,17 +3,11 @@ title: sort
 description: "Order rows by one or more expressions."
 ---
 
-Order rows by one or more expressions.
+`sort` changes row order without changing values or schema. That makes it easy to miss in a DAG unless the node label says why the order matters.
 
-## Mental model
+Use it before report tables, deterministic previews, or downstream work where the first rows carry meaning.
 
-A `sort` node changes row order without changing values. Use it when order matters for review, reports, or deterministic downstream sampling.
-
-## When to use
-
-Sorting for the report renderer, or before a window-like derive. For top-N, sort + a downstream Python script that does `.head(N)`.
-
-## Fields
+## Sort contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,23 +16,15 @@ Sorting for the report renderer, or before a window-like derive. For top-N, sort
 | `by[].expr` | yes | Expression used as a sort key. |
 | `by[].direction` | no | `asc` by default; set `desc` explicitly for descending order. |
 
-## Inputs
+## Ordering choices
 
-1 input.
+- `by` is ordered: first clause is primary, second is secondary, and so on.
+- `direction` defaults to `asc`. Use `desc` explicitly when descending order is the intent.
+- Sort expressions can be computed keys, but simple descending order is clearer as `direction: desc` than as a negated expression.
 
-## Outputs
+## Reviewing the result
 
-`default`: the input rows reordered by the sort keys.
-
-## Expression language
-
-- `by[].expr` uses the Rime expression language, so you can sort by computed keys such as `[last_name].lowercase()` or `[score] * -1`.
-- Prefer explicit `direction: desc` over negating numeric expressions when the intent is simple descending order.
-
-## Editor and report behavior
-
-- The preview should show the first rows after sorting and the sort keys used.
-- Sort nodes are often invisible in row/column counts, so the UI needs to make the ordering decision explicit.
+`default` is the input rows reordered. Because shape does not change, inspect the first rows and the sort keys rather than row counts.
 
 ## Example
 
@@ -51,14 +37,6 @@ Sorting for the report renderer, or before a window-like derive. For top-N, sort
     - { expr: "[date]", direction: asc }
 ```
 
-## Modeling notes
+## Related
 
-- `direction` defaults to `asc`. Use `desc` explicitly when you want descending.
-- Multi-key sort: order in the `by:` array is significant (primary, secondary, tertiary key).
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Expression language](/rime-docs/concepts/expressions/) — sort key expressions
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [Expression language](/rime-docs/concepts/expressions/) - sort key expressions

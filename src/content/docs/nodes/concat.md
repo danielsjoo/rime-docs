@@ -3,17 +3,11 @@ title: concat
 description: "Stack tables row-wise with a label column distinguishing the source of each row."
 ---
 
-Stack tables row-wise with a label column distinguishing the source of each row.
+`concat` stacks peer tables row-wise and adds a label column that records where each row came from.
 
-## Mental model
+It is most useful when two or more branches represent comparable cohorts, batches, sites, or time slices and you want one tidy table downstream.
 
-A `concat` node stacks peer tables row-wise and adds a group label. It is the clean way to turn separate cohorts into one tidy table for later stats.
-
-## When to use
-
-Combining same-shaped tables from different sources (e.g. monthly extracts, multi-site cohorts).
-
-## Fields
+## Stacking contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,23 +16,15 @@ Combining same-shaped tables from different sources (e.g. monthly extracts, mult
 | `groupLabels` | no | Labels for each input; defaults to the input refs. |
 | `schemaMode` | no | `strict` by default; `intersect` keeps shared columns, `union` fills missing cells with null. |
 
-## Inputs
+## Schema mode is the decision
 
-2+ inputs.
+- `strict` requires the same column set and is safest when tables should match exactly.
+- `intersect` keeps only shared columns and can silently drop useful fields if you are not looking.
+- `union` keeps all columns and fills missing cells with null, which is flexible but should be followed by null-profile review.
 
-## Outputs
+## Result shape
 
-`default`: the concatenated table with an added `source:` column (configurable name) indicating which input each row came from.
-
-## Editor and report behavior
-
-- The preview should show the added `groupColumn` and each label value.
-- Schema mode should be prominent because `strict`, `intersect`, and `union` have very different review implications.
-
-## Warnings and assumptions
-
-- `strict` schema mode fails when inputs do not share the same column set.
-- `union` fills missing columns with null; use it deliberately and inspect null profiles afterward.
+`default` is the combined table with the added `groupColumn`. Check that the labels are readable, because those values often become filters or group names later.
 
 ## Example
 
@@ -51,13 +37,6 @@ Combining same-shaped tables from different sources (e.g. monthly extracts, mult
   schemaMode: union               # strict | intersect | union, default strict
 ```
 
-## Modeling notes
+## Related
 
-- All inputs must share the same column names. Use `select` first if schemas differ.
-- The label column makes it easy to filter downstream by source: `filter` on `[source] == "site_a"`.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [t_test](/rime-docs/nodes/t_test/) - grouped tests often start by concatenating two cohorts

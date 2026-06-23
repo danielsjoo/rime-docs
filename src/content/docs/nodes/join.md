@@ -3,17 +3,11 @@ title: join
 description: "Two-input inner or left join on column keys."
 ---
 
-Two-input inner or left join on column keys.
+`join` enriches one table with another. The left input is the anchor, especially for `how: left`; the right input supplies matching columns.
 
-## Mental model
+Use one join for one relationship. If the explanation has to say "and then it also joins...", chain another join so the row-count effect stays inspectable.
 
-A `join` node combines two tables. The left input is the anchor, especially for `how: left`, and the right input enriches it.
-
-## When to use
-
-Combining two tables on a shared key. For more than two inputs, chain multiple joins.
-
-## Fields
+## Join contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,28 +16,17 @@ Combining two tables on a shared key. For more than two inputs, chain multiple j
 | `rightKey` | yes | Bare column name or expression evaluated on the right table. |
 | `how` | no | `inner` by default; `left` keeps all left rows. |
 
-## Inputs
+## Before you join
 
-2 inputs. Left and right tables (order matters for left joins).
+- Choose `inner` when unmatched rows should disappear. Choose `left` when the left table defines the cohort.
+- Watch many-to-many relationships. Rime allows them, but they create one output row for every matching pair.
+- If keys need normalization, an upstream `derive` node often makes the matching logic easier to review than expression keys inside the join.
 
-## Outputs
+## Result shape
 
-`default`: the joined table. Column names from the right side are suffixed to disambiguate if they collide with left-side names.
+`default` is the joined table. Right-side column names are suffixed when needed to avoid collisions.
 
-## Expression language
-
-- `leftKey` and `rightKey` can be bare column names. If the value is not a bare identifier, it is parsed as an expression.
-- Expression join keys are useful for normalized identifiers, but they can hide expensive or lossy matching logic; give those nodes clear labels.
-
-## Editor and report behavior
-
-- The editor should show both parent inputs and make left/right order clear.
-- Row-count expansion after a join is worth surfacing because many-to-many matches can explode silently.
-
-## Warnings and assumptions
-
-- Many-to-many joins are allowed; watch row counts for unplanned Cartesian expansion.
-- Expression keys are powerful but can mask type coercion. Prefer explicit upstream `derive` nodes when reviewers need to inspect the key.
+The editor/report should make left-vs-right order and row-count expansion visible.
 
 ## Example
 
@@ -56,14 +39,7 @@ Combining two tables on a shared key. For more than two inputs, chain multiple j
   how: left                       # inner | left, default inner
 ```
 
-## Modeling notes
+## Related
 
-- `how: inner` (default) drops unmatched rows; `how: left` keeps all left-side rows with nulls for unmatched right-side columns.
-- Many-to-many joins are allowed but produce the Cartesian product of matching rows — be careful with row count blow-up.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Expression language](/rime-docs/concepts/expressions/) — expression join keys
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [derive](/rime-docs/nodes/derive/) - normalize keys before joining
+- [Expression language](/rime-docs/concepts/expressions/) - expression join keys

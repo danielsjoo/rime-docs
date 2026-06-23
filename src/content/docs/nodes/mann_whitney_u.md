@@ -3,17 +3,11 @@ title: mann_whitney_u
 description: "Non-parametric two-sample test (Mann-Whitney U / Wilcoxon rank-sum)."
 ---
 
-Non-parametric two-sample test (Mann-Whitney U / Wilcoxon rank-sum).
+`mann_whitney_u` compares two groups by rank ordering the outcome values. It is the built-in escape from a shaky mean/normality story.
 
-## Mental model
+Use it for skewed continuous values, ordinal scores, or outlier-heavy groups when a rank-based comparison is easier to defend than a mean comparison.
 
-A `mann_whitney_u` node compares two groups by ranks rather than raw means. It is useful when the mean/normality story is not credible.
-
-## When to use
-
-When you want to compare two groups but your data isn't normally distributed (skewed, ordinal, has outliers). Tests the null that values from group A are equally likely to be larger or smaller than values from group B.
-
-## Fields
+## Rank-test contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,23 +16,17 @@ When you want to compare two groups but your data isn't normally distributed (sk
 | `groupColumn` | yes | Column containing group labels. |
 | `groupA`, `groupB` | yes | The two group values to compare. |
 
-## Inputs
+## What question it answers
 
-1 input.
+`default` reports group sizes, U, z, p-value, effect size, and a 95% effect-size confidence interval.
 
-## Outputs
+The null is rank/stochastic balance: values from group A are not systematically larger or smaller than values from group B. Do not describe it as a guaranteed median test when the distributions have different shapes.
 
-`default`: an object with `type`, `valueColumn`, `groupColumn`, `groupA`, `groupB`, `nA`, `nB`, `u`, `z`, `p_value`, `effect_size`, and `effect_size_ci_95`.
-
-## Editor and report behavior
-
-- Report output should show U, z, p-value, effect size, confidence interval, and group sizes.
-- Because this is rank-based, the surrounding docs/UI should avoid saying it directly tests medians in all cases.
-
-## Warnings and assumptions
+## Limits
 
 - The current assumption-warning pass does not emit Mann-Whitney-specific warnings yet.
-- The node still validates that both requested groups have numeric values before producing a result.
+- Very small groups make the asymptotic p-value fragile. Use an exact, permutation, or bootstrap approach in Python/R when that distinction matters.
+- Both requested groups must exist and have numeric values before the node can produce a result.
 
 ## Example
 
@@ -52,15 +40,6 @@ When you want to compare two groups but your data isn't normally distributed (sk
   groupB: treatment
 ```
 
-## Modeling notes
+## Related
 
-- Mann-Whitney tests stochastic dominance, not medians. If your two distributions have different shapes, the test result doesn't cleanly map to "the medians differ."
-- For very small samples (n < 5 per group), the asymptotic p-value is unreliable; use an exact, permutation, or bootstrap approach in a Python/R node if the distinction matters.
-- Mann-Whitney is a rank/stochastic-dominance test. It is not automatically a “median test” when distributions have different shapes.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [t_test](/rime-docs/nodes/t_test/) — mean-based alternative when assumptions are credible
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [t_test](/rime-docs/nodes/t_test/) - mean-based alternative when assumptions are credible

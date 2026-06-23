@@ -3,17 +3,11 @@ title: subgraph
 description: "Embed an external `.dag.yaml` file as a node, with named bindings and exposed outputs."
 ---
 
-Embed an external `.dag.yaml` file as a node, with named bindings and exposed outputs.
+`subgraph` wraps another `.dag.yaml` file behind an explicit boundary. From the parent DAG, the inner pipeline behaves like one composed node.
 
-## Mental model
+Use it when a cluster of steps has a reusable contract: a feature pipeline, a standardized cleaning pass, or a shared project module.
 
-A `subgraph` node is a pipeline boundary. It hides an external DAG behind explicit bindings and exposed outputs.
-
-## When to use
-
-Reusing a complete sub-pipeline across multiple projects, or composing one big DAG out of multiple smaller files. Subgraphs are opaque from the outside (good for encapsulation).
-
-## Fields
+## Boundary contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,23 +16,15 @@ Reusing a complete sub-pipeline across multiple projects, or composing one big D
 | `outputs` | no | Map from exposed output name to inner node ref. |
 | `inputs` | derived | Optional compatibility field; bindings are the real contract. |
 
-## Inputs
+## Bindings and outputs
 
-Variable — driven by the `bindings:` map.
+- `bindings` maps names expected inside the sub-DAG to refs in the parent DAG.
+- `outputs` maps public output names to inner node refs.
+- The subgraph is intentionally opaque from the outside. That is useful for encapsulation, but it makes the boundary names important documentation.
 
-## Outputs
+## Editor behavior
 
-Variable — driven by the `outputs:` map.
-
-## Editor and report behavior
-
-- The editor should render subgraphs as boxed composition, with clear exposed inputs/outputs.
-- Condense/expand should preserve external references and make boundary bindings inspectable.
-
-## Warnings and assumptions
-
-- Subgraph editing helpers report structured violations such as `EMPTY_SELECTION`, `UNKNOWN_NODE_ID`, `NON_CONVEX`, `CONTAINS_SOURCE`, and `UNRESOLVED_REF`.
-- The runtime executes subgraphs through the engine, not the leaf node executor.
+Condense/expand UI should preserve external refs and make bindings inspectable. Structured violations include `EMPTY_SELECTION`, `UNKNOWN_NODE_ID`, `NON_CONVEX`, `CONTAINS_SOURCE`, and `UNRESOLVED_REF`.
 
 ## Example
 
@@ -53,13 +39,6 @@ Variable — driven by the `outputs:` map.
     feature_b: inner_node_b.train
 ```
 
-## Modeling notes
+## Related
 
-- `bindings:` maps outer node refs to inner slot names; `outputs:` maps exposed names to inner node refs. Mismatches caught at validate time.
-- Subgraphs don't share cache with their parent — running the same subgraph twice in one DAG produces two cached results, not one.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [Concepts: DAG specification](/rime-docs/concepts/dag/) - how refs and DAG boundaries work

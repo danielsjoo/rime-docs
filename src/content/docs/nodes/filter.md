@@ -3,17 +3,11 @@ title: filter
 description: "Keep rows matching a boolean expression."
 ---
 
-Keep rows matching a boolean expression.
+A `filter` node is a named row gate. The schema stays the same; only the set of rows changes.
 
-## Mental model
+Good filter nodes read like cohort decisions: adults only, visits after baseline, active accounts, non-null outcomes. If the expression needs a paragraph to explain it, split the logic into an upstream `derive` with a readable feature name.
 
-A `filter` node is a row gate. It keeps the same schema and changes only the set of rows, which makes it ideal for cohorts, quality gates, and thresholds.
-
-## When to use
-
-Slicing a cohort, removing nulls, gating on a threshold. The expression language supports boolean operators, arithmetic, comparisons, membership checks, and functions like `coalesce(...)`.
-
-## Fields
+## Filter shape
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -21,29 +15,17 @@ Slicing a cohort, removing nulls, gating on a threshold. The expression language
 | `expr` | yes | Boolean expression evaluated per row. Truthy rows are kept. |
 | `metadata.label` | no | Use a readable label such as “Keep visits after baseline”; the expression itself is usually too terse for reviewers. |
 
-## Inputs
+## Expression guidance
 
-1 input. The table to filter.
+- Write a boolean expression such as `[age] >= 18` or `[status] == "active"`.
+- Use bracketed column refs and plain literals. Row-level functions like `coalesce([score], 0)` are fine.
+- Do not hide aggregations inside a filter. Build summaries with `aggregate`, then filter the summarized table.
 
-## Outputs
+## Reviewing the result
 
-`default`: the input rows that satisfy `expr:`.
+The important review question is row loss. Compare input rows to output rows and make sure a zero-row result is intentional.
 
-## Expression language
-
-- `expr` uses the Rime expression language and must evaluate to a boolean per row.
-- Use bracketed column refs (`[age]`) and plain literals (`18`, `"active"`, `true`, `null`).
-- Aggregate methods like `.mean()` are not meaningful in a row filter; compute summaries upstream with `aggregate`.
-
-## Editor and report behavior
-
-- The selected node preview should make row-count change obvious: input rows vs output rows is the main story.
-- Warnings or errors should point at the expression, not the whole node.
-
-## Warnings and assumptions
-
-- Expression parse or evaluation errors fail the node and skip downstream dependents.
-- A filter that returns zero rows is valid, but downstream stats may fail because they have too few observations.
+Expression parse or evaluation errors fail the node and downstream dependents. The best UI and report copy should point at the expression, not the whole DAG.
 
 ## Example
 
@@ -54,14 +36,6 @@ Slicing a cohort, removing nulls, gating on a threshold. The expression language
   expr: "[age] >= 18"
 ```
 
-## Modeling notes
+## Related
 
-- Column references use `[brackets]`: `[age] >= 18`, not `age >= 18`.
-- Filtering on a derived column requires a `derive` node first — you can't reference a column that doesn't exist yet.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Expression language](/rime-docs/concepts/expressions/) — syntax for `expr`
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [Expression language](/rime-docs/concepts/expressions/) - syntax for row predicates
