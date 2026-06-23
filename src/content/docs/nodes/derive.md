@@ -3,17 +3,11 @@ title: derive
 description: "Add a computed column from existing columns."
 ---
 
-Add a computed column from existing columns.
+`derive` adds one computed column. It is the right node when a feature deserves a name and should be inspectable in the DAG.
 
-## Mental model
+Prefer a chain of small derives over one opaque script when each intermediate feature is useful for review. Use a language node when the computation needs loops, model code, external packages, or multiple output columns at once.
 
-A `derive` node adds one named feature column. Chain several derives when you want an inspectable feature-building trail instead of one opaque script.
-
-## When to use
-
-Computed features (BMI, ratios, normalized scores). For a one-step pipeline where you derive several columns at once, chain multiple `derive` nodes — they're cheap.
-
-## Fields
+## Feature contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -21,29 +15,17 @@ Computed features (BMI, ratios, normalized scores). For a one-step pipeline wher
 | `as` | yes | Identifier-shaped output column name. |
 | `expr` | yes | Expression compiled to a Polars expression and aliased to `as`. |
 
-## Inputs
+## Writing the expression
 
-1 input. The table to extend.
+- `expr` is compiled to Polars and aliased to `as`, so the expression itself does not need an assignment.
+- Use `coalesce()` when nulls should become a default value instead of following native null behavior.
+- The new `as` column cannot collide with an existing column. Drop or rename first if you mean to replace something.
 
-## Outputs
+## Reviewing the result
 
-`default`: the input table with one additional column named by `as:`.
+The preview should make the new column easy to find. For numeric features, a distribution/profile is usually more useful than a long row sample.
 
-## Expression language
-
-- `expr` uses the Rime expression language and is compiled to Polars.
-- Use functions like `coalesce([score], 0)` for null-safe feature engineering.
-- The node aliases the result to `as`, so the expression itself does not need an alias assignment.
-
-## Editor and report behavior
-
-- The table preview should highlight the new `as` column so reviewers can inspect the feature quickly.
-- For numerical features, column profile deltas are often more useful than a large row sample.
-
-## Warnings and assumptions
-
-- Unsupported expression functions fail as `NODE_EXECUTION` errors from the compiler/runtime.
-- Deriving over nulls follows Polars semantics; use `coalesce()` when nulls should become a default value.
+`default` is the input table plus the new column.
 
 ## Example
 
@@ -55,14 +37,7 @@ Computed features (BMI, ratios, normalized scores). For a one-step pipeline wher
   expr: "[crp_mean] * [ldl_max] / 1000.0"
 ```
 
-## Modeling notes
+## Related
 
-- The new column name (`as:`) must not collide with an existing column. Use `select` first to drop the old one if you want to overwrite.
-- Expressions can't reference other derived columns within the same node. Use a second `derive` for that.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Expression language](/rime-docs/concepts/expressions/) — syntax for `expr`
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [Expression language](/rime-docs/concepts/expressions/) - supported operators and functions
+- [select](/rime-docs/nodes/select/) - narrow or reorder columns after deriving

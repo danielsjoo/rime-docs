@@ -3,17 +3,11 @@ title: correlation
 description: "Pearson or Spearman correlation between two columns."
 ---
 
-Pearson or Spearman correlation between two columns.
+`correlation` is a compact association check between two numeric columns. It is evidence for relationship, not a model of cause.
 
-## Mental model
+Use Pearson when a linear relationship is the question. Use Spearman when rank order or monotonic movement is more believable than raw linearity.
 
-A `correlation` node summarizes pairwise association between two numeric columns. It is exploratory evidence, not a causal model.
-
-## When to use
-
-Quick check of linear (Pearson) or rank-order (Spearman) relationship between two continuous columns. For non-linear relationships, prefer `linear_regression` with feature engineering, or a Python script for more sophisticated measures.
-
-## Fields
+## Association contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -21,23 +15,17 @@ Quick check of linear (Pearson) or rank-order (Spearman) relationship between tw
 | `columnA`, `columnB` | yes | Numeric columns to pair row-wise. |
 | `method` | no | `pearson` by default; `spearman` ranks values first. |
 
-## Inputs
+## How to read the result
 
-1 input.
+`default` reports method, paired n, coefficient, p-value, effect size, and a 95% coefficient confidence interval.
 
-## Outputs
+Pearson/Spearman disagreement can be more useful than either number alone because it often points to outliers or non-linear shape.
 
-`default`: an object with `type`, `columnA`, `columnB`, `method`, `n`, `coefficient`, `t_statistic`, `p_value`, `effect_size`, and `coefficient_ci_95`.
+## Watch for
 
-## Editor and report behavior
-
-- Report output should show method, coefficient, p-value, n, and the coefficient confidence interval.
-- If Pearson and Spearman disagree, the warning is often the most important part of the node.
-
-## Warnings and assumptions
-
-- `CORRELATION_SAMPLE_SMALL` is informational when n is below 20.
-- `CORRELATION_PEARSON_OUTLIER_SENSITIVE` warns when Pearson and Spearman differ by at least 0.2.
+- `CORRELATION_SAMPLE_SMALL` appears when n is below 20.
+- `CORRELATION_PEARSON_OUTLIER_SENSITIVE` appears when Pearson and Spearman differ by at least 0.2.
+- If you need a directional fitted relationship, move to `linear_regression`; if you need controls or nonlinear features, use Python/R.
 
 ## Example
 
@@ -50,15 +38,6 @@ Quick check of linear (Pearson) or rank-order (Spearman) relationship between tw
   method: pearson                 # pearson | spearman, default pearson
 ```
 
-## Modeling notes
+## Related
 
-- Pearson assumes normality and linearity; Spearman is more robust but only captures monotonic relationships.
-- Correlation is not causation. The node won't tell you which way the arrow points.
-- Pearson measures linear association. Spearman ranks first and is better for monotonic but non-linear relationships.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [linear_regression](/rime-docs/nodes/linear_regression/) — model a directional relationship
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [linear_regression](/rime-docs/nodes/linear_regression/) - model a directional single-feature relationship

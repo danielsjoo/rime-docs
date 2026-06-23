@@ -7,15 +7,9 @@ Rime nodes are typed DAG steps. Some shape tables, some produce statistical obje
 
 ## How To Read These Pages
 
-Each node page explains:
+The node pages are not all shaped the same way. A statistical node needs interpretation and assumption guidance. A table transform needs review cues about shape, columns, and row counts. A language node needs a slot contract.
 
-- the mental model
-- when to use the node
-- required fields
-- input and output shape
-- expression-language behavior when relevant
-- editor/report behavior
-- warnings, assumptions, and modeling notes
+Each page keeps the schema facts close to the explanation, then spends its space on the parts that matter for that node: what problem it solves, what the output means, what to inspect in the editor or report, and when to choose a different node.
 
 For transform formulas, start with [Expression language](/rime-docs/concepts/expressions/). For script-backed custom logic, start with [language nodes](/rime-docs/nodes/script/).
 

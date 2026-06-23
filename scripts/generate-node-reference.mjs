@@ -223,43 +223,6 @@ nodes:
   },
 ];
 
-const MENTAL_MODEL_BY_KIND = {
-  source:
-    'A `source` node is the boundary between external bytes and the Rime DAG. After the source loads, downstream nodes should treat the data as a typed table owned by the runtime.',
-  filter:
-    'A `filter` node is a row gate. It keeps the same schema and changes only the set of rows, which makes it ideal for cohorts, quality gates, and thresholds.',
-  derive:
-    'A `derive` node adds one named feature column. Chain several derives when you want an inspectable feature-building trail instead of one opaque script.',
-  aggregate:
-    'An `aggregate` node turns many rows into one row per group, or one global summary row when `groupBy: []`.',
-  select:
-    'A `select` node is a projection. It narrows a table to the columns, aliases, or expressions that downstream work should see.',
-  sort:
-    'A `sort` node changes row order without changing values. Use it when order matters for review, reports, or deterministic downstream sampling.',
-  join:
-    'A `join` node combines two tables. The left input is the anchor, especially for `how: left`, and the right input enriches it.',
-  pivot:
-    'A `pivot` node makes a long table wide: index columns define rows, a categorical column becomes output columns, and one value column is aggregated into each cell.',
-  concat:
-    'A `concat` node stacks peer tables row-wise and adds a group label. It is the clean way to turn separate cohorts into one tidy table for later stats.',
-  t_test:
-    'A `t_test` node consumes one tidy table and emits a stat object, not another table. It compares two named groups inside one `groupColumn`.',
-  anova:
-    'An `anova` node is the multi-group sibling of `t_test`: one continuous outcome, one grouping column, and an overall F-test across groups.',
-  mann_whitney_u:
-    'A `mann_whitney_u` node compares two groups by ranks rather than raw means. It is useful when the mean/normality story is not credible.',
-  chi_square:
-    'A `chi_square` node builds a contingency table from two categorical columns, then tests whether their observed counts depart from independence.',
-  correlation:
-    'A `correlation` node summarizes pairwise association between two numeric columns. It is exploratory evidence, not a causal model.',
-  linear_regression:
-    'A `linear_regression` node fits a single-predictor OLS line and emits coefficients, uncertainty, and fit statistics for a compact report callout.',
-  subgraph:
-    'A `subgraph` node is a pipeline boundary. It hides an external DAG behind explicit bindings and exposed outputs.',
-  script:
-    'A language node is the escape hatch. The YAML declares slots and outputs; Python, R, JavaScript, or SQL owns the computation.'
-};
-
 const FIELD_ROWS_BY_KIND = {
   source: [
     ['`id`', 'yes', 'Source binding key. Runtime source overrides and editor file bindings are keyed by this id.'],
@@ -362,229 +325,6 @@ const FIELD_ROWS_BY_KIND = {
   ]
 };
 
-const OUTPUT_DETAILS_BY_KIND = {
-  t_test:
-    '`default`: an object with `type`, `valueColumn`, `groupColumn`, `groupA`, `groupB`, `equalVariance`, `nA`, `nB`, `meanA`, `meanB`, `mean_diff`, `t_statistic`, `dof`, `p_value`, `mean_diff_ci_95`, and `effect_size`.',
-  anova:
-    '`default`: an object with `type`, `valueColumn`, `groupColumn`, `n`, `groups`, `df_between`, `df_within`, `f_statistic`, `p_value`, and `effect_size`.',
-  mann_whitney_u:
-    '`default`: an object with `type`, `valueColumn`, `groupColumn`, `groupA`, `groupB`, `nA`, `nB`, `u`, `z`, `p_value`, `effect_size`, and `effect_size_ci_95`.',
-  chi_square:
-    '`default`: an object with `type`, `columnA`, `columnB`, `n`, `dof`, `chi_square`, `p_value`, and `effect_size`.',
-  correlation:
-    '`default`: an object with `type`, `columnA`, `columnB`, `method`, `n`, `coefficient`, `t_statistic`, `p_value`, `effect_size`, and `coefficient_ci_95`.',
-  linear_regression:
-    '`default`: an object with `type`, `feature`, `target`, `n`, `slope`, `intercept`, `r2`, `p_value`, `slope_ci_95`, and `effect_size`.'
-};
-
-const EXPRESSION_NOTES_BY_KIND = {
-  filter: [
-    '`expr` uses the Rime expression language and must evaluate to a boolean per row.',
-    'Use bracketed column refs (`[age]`) and plain literals (`18`, `"active"`, `true`, `null`).',
-    'Aggregate methods like `.mean()` are not meaningful in a row filter; compute summaries upstream with `aggregate`.'
-  ],
-  derive: [
-    '`expr` uses the Rime expression language and is compiled to Polars.',
-    'Use functions like `coalesce([score], 0)` for null-safe feature engineering.',
-    'The node aliases the result to `as`, so the expression itself does not need an alias assignment.'
-  ],
-  aggregate: [
-    '`groupBy` entries and `metrics` entries use the Rime expression language.',
-    'Metrics should be alias expressions: `"[mean_score] = [score].mean()"`.',
-    'Common reducers include `.sum()`, `.mean()`, `.count()`, `.min()`, `.max()`, `.n_unique()`, and `.distinct()`.'
-  ],
-  select: [
-    '`columns` are schema-limited to identifier-shaped strings today, but runtime projection compiles them as expressions.',
-    'For derived expressions with clear names, prefer an upstream `derive` followed by `select` for readability.'
-  ],
-  sort: [
-    '`by[].expr` uses the Rime expression language, so you can sort by computed keys such as `[last_name].lowercase()` or `[score] * -1`.',
-    'Prefer explicit `direction: desc` over negating numeric expressions when the intent is simple descending order.'
-  ],
-  join: [
-    '`leftKey` and `rightKey` can be bare column names. If the value is not a bare identifier, it is parsed as an expression.',
-    'Expression join keys are useful for normalized identifiers, but they can hide expensive or lossy matching logic; give those nodes clear labels.'
-  ]
-};
-
-const EDITOR_NOTES_BY_KIND = {
-  source: [
-    'The editor should show the bound path, inferred shape, column profiles, and sampled rows immediately after a run.',
-    'If the path is missing, the app should disable run-dependent preview rather than making the user probe manually.'
-  ],
-  filter: [
-    'The selected node preview should make row-count change obvious: input rows vs output rows is the main story.',
-    'Warnings or errors should point at the expression, not the whole node.'
-  ],
-  derive: [
-    'The table preview should highlight the new `as` column so reviewers can inspect the feature quickly.',
-    'For numerical features, column profile deltas are often more useful than a large row sample.'
-  ],
-  aggregate: [
-    'The preview should lead with the output shape because aggregation usually collapses rows.',
-    'Metric names should be visible as output columns; unreadable aliases are a smell.'
-  ],
-  select: [
-    'The preview should feel like a schema check: columns kept, columns dropped, and final ordering.',
-    'This node is a good place for the editor to warn about accidental over-wide downstream tables.'
-  ],
-  sort: [
-    'The preview should show the first rows after sorting and the sort keys used.',
-    'Sort nodes are often invisible in row/column counts, so the UI needs to make the ordering decision explicit.'
-  ],
-  join: [
-    'The editor should show both parent inputs and make left/right order clear.',
-    'Row-count expansion after a join is worth surfacing because many-to-many matches can explode silently.'
-  ],
-  pivot: [
-    'The preview should show the new wide columns and total width; high-cardinality pivots can become unreadable fast.',
-    'The editor should make `agg` visible because it changes the meaning of every pivoted cell.'
-  ],
-  concat: [
-    'The preview should show the added `groupColumn` and each label value.',
-    'Schema mode should be prominent because `strict`, `intersect`, and `union` have very different review implications.'
-  ],
-  t_test: [
-    'In reports, this renders as a stat object rather than a table. Surface `p_value`, `mean_diff`, confidence interval, and warnings together.',
-    'In the editor, show the two group sizes before the statistic; a significant p-value with tiny groups should feel suspicious.'
-  ],
-  anova: [
-    'Report output should show the F statistic, p-value, effect size, degrees of freedom, and per-group means.',
-    'Group sample sizes and warnings belong next to the result, not hidden below the fold.'
-  ],
-  mann_whitney_u: [
-    'Report output should show U, z, p-value, effect size, confidence interval, and group sizes.',
-    'Because this is rank-based, the surrounding docs/UI should avoid saying it directly tests medians in all cases.'
-  ],
-  chi_square: [
-    'Report output should make the tested columns and Cramer’s V/effect size visible.',
-    'When expected counts are low, warnings should be hard to miss because the p-value approximation can be invalid.'
-  ],
-  correlation: [
-    'Report output should show method, coefficient, p-value, n, and the coefficient confidence interval.',
-    'If Pearson and Spearman disagree, the warning is often the most important part of the node.'
-  ],
-  linear_regression: [
-    'Report output should show slope, intercept, r2, p-value, confidence interval, effect size, and outlier warnings.',
-    'The editor should be clear this is single-feature OLS, not a general modeling workbench.'
-  ],
-  subgraph: [
-    'The editor should render subgraphs as boxed composition, with clear exposed inputs/outputs.',
-    'Condense/expand should preserve external references and make boundary bindings inspectable.'
-  ],
-  script: [
-    'The editor should show named slots as real edges and show the source file beside the selected node preview.',
-    'Multiple outputs should be visible as named outputs in both the canvas and report.'
-  ]
-};
-
-const WARNING_NOTES_BY_KIND = {
-  source: [
-    'Missing source values surface as `NODE_INPUT_MISSING` at run time.',
-    'CSV cells are converted to primitive number/boolean/string values when possible; empty cells become null.'
-  ],
-  filter: [
-    'Expression parse or evaluation errors fail the node and skip downstream dependents.',
-    'A filter that returns zero rows is valid, but downstream stats may fail because they have too few observations.'
-  ],
-  derive: [
-    'Unsupported expression functions fail as `NODE_EXECUTION` errors from the compiler/runtime.',
-    'Deriving over nulls follows Polars semantics; use `coalesce()` when nulls should become a default value.'
-  ],
-  aggregate: [
-    'Metrics without aliases produce hard-to-read output columns; use alias expressions for report-quality results.',
-    'Global aggregation (`groupBy: []`) is valid and should produce one row.'
-  ],
-  join: [
-    'Many-to-many joins are allowed; watch row counts for unplanned Cartesian expansion.',
-    'Expression keys are powerful but can mask type coercion. Prefer explicit upstream `derive` nodes when reviewers need to inspect the key.'
-  ],
-  pivot: [
-    'Only finite numeric values contribute to `sum` and `mean` cells; empty buckets become null except `count`, which returns counts.',
-    'High-cardinality `columns` values create very wide output tables.'
-  ],
-  concat: [
-    '`strict` schema mode fails when inputs do not share the same column set.',
-    '`union` fills missing columns with null; use it deliberately and inspect null profiles afterward.'
-  ],
-  t_test: [
-    'Warnings include `TT_GROUP_SAMPLE_VERY_SMALL`, `TT_GROUP_SAMPLE_SMALL`, `TT_GROUP_NON_NORMAL_SHAPE`, `TT_GROUP_OUTLIER_RATE_MODERATE`, `TT_GROUP_OUTLIER_RATE_HIGH`, and `TT_VARIANCE_RATIO_HIGH`.',
-    '`TT_VARIANCE_RATIO_HIGH` only applies when `equalVariance: true` and the group variance ratio is at least 4.'
-  ],
-  anova: [
-    'Warnings include `ANOVA_GROUP_SAMPLE_VERY_SMALL`, `ANOVA_GROUP_SAMPLE_SMALL`, `ANOVA_GROUP_NON_NORMAL_SHAPE`, `ANOVA_GROUP_OUTLIER_RATE_MODERATE`, `ANOVA_GROUP_OUTLIER_RATE_HIGH`, and `ANOVA_VARIANCE_RATIO_HIGH`.',
-    '`ANOVA_VARIANCE_RATIO_HIGH` fires when group variances differ by at least 4x.'
-  ],
-  mann_whitney_u: [
-    'The current assumption-warning pass does not emit Mann-Whitney-specific warnings yet.',
-    'The node still validates that both requested groups have numeric values before producing a result.'
-  ],
-  chi_square: [
-    '`CHI_SQUARE_EXPECTED_CELL_TOO_LOW` is critical when any expected cell count is below 1.',
-    '`CHI_SQUARE_EXPECTED_CELL_LOW_FREQUENCY` warns when more than 20% of expected cells are below 5.'
-  ],
-  correlation: [
-    '`CORRELATION_SAMPLE_SMALL` is informational when n is below 20.',
-    '`CORRELATION_PEARSON_OUTLIER_SENSITIVE` warns when Pearson and Spearman differ by at least 0.2.'
-  ],
-  linear_regression: [
-    '`LINEAR_REGRESSION_SAMPLE_SMALL` is informational when n is below 20.',
-    '`LINEAR_REGRESSION_HIGH_RESIDUAL_OUTLIERS` warns when at least 5% of observations have residuals at or beyond 3 residual standard deviations.'
-  ],
-  subgraph: [
-    'Subgraph editing helpers report structured violations such as `EMPTY_SELECTION`, `UNKNOWN_NODE_ID`, `NON_CONVEX`, `CONTAINS_SOURCE`, and `UNRESOLVED_REF`.',
-    'The runtime executes subgraphs through the engine, not the leaf node executor.'
-  ],
-  script: [
-    'A script node without `source` fails with `NODE_PARAM_INVALID` at run time.',
-    'If script execution is disabled or no executor is registered for the language, the node fails with `NODE_UNSUPPORTED`.'
-  ]
-};
-
-const MODELING_NOTES_BY_KIND = {
-  t_test: [
-    'Use one tidy table with a grouping column instead of two separate inputs.',
-    'Use `concat` to stack two cohorts first when the cohorts start in separate branches.'
-  ],
-  anova: [
-    'ANOVA answers whether at least one group mean differs; it does not identify which pair differs.',
-    'Follow with planned pairwise `t_test` nodes only for comparisons you can justify.'
-  ],
-  mann_whitney_u: [
-    'Mann-Whitney is a rank/stochastic-dominance test. It is not automatically a “median test” when distributions have different shapes.'
-  ],
-  chi_square: [
-    'A significant result means the variables are not independent; inspect the contingency table to understand which cells drive the result.'
-  ],
-  correlation: [
-    'Pearson measures linear association. Spearman ranks first and is better for monotonic but non-linear relationships.'
-  ],
-  linear_regression: [
-    'This node is intentionally small: one predictor, one target. Use a Python/R node for multi-feature models, robust errors, or diagnostics beyond the built-in warnings.'
-  ]
-};
-
-const SEE_ALSO_BY_KIND = {
-  filter: ['- [Expression language](/rime-docs/concepts/expressions/) — syntax for `expr`'],
-  derive: ['- [Expression language](/rime-docs/concepts/expressions/) — syntax for `expr`'],
-  aggregate: ['- [Expression language](/rime-docs/concepts/expressions/) — group and metric expressions'],
-  select: ['- [Expression language](/rime-docs/concepts/expressions/) — projection expression syntax'],
-  sort: ['- [Expression language](/rime-docs/concepts/expressions/) — sort key expressions'],
-  join: ['- [Expression language](/rime-docs/concepts/expressions/) — expression join keys'],
-  t_test: ['- [concat](/rime-docs/nodes/concat/) — stack cohorts before running a grouped test'],
-  anova: ['- [t_test](/rime-docs/nodes/t_test/) — pairwise follow-up comparisons'],
-  mann_whitney_u: ['- [t_test](/rime-docs/nodes/t_test/) — mean-based alternative when assumptions are credible'],
-  chi_square: ['- [Reports](/rime-docs/concepts/reports/) — warning callouts in generated reports'],
-  correlation: ['- [linear_regression](/rime-docs/nodes/linear_regression/) — model a directional relationship'],
-  linear_regression: ['- [correlation](/rime-docs/nodes/correlation/) — lighter-weight association check'],
-  script: [
-    '- [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms',
-      '- [R language nodes](/rime-docs/scripts/r/) — data.frame/tibble-style transforms',
-      '- [JavaScript language nodes](/rime-docs/scripts/javascript/) — defineNode and row-array transforms',
-    '- [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms'
-  ]
-};
-
 const md = await readFile(REF_PATH, 'utf8');
 await mkdir(OUT_DIR, { recursive: true });
 
@@ -614,43 +354,561 @@ function extractYamlExample(refBody) {
   return m ? m[1].trim() : null;
 }
 
-function renderList(items) {
-  if (!items || items.length === 0) return '';
-  return items.map((item) => `- ${item}`).join('\n');
-}
-
-function renderSection(title, body) {
-  if (!body) return '';
-  const text = Array.isArray(body) ? renderList(body) : body;
-  if (!text.trim()) return '';
-  return `\n## ${title}\n\n${text}\n`;
-}
-
 function escapeTableCell(value) {
   return value.replace(/\|/g, '\\|').replace(/\n/g, '<br />');
 }
 
-function renderFieldTable(kind) {
+function renderFieldTable(kind, title = 'YAML shape') {
   const rows = FIELD_ROWS_BY_KIND[kind];
   if (!rows || rows.length === 0) return '';
   const body = rows
     .map(([field, required, notes]) => `| ${field} | ${required} | ${escapeTableCell(notes)} |`)
     .join('\n');
-  return `\n## Fields\n\n| Field | Required | Notes |\n| --- | --- | --- |\n${body}\n`;
+  return `\n## ${title}\n\n| Field | Required | Notes |\n| --- | --- | --- |\n${body}\n`;
 }
 
-function renderSeeAlso(meta) {
-  const local = SEE_ALSO_BY_KIND[meta.kind] ?? [];
-  const languageLinks =
-    meta.kind === 'script'
-      ? local
-      : ['- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough'];
-  return [
-    ...languageLinks,
-    ...(meta.kind === 'script' ? [] : local),
-    '- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system',
-    '- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema'
-  ].join('\n');
+const NODE_PAGE_SECTIONS = {
+  source: [
+    {
+      paragraphs: [
+        'A `source` node is where bytes on disk become a Rime table. Keep this node boring: name the file, load it, and let downstream nodes do cleanup or interpretation.',
+        'That separation makes reports easier to read. A raw CSV source can stay out of the report while the first meaningful transform gets the review attention.'
+      ]
+    },
+    {
+      title: 'Use it at the edge',
+      paragraphs: [
+        'Use `source` when the project starts from a local CSV, JSON, NDJSON, or Parquet file. It has no parents and usually sits at the top of the DAG.',
+        'If a SQL query should read a file directly with DuckDB, use a `kind: sql` language node instead. That path is often better for large Parquet or SQL-first ingestion.'
+      ]
+    },
+    { type: 'fields', title: 'Source contract' },
+    {
+      title: 'What to inspect',
+      bullets: [
+        'The path is project-relative and can be replaced at run time with `--source <id>=<file>`.',
+        'Parquet preserves types best. CSV and JSON inference are convenient, but worth checking in the editor preview.',
+        'Set `metadata.report: false` for noisy raw inputs when the report should begin at a cleaned or joined table.'
+      ]
+    },
+    { type: 'example', title: 'Small example' },
+    {
+      type: 'related',
+      links: [
+        '- [SQL language nodes](/rime-docs/scripts/sql/) - use DuckDB when ingestion is query-shaped',
+        '- [Dataset scanning](/rime-docs/editor/dataset-scanning/) - how the editor previews loaded tables'
+      ]
+    }
+  ],
+  filter: [
+    {
+      paragraphs: [
+        'A `filter` node is a named row gate. The schema stays the same; only the set of rows changes.',
+        'Good filter nodes read like cohort decisions: adults only, visits after baseline, active accounts, non-null outcomes. If the expression needs a paragraph to explain it, split the logic into an upstream `derive` with a readable feature name.'
+      ]
+    },
+    { type: 'fields', title: 'Filter shape' },
+    {
+      title: 'Expression guidance',
+      bullets: [
+        'Write a boolean expression such as `[age] >= 18` or `[status] == "active"`.',
+        'Use bracketed column refs and plain literals. Row-level functions like `coalesce([score], 0)` are fine.',
+        'Do not hide aggregations inside a filter. Build summaries with `aggregate`, then filter the summarized table.'
+      ]
+    },
+    {
+      title: 'Reviewing the result',
+      paragraphs: [
+        'The important review question is row loss. Compare input rows to output rows and make sure a zero-row result is intentional.',
+        'Expression parse or evaluation errors fail the node and downstream dependents. The best UI and report copy should point at the expression, not the whole DAG.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [Expression language](/rime-docs/concepts/expressions/) - syntax for row predicates']
+    }
+  ],
+  derive: [
+    {
+      paragraphs: [
+        '`derive` adds one computed column. It is the right node when a feature deserves a name and should be inspectable in the DAG.',
+        'Prefer a chain of small derives over one opaque script when each intermediate feature is useful for review. Use a language node when the computation needs loops, model code, external packages, or multiple output columns at once.'
+      ]
+    },
+    { type: 'fields', title: 'Feature contract' },
+    {
+      title: 'Writing the expression',
+      bullets: [
+        '`expr` is compiled to Polars and aliased to `as`, so the expression itself does not need an assignment.',
+        'Use `coalesce()` when nulls should become a default value instead of following native null behavior.',
+        'The new `as` column cannot collide with an existing column. Drop or rename first if you mean to replace something.'
+      ]
+    },
+    {
+      title: 'Reviewing the result',
+      paragraphs: [
+        'The preview should make the new column easy to find. For numeric features, a distribution/profile is usually more useful than a long row sample.',
+        '`default` is the input table plus the new column.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: [
+        '- [Expression language](/rime-docs/concepts/expressions/) - supported operators and functions',
+        '- [select](/rime-docs/nodes/select/) - narrow or reorder columns after deriving'
+      ]
+    }
+  ],
+  aggregate: [
+    {
+      paragraphs: [
+        '`aggregate` turns row-level data into named summaries. It emits one row per group, or one global summary row when `groupBy: []`.',
+        'This is the node to reach for when the output columns are the story: counts by site, mean score by arm, maximum date per account, or a compact table for a report.'
+      ]
+    },
+    { type: 'fields', title: 'Aggregation contract' },
+    {
+      title: 'Designing metrics',
+      bullets: [
+        'Each metric should be an alias expression, for example `"[mean_score] = [score].mean()"`.',
+        'Keep metric names report-ready. Anonymous or machine-looking aliases make the resulting table harder to review.',
+        'Common reducers include `.sum()`, `.mean()`, `.count()`, `.min()`, `.max()`, `.n_unique()`, and `.distinct()`.'
+      ]
+    },
+    {
+      title: 'What changes',
+      paragraphs: [
+        '`default` contains the group keys plus metric columns. The row count usually collapses, so output shape is the first thing to inspect.',
+        'For more complex windowed reductions or custom statistics, move to a Python, R, JavaScript, or SQL node.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [Expression language](/rime-docs/concepts/expressions/) - group and metric expressions']
+    }
+  ],
+  select: [
+    {
+      paragraphs: [
+        '`select` is a schema decision. It keeps the columns you name, in the order you name them.',
+        'Use it to make the next node cheaper and clearer: trim wide source tables, prepare a report table, or define the exact payload crossing into a language node.'
+      ]
+    },
+    { type: 'fields', title: 'Projection contract' },
+    {
+      title: 'Review notes',
+      bullets: [
+        '`default` is the same rows with only the selected columns.',
+        'Column order is part of the node behavior, so use `select` when report ordering matters.',
+        'Selecting a nonexistent column is a hard validation error.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: [
+        '- [derive](/rime-docs/nodes/derive/) - create named features before selecting them',
+        '- [Expression language](/rime-docs/concepts/expressions/) - projection syntax notes'
+      ]
+    }
+  ],
+  sort: [
+    {
+      paragraphs: [
+        '`sort` changes row order without changing values or schema. That makes it easy to miss in a DAG unless the node label says why the order matters.',
+        'Use it before report tables, deterministic previews, or downstream work where the first rows carry meaning.'
+      ]
+    },
+    { type: 'fields', title: 'Sort contract' },
+    {
+      title: 'Ordering choices',
+      bullets: [
+        '`by` is ordered: first clause is primary, second is secondary, and so on.',
+        '`direction` defaults to `asc`. Use `desc` explicitly when descending order is the intent.',
+        'Sort expressions can be computed keys, but simple descending order is clearer as `direction: desc` than as a negated expression.'
+      ]
+    },
+    {
+      title: 'Reviewing the result',
+      paragraphs: [
+        '`default` is the input rows reordered. Because shape does not change, inspect the first rows and the sort keys rather than row counts.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [Expression language](/rime-docs/concepts/expressions/) - sort key expressions']
+    }
+  ],
+  join: [
+    {
+      paragraphs: [
+        '`join` enriches one table with another. The left input is the anchor, especially for `how: left`; the right input supplies matching columns.',
+        'Use one join for one relationship. If the explanation has to say "and then it also joins...", chain another join so the row-count effect stays inspectable.'
+      ]
+    },
+    { type: 'fields', title: 'Join contract' },
+    {
+      title: 'Before you join',
+      bullets: [
+        'Choose `inner` when unmatched rows should disappear. Choose `left` when the left table defines the cohort.',
+        'Watch many-to-many relationships. Rime allows them, but they create one output row for every matching pair.',
+        'If keys need normalization, an upstream `derive` node often makes the matching logic easier to review than expression keys inside the join.'
+      ]
+    },
+    {
+      title: 'Result shape',
+      paragraphs: [
+        '`default` is the joined table. Right-side column names are suffixed when needed to avoid collisions.',
+        'The editor/report should make left-vs-right order and row-count expansion visible.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: [
+        '- [derive](/rime-docs/nodes/derive/) - normalize keys before joining',
+        '- [Expression language](/rime-docs/concepts/expressions/) - expression join keys'
+      ]
+    }
+  ],
+  pivot: [
+    {
+      paragraphs: [
+        '`pivot` turns tidy/long data into a wide summary table. Index columns stay as row identity; distinct values from one column become output columns.',
+        'It is useful for crosstabs and compact comparison tables. It is also one of the easiest nodes to make unreadable if the pivot column has too many distinct values.'
+      ]
+    },
+    { type: 'fields', title: 'Pivot contract' },
+    {
+      title: 'What each cell means',
+      bullets: [
+        '`values` supplies the numeric value for each cell.',
+        '`agg` decides how multiple rows in the same bucket collapse. The default is `sum`; use `mean` or `count` when that is the actual question.',
+        'Empty buckets become null for `sum` and `mean`; `count` returns counts.'
+      ]
+    },
+    {
+      title: 'Reviewing the result',
+      paragraphs: [
+        '`default` is the pivoted wide table. Inspect total width and the generated column names before sending it to reports or scripts.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [aggregate](/rime-docs/nodes/aggregate/) - grouped summaries without widening']
+    }
+  ],
+  concat: [
+    {
+      paragraphs: [
+        '`concat` stacks peer tables row-wise and adds a label column that records where each row came from.',
+        'It is most useful when two or more branches represent comparable cohorts, batches, sites, or time slices and you want one tidy table downstream.'
+      ]
+    },
+    { type: 'fields', title: 'Stacking contract' },
+    {
+      title: 'Schema mode is the decision',
+      bullets: [
+        '`strict` requires the same column set and is safest when tables should match exactly.',
+        '`intersect` keeps only shared columns and can silently drop useful fields if you are not looking.',
+        '`union` keeps all columns and fills missing cells with null, which is flexible but should be followed by null-profile review.'
+      ]
+    },
+    {
+      title: 'Result shape',
+      paragraphs: [
+        '`default` is the combined table with the added `groupColumn`. Check that the labels are readable, because those values often become filters or group names later.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [t_test](/rime-docs/nodes/t_test/) - grouped tests often start by concatenating two cohorts']
+    }
+  ],
+  t_test: [
+    {
+      paragraphs: [
+        '`t_test` compares the mean of one numeric outcome across two named groups in one tidy table. It returns a statistical object, not a transformed table.',
+        'Use it when a mean comparison is the honest question and the data is roughly compatible with a t-test story. If the outcome is ordinal, heavily skewed, or dominated by outliers, consider `mann_whitney_u` or a custom Python/R node.'
+      ]
+    },
+    { type: 'fields', title: 'Test contract' },
+    {
+      title: 'How to read the result',
+      paragraphs: [
+        '`default` reports group sizes, group means, mean difference, t statistic, degrees of freedom, p-value, a 95% confidence interval, and effect size.',
+        '`equalVariance: false` uses Welch-style unequal-variance standard errors. The schema default is `true`, so set it deliberately when variances may differ.'
+      ]
+    },
+    {
+      title: 'Warnings that matter',
+      bullets: [
+        'Small groups, non-normal shape, outlier rates, and high variance ratios can all produce warnings.',
+        '`TT_VARIANCE_RATIO_HIGH` only fires for the equal-variance variant, because that is where unequal variances undercut the assumption.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: [
+        '- [concat](/rime-docs/nodes/concat/) - stack two cohorts before testing',
+        '- [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) - rank-based alternative'
+      ]
+    }
+  ],
+  anova: [
+    {
+      paragraphs: [
+        '`anova` is the multi-group mean-comparison node. It asks whether at least one group mean differs from the others.',
+        'It is not a pairwise explanation tool. A significant F-test tells you the groups are not all behaving alike; it does not tell you which pair caused the result.'
+      ]
+    },
+    { type: 'fields', title: 'Test contract' },
+    {
+      title: 'How to read the result',
+      paragraphs: [
+        '`default` includes group summaries, between/within degrees of freedom, the F statistic, p-value, and effect size.',
+        'Use `groupLabels` when group order or display names matter in a report.'
+      ]
+    },
+    {
+      title: 'Assumptions and follow-up',
+      bullets: [
+        'Watch sample-size, shape, outlier, and variance-ratio warnings next to the result.',
+        'Plan follow-up pairwise `t_test` nodes only for comparisons you can justify, not every possible pair by reflex.',
+        'For a non-parametric multi-group alternative, use a Python/R node for Kruskal-Wallis or permutation testing.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [t_test](/rime-docs/nodes/t_test/) - planned pairwise mean comparisons']
+    }
+  ],
+  mann_whitney_u: [
+    {
+      paragraphs: [
+        '`mann_whitney_u` compares two groups by rank ordering the outcome values. It is the built-in escape from a shaky mean/normality story.',
+        'Use it for skewed continuous values, ordinal scores, or outlier-heavy groups when a rank-based comparison is easier to defend than a mean comparison.'
+      ]
+    },
+    { type: 'fields', title: 'Rank-test contract' },
+    {
+      title: 'What question it answers',
+      paragraphs: [
+        '`default` reports group sizes, U, z, p-value, effect size, and a 95% effect-size confidence interval.',
+        'The null is rank/stochastic balance: values from group A are not systematically larger or smaller than values from group B. Do not describe it as a guaranteed median test when the distributions have different shapes.'
+      ]
+    },
+    {
+      title: 'Limits',
+      bullets: [
+        'The current assumption-warning pass does not emit Mann-Whitney-specific warnings yet.',
+        'Very small groups make the asymptotic p-value fragile. Use an exact, permutation, or bootstrap approach in Python/R when that distinction matters.',
+        'Both requested groups must exist and have numeric values before the node can produce a result.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [t_test](/rime-docs/nodes/t_test/) - mean-based alternative when assumptions are credible']
+    }
+  ],
+  chi_square: [
+    {
+      paragraphs: [
+        '`chi_square` builds a contingency table from two categorical columns and tests whether the observed counts depart from independence.',
+        'Use it when the question is about association between categories: site by outcome band, treatment by response class, product by region.'
+      ]
+    },
+    { type: 'fields', title: 'Count-test contract' },
+    {
+      title: 'How to read the result',
+      paragraphs: [
+        '`default` includes the tested columns, n, degrees of freedom, chi-square statistic, p-value, and effect size.',
+        'A significant result means the variables are not independent. It does not identify which cells are responsible, so inspect the contingency table or residuals in a follow-up node if needed.'
+      ]
+    },
+    {
+      title: 'Expected counts',
+      bullets: [
+        '`CHI_SQUARE_EXPECTED_CELL_TOO_LOW` is critical when any expected cell count is below 1.',
+        '`CHI_SQUARE_EXPECTED_CELL_LOW_FREQUENCY` warns when more than 20% of expected cells are below 5.',
+        'For small 2x2 cases where approximation quality matters, use Fisher exact in Python/R.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [Reports](/rime-docs/concepts/reports/) - warning callouts in generated reports']
+    }
+  ],
+  correlation: [
+    {
+      paragraphs: [
+        '`correlation` is a compact association check between two numeric columns. It is evidence for relationship, not a model of cause.',
+        'Use Pearson when a linear relationship is the question. Use Spearman when rank order or monotonic movement is more believable than raw linearity.'
+      ]
+    },
+    { type: 'fields', title: 'Association contract' },
+    {
+      title: 'How to read the result',
+      paragraphs: [
+        '`default` reports method, paired n, coefficient, p-value, effect size, and a 95% coefficient confidence interval.',
+        'Pearson/Spearman disagreement can be more useful than either number alone because it often points to outliers or non-linear shape.'
+      ]
+    },
+    {
+      title: 'Watch for',
+      bullets: [
+        '`CORRELATION_SAMPLE_SMALL` appears when n is below 20.',
+        '`CORRELATION_PEARSON_OUTLIER_SENSITIVE` appears when Pearson and Spearman differ by at least 0.2.',
+        'If you need a directional fitted relationship, move to `linear_regression`; if you need controls or nonlinear features, use Python/R.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [linear_regression](/rime-docs/nodes/linear_regression/) - model a directional single-feature relationship']
+    }
+  ],
+  linear_regression: [
+    {
+      paragraphs: [
+        '`linear_regression` fits one ordinary least squares line: one numeric feature, one numeric target.',
+        'It is intentionally small. Use it for a reportable single-feature relationship, not as a substitute for a modeling workflow.'
+      ]
+    },
+    { type: 'fields', title: 'Model contract' },
+    {
+      title: 'How to read the result',
+      paragraphs: [
+        '`default` includes n, slope, intercept, r2, p-value, a 95% slope confidence interval, and effect size.',
+        '`testFraction` can reserve a deterministic holdout split. Add `seed` when you want that split to be repeatable.'
+      ]
+    },
+    {
+      title: 'When not to use it',
+      bullets: [
+        'Multiple predictors, interactions, robust standard errors, diagnostics, and nonlinear models belong in Python/R.',
+        '`LINEAR_REGRESSION_SAMPLE_SMALL` appears when n is below 20.',
+        '`LINEAR_REGRESSION_HIGH_RESIDUAL_OUTLIERS` warns when at least 5% of observations have residuals at or beyond 3 residual standard deviations.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [correlation](/rime-docs/nodes/correlation/) - lighter-weight association check']
+    }
+  ],
+  subgraph: [
+    {
+      paragraphs: [
+        '`subgraph` wraps another `.dag.yaml` file behind an explicit boundary. From the parent DAG, the inner pipeline behaves like one composed node.',
+        'Use it when a cluster of steps has a reusable contract: a feature pipeline, a standardized cleaning pass, or a shared project module.'
+      ]
+    },
+    { type: 'fields', title: 'Boundary contract' },
+    {
+      title: 'Bindings and outputs',
+      bullets: [
+        '`bindings` maps names expected inside the sub-DAG to refs in the parent DAG.',
+        '`outputs` maps public output names to inner node refs.',
+        'The subgraph is intentionally opaque from the outside. That is useful for encapsulation, but it makes the boundary names important documentation.'
+      ]
+    },
+    {
+      title: 'Editor behavior',
+      paragraphs: [
+        'Condense/expand UI should preserve external refs and make bindings inspectable. Structured violations include `EMPTY_SELECTION`, `UNKNOWN_NODE_ID`, `NON_CONVEX`, `CONTAINS_SOURCE`, and `UNRESOLVED_REF`.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: ['- [Concepts: DAG specification](/rime-docs/concepts/dag/) - how refs and DAG boundaries work']
+    }
+  ],
+  script: [
+    {
+      paragraphs: [
+        'Language nodes are the escape hatch: `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql`. The YAML declares slots and outputs; the language owns the computation.',
+        'Use one when the built-in nodes would hide the real logic, or when you need a package, query, model, visualization, custom file output, or multiple named outputs.'
+      ]
+    },
+    { type: 'fields', title: 'Slot contract' },
+    {
+      title: 'Inputs and outputs',
+      paragraphs: [
+        '`in` is a named map from function/query slot to a node ref, named output ref, or `params.name` scalar. Empty `in` is allowed for ingress scripts.',
+        '`out` can declare multiple named outputs. When omitted, the node uses the language manifest or the default output.'
+      ]
+    },
+    {
+      title: 'Choosing the language',
+      bullets: [
+        'Use SQL for DuckDB-backed joins, scans, and relational transforms.',
+        'Use Python/R for statistics, modeling, plotting, or libraries Rime should not rebuild as core nodes.',
+        'Use JavaScript when the project already has JS utilities or when output shaping is easier near web/report code.'
+      ]
+    },
+    {
+      title: 'Runtime failure modes',
+      bullets: [
+        'A language node without `source` fails at run time.',
+        'If script execution is disabled or no executor is registered for the language, the node fails with `NODE_UNSUPPORTED`.',
+        'Multi-output declarations must match what the script actually returns.'
+      ]
+    },
+    { type: 'example', title: 'Named-slot example' },
+    {
+      type: 'related',
+      links: [
+        '- [Python language nodes](/rime-docs/scripts/python/) - pandas-based transforms',
+        '- [R language nodes](/rime-docs/scripts/r/) - data.frame/tibble-style transforms',
+        '- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode` and row-array transforms',
+        '- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB-backed transforms'
+      ]
+    }
+  ]
+};
+
+function renderPageSection(section, meta, yaml) {
+  if (section.type === 'fields') {
+    return renderFieldTable(meta.kind, section.title);
+  }
+
+  if (section.type === 'example') {
+    const fallback =
+      '> Example pending - see [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) in the upstream repo for the field list.';
+    return `\n## ${section.title ?? 'Example'}\n\n${yaml ? '```yaml\n' + yaml + '\n```' : fallback}\n`;
+  }
+
+  if (section.type === 'related') {
+    if (!section.links || section.links.length === 0) return '';
+    return `\n## Related\n\n${section.links.join('\n')}\n`;
+  }
+
+  const parts = [];
+  if (section.paragraphs) parts.push(section.paragraphs.join('\n\n'));
+  if (section.bullets) parts.push(section.bullets.map((item) => `- ${item}`).join('\n'));
+  if (section.body) parts.push(section.body);
+
+  const text = parts.join('\n\n').trim();
+  if (!text) return '';
+  return section.title ? `\n## ${section.title}\n\n${text}\n` : `\n${text}\n`;
+}
+
+function renderNodePage(meta, yaml) {
+  const sections = NODE_PAGE_SECTIONS[meta.kind];
+  if (!sections) throw new Error(`Missing custom node reference sections for ${meta.kind}`);
+  return sections.map((section) => renderPageSection(section, meta, yaml)).join('');
 }
 
 let written = 0;
@@ -658,48 +916,19 @@ for (const meta of KINDS) {
   const refBody = refByKind.get(meta.kind);
   const yaml = extractYamlExample(refBody) ?? meta.example;
 
-  const modelingNotes = [...(meta.pitfalls ?? []), ...(MODELING_NOTES_BY_KIND[meta.kind] ?? [])];
-  const outputText = OUTPUT_DETAILS_BY_KIND[meta.kind] ?? meta.outputs;
-
   // YAML-safe quote: wrap in double quotes, escape any internal double quotes.
   const yamlString = (s) => `"${s.replace(/"/g, '\\"')}"`;
+  const pageBody = renderNodePage(meta, yaml);
 
   const content = `---
 title: ${meta.title ?? meta.kind}
 description: ${yamlString(meta.blurb)}
 ---
 
-${meta.blurb}
-${renderSection('Mental model', MENTAL_MODEL_BY_KIND[meta.kind])}
-
-## When to use
-
-${meta.whenToUse}
-${renderFieldTable(meta.kind)}
-
-## Inputs
-
-${meta.inputs}
-
-## Outputs
-
-${outputText}
-${renderSection('Expression language', EXPRESSION_NOTES_BY_KIND[meta.kind])}
-${renderSection('Editor and report behavior', EDITOR_NOTES_BY_KIND[meta.kind])}
-${renderSection('Warnings and assumptions', WARNING_NOTES_BY_KIND[meta.kind])}
-
-## Example
-
-${yaml ? '```yaml\n' + yaml + '\n```' : '> Example pending — see [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) in the upstream repo for the field list.'}
-
-## Modeling notes
-
-${renderList(modelingNotes)}
-
-## See also
-
-${renderSeeAlso(meta)}
-`.replace(/\n{3,}/g, '\n\n');
+${pageBody}
+`
+    .replace(/\n{3,}/g, '\n\n')
+    .trimEnd() + '\n';
 
   await writeFile(path.join(OUT_DIR, `${meta.kind}.md`), content);
   written += 1;

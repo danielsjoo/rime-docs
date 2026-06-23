@@ -3,17 +3,11 @@ title: language nodes
 description: "Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits."
 ---
 
-Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits.
+Language nodes are the escape hatch: `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql`. The YAML declares slots and outputs; the language owns the computation.
 
-## Mental model
+Use one when the built-in nodes would hide the real logic, or when you need a package, query, model, visualization, custom file output, or multiple named outputs.
 
-A language node is the escape hatch. The YAML declares slots and outputs; Python, R, JavaScript, or SQL owns the computation.
-
-## When to use
-
-When the 14 core nodes don't cover your transform. See the per-language pages — [Python](/rime-docs/scripts/python/), [R](/rime-docs/scripts/r/), [JavaScript](/rime-docs/scripts/javascript/), [SQL](/rime-docs/scripts/sql/) — for function-signature details.
-
-## Fields
+## Slot contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -23,25 +17,25 @@ When the 14 core nodes don't cover your transform. See the per-language pages �
 | `out` | no | Declared output map or list. Omit for the manifest/default output. |
 | `entrypoint` | no | Function/export name for languages that need one. |
 
-## Inputs
+## Inputs and outputs
 
-Variable — declare named slots in `in:`. Each slot can be a dataframe ref or a `params.*` reference.
+`in` is a named map from function/query slot to a node ref, named output ref, or `params.name` scalar. Empty `in` is allowed for ingress scripts.
 
-## Outputs
+`out` can declare multiple named outputs. When omitted, the node uses the language manifest or the default output.
 
-`default` by default, or multiple named outputs declared in `out:`.
+## Choosing the language
 
-## Editor and report behavior
+- Use SQL for DuckDB-backed joins, scans, and relational transforms.
+- Use Python/R for statistics, modeling, plotting, or libraries Rime should not rebuild as core nodes.
+- Use JavaScript when the project already has JS utilities or when output shaping is easier near web/report code.
 
-- The editor should show named slots as real edges and show the source file beside the selected node preview.
-- Multiple outputs should be visible as named outputs in both the canvas and report.
+## Runtime failure modes
 
-## Warnings and assumptions
-
-- A script node without `source` fails with `NODE_PARAM_INVALID` at run time.
+- A language node without `source` fails at run time.
 - If script execution is disabled or no executor is registered for the language, the node fails with `NODE_UNSUPPORTED`.
+- Multi-output declarations must match what the script actually returns.
 
-## Example
+## Named-slot example
 
 ```yaml
 specification_version: "2.1"
@@ -61,16 +55,9 @@ nodes:
     entrypoint: run
 ```
 
-## Modeling notes
+## Related
 
-- Multi-output nodes (`out:`) require the language function to return a dict / list / object whose keys match.
-- No `params.*` slots → no params at all. To pass a top-level param to a language node, you must wire it through the YAML.
-
-## See also
-
-- [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms
-- [R language nodes](/rime-docs/scripts/r/) — data.frame/tibble-style transforms
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) — defineNode and row-array transforms
-- [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [Python language nodes](/rime-docs/scripts/python/) - pandas-based transforms
+- [R language nodes](/rime-docs/scripts/r/) - data.frame/tibble-style transforms
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode` and row-array transforms
+- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB-backed transforms

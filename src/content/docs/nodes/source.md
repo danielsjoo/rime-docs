@@ -3,17 +3,17 @@ title: source
 description: "File-based ingress: read a CSV / JSON / NDJSON / Parquet file into a tabular value."
 ---
 
-File-based ingress: read a CSV / JSON / NDJSON / Parquet file into a tabular value.
+A `source` node is where bytes on disk become a Rime table. Keep this node boring: name the file, load it, and let downstream nodes do cleanup or interpretation.
 
-## Mental model
+That separation makes reports easier to read. A raw CSV source can stay out of the report while the first meaningful transform gets the review attention.
 
-A `source` node is the boundary between external bytes and the Rime DAG. After the source loads, downstream nodes should treat the data as a typed table owned by the runtime.
+## Use it at the edge
 
-## When to use
+Use `source` when the project starts from a local CSV, JSON, NDJSON, or Parquet file. It has no parents and usually sits at the top of the DAG.
 
-Whenever your data starts as a file on disk. For SQL-only pipelines, consider a `kind: sql` node in ingress mode instead — it reads files directly via DuckDB and is often faster for large Parquet.
+If a SQL query should read a file directly with DuckDB, use a `kind: sql` language node instead. That path is often better for large Parquet or SQL-first ingestion.
 
-## Fields
+## Source contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,25 +22,13 @@ Whenever your data starts as a file on disk. For SQL-only pipelines, consider a 
 | `path` | run-time required | Project-relative CSV, JSON, NDJSON, or Parquet path. The editor may hold an unfinished source without a path, but a run needs one or a runtime source override. |
 | `metadata.report` | no | Often `false` for raw files so reports start at the first meaningful transform. |
 
-## Inputs
+## What to inspect
 
-None — `source` is a root node.
+- The path is project-relative and can be replaced at run time with `--source <id>=<file>`.
+- Parquet preserves types best. CSV and JSON inference are convenient, but worth checking in the editor preview.
+- Set `metadata.report: false` for noisy raw inputs when the report should begin at a cleaned or joined table.
 
-## Outputs
-
-`default`: the loaded table. Schema is inferred from the file (`.parquet` preserves types; `.csv` infers headers; `.json` / `.ndjson` infer field types).
-
-## Editor and report behavior
-
-- The editor should show the bound path, inferred shape, column profiles, and sampled rows immediately after a run.
-- If the path is missing, the app should disable run-dependent preview rather than making the user probe manually.
-
-## Warnings and assumptions
-
-- Missing source values surface as `NODE_INPUT_MISSING` at run time.
-- CSV cells are converted to primitive number/boolean/string values when possible; empty cells become null.
-
-## Example
+## Small example
 
 ```yaml
 - id: patients
@@ -48,13 +36,7 @@ None — `source` is a root node.
   path: data/patients.csv         # project-relative; under dataDir/ by convention
 ```
 
-## Modeling notes
+## Related
 
-- CSV header inference is best-effort — if column names contain non-ASCII or special characters, explicitly cast in a downstream `derive`.
-- JSON files load as a single table — for ndjson (one record per line), use the `.ndjson` extension.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [SQL language nodes](/rime-docs/scripts/sql/) - use DuckDB when ingestion is query-shaped
+- [Dataset scanning](/rime-docs/editor/dataset-scanning/) - how the editor previews loaded tables

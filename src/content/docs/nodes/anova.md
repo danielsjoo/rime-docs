@@ -3,17 +3,11 @@ title: anova
 description: "One-way analysis of variance across N groups."
 ---
 
-One-way analysis of variance across N groups.
+`anova` is the multi-group mean-comparison node. It asks whether at least one group mean differs from the others.
 
-## Mental model
+It is not a pairwise explanation tool. A significant F-test tells you the groups are not all behaving alike; it does not tell you which pair caused the result.
 
-An `anova` node is the multi-group sibling of `t_test`: one continuous outcome, one grouping column, and an overall F-test across groups.
-
-## When to use
-
-Comparing means across three or more groups. For exactly two groups, use `t_test`. For non-normal data, consider Kruskal-Wallis (not built in — write a `kind: python` node).
-
-## Fields
+## Test contract
 
 | Field | Required | Notes |
 | --- | --- | --- |
@@ -22,23 +16,17 @@ Comparing means across three or more groups. For exactly two groups, use `t_test
 | `groupColumn` | yes | Column containing two or more groups. |
 | `groupLabels` | no | Optional display/order hint for the groups. |
 
-## Inputs
+## How to read the result
 
-1 input. Data with a continuous outcome column and a grouping column.
+`default` includes group summaries, between/within degrees of freedom, the F statistic, p-value, and effect size.
 
-## Outputs
+Use `groupLabels` when group order or display names matter in a report.
 
-`default`: an object with `type`, `valueColumn`, `groupColumn`, `n`, `groups`, `df_between`, `df_within`, `f_statistic`, `p_value`, and `effect_size`.
+## Assumptions and follow-up
 
-## Editor and report behavior
-
-- Report output should show the F statistic, p-value, effect size, degrees of freedom, and per-group means.
-- Group sample sizes and warnings belong next to the result, not hidden below the fold.
-
-## Warnings and assumptions
-
-- Warnings include `ANOVA_GROUP_SAMPLE_VERY_SMALL`, `ANOVA_GROUP_SAMPLE_SMALL`, `ANOVA_GROUP_NON_NORMAL_SHAPE`, `ANOVA_GROUP_OUTLIER_RATE_MODERATE`, `ANOVA_GROUP_OUTLIER_RATE_HIGH`, and `ANOVA_VARIANCE_RATIO_HIGH`.
-- `ANOVA_VARIANCE_RATIO_HIGH` fires when group variances differ by at least 4x.
+- Watch sample-size, shape, outlier, and variance-ratio warnings next to the result.
+- Plan follow-up pairwise `t_test` nodes only for comparisons you can justify, not every possible pair by reflex.
+- For a non-parametric multi-group alternative, use a Python/R node for Kruskal-Wallis or permutation testing.
 
 ## Example
 
@@ -51,16 +39,6 @@ Comparing means across three or more groups. For exactly two groups, use `t_test
   groupLabels: [a, b, c]          # optional
 ```
 
-## Modeling notes
+## Related
 
-- ANOVA assumes group variances are roughly equal. If they're not, results are less reliable; consider a non-parametric alternative.
-- A significant overall F doesn't tell you which groups differ — follow up with pairwise `t_test` nodes for the comparisons you care about.
-- ANOVA answers whether at least one group mean differs; it does not identify which pair differs.
-- Follow with planned pairwise `t_test` nodes only for comparisons you can justify.
-
-## See also
-
-- [Language node reference](/rime-docs/nodes/script/) — the escape hatch when this node is not enough
-- [t_test](/rime-docs/nodes/t_test/) — pairwise follow-up comparisons
-- [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
-- [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema
+- [t_test](/rime-docs/nodes/t_test/) - planned pairwise mean comparisons
