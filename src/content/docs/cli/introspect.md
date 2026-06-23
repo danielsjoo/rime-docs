@@ -35,5 +35,5 @@ the `in:` bindings to point at real upstream nodes and params.
 
 ## Related Commands
 
-- [`rime validate`](/rime-docs/cli/validate/) - confirm the pasted node block is valid.
-- [Language node reference](/rime-docs/nodes/script/) - full field list.
+- [`rime validate`](/cli/validate/) - confirm the pasted node block is valid.
+- [Language node reference](/nodes/script/) - full field list.

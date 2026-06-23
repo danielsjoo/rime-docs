@@ -39,5 +39,5 @@ The preview should make the new column easy to find. For numeric features, a dis
 
 ## Related
 
-- [Expression language](/rime-docs/concepts/expressions/) - supported operators and functions
-- [select](/rime-docs/nodes/select/) - narrow or reorder columns after deriving
+- [Expression language](/concepts/expressions/) - supported operators and functions
+- [select](/nodes/select/) - narrow or reorder columns after deriving

@@ -54,11 +54,11 @@ metadata:
   report: false
 ```
 
-See [Reports](/rime-docs/concepts/reports/) for report layout and output
+See [Reports](/concepts/reports/) for report layout and output
 rendering details.
 
 ## Related Commands
 
-- [`rime run`](/rime-docs/cli/run/) - execute without rendering HTML.
-- [`rime check`](/rime-docs/cli/check/) - validate report wiring without running.
+- [`rime run`](/cli/run/) - execute without rendering HTML.
+- [`rime check`](/cli/check/) - validate report wiring without running.
 

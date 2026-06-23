@@ -38,5 +38,5 @@ If a SQL query should read a file directly with DuckDB, use a `kind: sql` langua
 
 ## Related
 
-- [SQL language nodes](/rime-docs/scripts/sql/) - use DuckDB when ingestion is query-shaped
-- [Dataset scanning](/rime-docs/editor/dataset-scanning/) - how the editor previews loaded tables
+- [SQL language nodes](/scripts/sql/) - use DuckDB when ingestion is query-shaped
+- [Dataset scanning](/editor/dataset-scanning/) - how the editor previews loaded tables

@@ -4,8 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://danielsjoo.github.io',
-  base: '/rime-docs',
+  site: 'https://rimekit.dev',
   integrations: [
     starlight({
       title: 'Rime',
@@ -76,7 +75,7 @@ export default defineConfig({
         {
           label: 'Rime Editor',
           items: [
-            { label: 'Product page', link: '/rime-docs/editor/' },
+            { label: 'Product page', link: 'https://editor.rimekit.dev/' },
             { label: 'Getting started', slug: 'editor/getting-started' },
             { label: 'Dataset scanning', slug: 'editor/dataset-scanning' },
             { label: 'Reports', slug: 'editor/reports' },

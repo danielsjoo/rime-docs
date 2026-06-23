@@ -133,9 +133,9 @@ No interpreter setup needed — DuckDB is bundled with the Rime runtime. The min
 
 ## See also
 
-- [Python language nodes](/rime-docs/scripts/python/) — for ML and statistical work
-- [R language nodes](/rime-docs/scripts/r/) — for tidyverse-style analysis
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) — for external API fetches
-- [Language node reference](/rime-docs/nodes/script/) — full field list
-- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) — the cross-cutting design
+- [Python language nodes](/scripts/python/) — for ML and statistical work
+- [R language nodes](/scripts/r/) — for tidyverse-style analysis
+- [JavaScript language nodes](/scripts/javascript/) — for external API fetches
+- [Language node reference](/nodes/script/) — full field list
+- [Polyglot runtime overview](/concepts/polyglot/) — the cross-cutting design
 - [DuckDB documentation](https://duckdb.org/docs/) — the SQL dialect, file functions, extensions

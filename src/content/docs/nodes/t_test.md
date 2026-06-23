@@ -43,5 +43,5 @@ Use it when a mean comparison is the honest question and the data is roughly com
 
 ## Related
 
-- [concat](/rime-docs/nodes/concat/) - stack two cohorts before testing
-- [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) - rank-based alternative
+- [concat](/nodes/concat/) - stack two cohorts before testing
+- [mann_whitney_u](/nodes/mann_whitney_u/) - rank-based alternative

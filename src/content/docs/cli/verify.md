@@ -44,6 +44,6 @@ status.
 
 ## Related Commands
 
-- [`rime run`](/rime-docs/cli/run/) - recompute stale nodes.
-- [`rime build`](/rime-docs/cli/build/) - run and render a report.
+- [`rime run`](/cli/run/) - recompute stale nodes.
+- [`rime build`](/cli/build/) - run and render a report.
 

@@ -82,7 +82,7 @@ Most pipelines don't even need to write a custom function for common shapes. Rim
 | `sort` | Order rows by one or more expressions |
 | `aggregate` | Group + reduce, with named metrics |
 
-These nodes share Rime's [expression language](/rime-docs/concepts/expressions/). The useful pattern is to keep data-shaping logic visible as small formulas instead of hiding every operation inside a script node:
+These nodes share Rime's [expression language](/concepts/expressions/). The useful pattern is to keep data-shaping logic visible as small formulas instead of hiding every operation inside a script node:
 
 ```yaml
 - id: risk_index
@@ -133,7 +133,7 @@ Anything you can't express with the built-ins is a language node. Same functiona
     threshold: params.threshold   # scalar slot
 ```
 
-Native values per language: pandas DataFrame (Python), data.frame/tibble-style table (R), row arrays (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
+Native values per language: pandas DataFrame (Python), data.frame/tibble-style table (R), row arrays (JS), temp table (SQL). See [Polyglot runtime](/concepts/polyglot/) for the per-language details.
 
 ## Metadata (optional, all kinds)
 
@@ -152,4 +152,4 @@ metadata:
 - **Caching is automatic.** Change a script — only it and its downstream re-run. Change an input — same.
 - **Reproducibility is a side effect of the model, not extra work.** The cache key is `hash(source + inputs)`; same key = same result, every time.
 
-Per-kind field reference lives under [Node Reference](/rime-docs/nodes/) in the sidebar.
+Per-kind field reference lives under [Node Reference](/nodes/) in the sidebar.

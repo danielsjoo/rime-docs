@@ -41,4 +41,4 @@ It is useful for crosstabs and compact comparison tables. It is also one of the 
 
 ## Related
 
-- [aggregate](/rime-docs/nodes/aggregate/) - grouped summaries without widening
+- [aggregate](/nodes/aggregate/) - grouped summaries without widening

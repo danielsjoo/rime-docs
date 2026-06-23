@@ -8,7 +8,7 @@ This page runs the smallest complete Rime project: one CSV, one
 interpreter setup is required.
 
 For a slower tutorial that creates every file from scratch, see the
-[first pipeline workshop](/rime-docs/workshops/first-pipeline/).
+[first pipeline workshop](/workshops/first-pipeline/).
 
 ## Clone an Example
 
@@ -168,7 +168,7 @@ rime run pipeline.dag.yaml --param min_mass=3800
 
 ## Next
 
-- [Workshop: build a first pipeline](/rime-docs/workshops/first-pipeline/)
-- [Concepts: DAG specification](/rime-docs/concepts/dag/)
-- [Concepts: Polyglot runtime](/rime-docs/concepts/polyglot/)
-- [Node Reference](/rime-docs/nodes/) — every built-in operator
+- [Workshop: build a first pipeline](/workshops/first-pipeline/)
+- [Concepts: DAG specification](/concepts/dag/)
+- [Concepts: Polyglot runtime](/concepts/polyglot/)
+- [Node Reference](/nodes/) — every built-in operator

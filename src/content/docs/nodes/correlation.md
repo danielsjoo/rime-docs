@@ -40,4 +40,4 @@ Pearson/Spearman disagreement can be more useful than either number alone becaus
 
 ## Related
 
-- [linear_regression](/rime-docs/nodes/linear_regression/) - model a directional single-feature relationship
+- [linear_regression](/nodes/linear_regression/) - model a directional single-feature relationship

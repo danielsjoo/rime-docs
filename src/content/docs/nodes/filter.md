@@ -38,4 +38,4 @@ Expression parse or evaluation errors fail the node and downstream dependents. T
 
 ## Related
 
-- [Expression language](/rime-docs/concepts/expressions/) - syntax for row predicates
+- [Expression language](/concepts/expressions/) - syntax for row predicates

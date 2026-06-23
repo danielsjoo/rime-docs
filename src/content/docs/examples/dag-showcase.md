@@ -5,7 +5,7 @@ description: A multi-branch demo pipeline mixing SQL, Python, R, and built-in op
 
 The repo's [`examples/dag-showcase/`](https://github.com/danielsjoo/rime/tree/main/examples/dag-showcase) is a compact multi-branch project. It exercises file sources, SQL nodes, derive/filter/aggregate chains, terminal stat nodes, report metadata, and cache behavior.
 
-![Rime Editor DAG focus screenshot showing the dag-showcase pipeline and node inspector.](/rime-docs/editor/assets/hero-dag-focus.jpg)
+![Rime Editor DAG focus screenshot showing the dag-showcase pipeline and node inspector.](/editor/assets/hero-dag-focus.jpg)
 
 ## What's inside
 

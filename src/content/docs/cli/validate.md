@@ -52,8 +52,8 @@ Error codes have stable prefixes: `V2_DAG_SCHEMA`, `V2_DAG_GRAPH`, `V2_REPORT_RE
 
 ## Related Commands
 
-- [`rime check`](/rime-docs/cli/check/) - validate DAG plus optional report wiring.
-- [`rime run`](/rime-docs/cli/run/) - execute the DAG after validation passes.
+- [`rime check`](/cli/check/) - validate DAG plus optional report wiring.
+- [`rime run`](/cli/run/) - execute the DAG after validation passes.
 
 ## Exit codes
 

@@ -116,4 +116,4 @@ rime build examples/single-file/pipeline.dag.yaml --out /tmp/rime-single-file-re
 ```
 
 If both commands succeed, continue to the
-[Quick start](/rime-docs/get-started/quick-start/).
+[Quick start](/get-started/quick-start/).

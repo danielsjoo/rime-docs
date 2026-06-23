@@ -5,7 +5,7 @@ description: The shape of pipeline.dag.yaml.
 
 `pipeline.dag.yaml` is the source of truth for graph shape, node configuration,
 source paths, report inclusion, and optional interpreter/param defaults. For
-per-node fields, use the [Node Reference](/rime-docs/nodes/).
+per-node fields, use the [Node Reference](/nodes/).
 
 ## Top level
 
@@ -126,11 +126,11 @@ For one-off DAGs, drop the marker; everything resolves relative to the DAG file.
 `linear_regression`, `subgraph`, plus language kinds `python`, `r`,
 `javascript`, and `sql`.
 
-Each has its own reference page under [Node Reference](/rime-docs/nodes/).
+Each has its own reference page under [Node Reference](/nodes/).
 
 ## Expression language
 
-`filter.expr`, `derive.expr`, `aggregate.metrics[]`, `aggregate.groupBy[]`, `sort.by[].expr`, and expression join keys use Rime's small [expression language](/rime-docs/concepts/expressions/). Column refs go in `[brackets]`; literals are plain values.
+`filter.expr`, `derive.expr`, `aggregate.metrics[]`, `aggregate.groupBy[]`, `sort.by[].expr`, and expression join keys use Rime's small [expression language](/concepts/expressions/). Column refs go in `[brackets]`; literals are plain values.
 
 ```yaml
 expr: "[age] >= 18 and [status] == 'active'"

@@ -48,11 +48,11 @@ run.
 
 ## Per-Language Pages
 
-- **[SQL language nodes](/rime-docs/scripts/sql/)** - DuckDB temp tables and ingress mode
-- **[Python language nodes](/rime-docs/scripts/python/)** - pandas DataFrame entrypoints and matplotlib capture
-- **[R language nodes](/rime-docs/scripts/r/)** - `run`/`transform` functions, data.frames, and plot-return capture
-- **[JavaScript language nodes](/rime-docs/scripts/javascript/)** - `defineNode`, row arrays, async support
-- **[HTML output](/rime-docs/scripts/html/)** - custom HTML artifacts returned from a JavaScript node
+- **[SQL language nodes](/scripts/sql/)** - DuckDB temp tables and ingress mode
+- **[Python language nodes](/scripts/python/)** - pandas DataFrame entrypoints and matplotlib capture
+- **[R language nodes](/scripts/r/)** - `run`/`transform` functions, data.frames, and plot-return capture
+- **[JavaScript language nodes](/scripts/javascript/)** - `defineNode`, row arrays, async support
+- **[HTML output](/scripts/html/)** - custom HTML artifacts returned from a JavaScript node
 
 ## Interpreter Resolution
 

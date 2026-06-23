@@ -43,4 +43,4 @@ It is intentionally small. Use it for a reportable single-feature relationship, 
 
 ## Related
 
-- [correlation](/rime-docs/nodes/correlation/) - lighter-weight association check
+- [correlation](/nodes/correlation/) - lighter-weight association check

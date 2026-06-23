@@ -49,6 +49,6 @@ prints report diagnostics and exits nonzero before any node executes.
 
 ## Related Commands
 
-- [`rime validate`](/rime-docs/cli/validate/) - DAG-only validation.
-- [`rime build`](/rime-docs/cli/build/) - run the DAG and render HTML.
+- [`rime validate`](/cli/validate/) - DAG-only validation.
+- [`rime build`](/cli/build/) - run the DAG and render HTML.
 

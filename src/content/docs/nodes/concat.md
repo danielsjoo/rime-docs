@@ -39,4 +39,4 @@ It is most useful when two or more branches represent comparable cohorts, batche
 
 ## Related
 
-- [t_test](/rime-docs/nodes/t_test/) - grouped tests often start by concatenating two cohorts
+- [t_test](/nodes/t_test/) - grouped tests often start by concatenating two cohorts

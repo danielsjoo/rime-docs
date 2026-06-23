@@ -31,5 +31,5 @@ Use it to make the next node cheaper and clearer: trim wide source tables, prepa
 
 ## Related
 
-- [derive](/rime-docs/nodes/derive/) - create named features before selecting them
-- [Expression language](/rime-docs/concepts/expressions/) - projection syntax notes
+- [derive](/nodes/derive/) - create named features before selecting them
+- [Expression language](/concepts/expressions/) - projection syntax notes

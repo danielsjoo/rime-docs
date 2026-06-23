@@ -5,7 +5,7 @@ description: Use table previews, shape tuples, column profiles, null counts, and
 
 Dataset scanning is the editor workflow that makes Rime feel different from editing YAML alone. Every table-producing node can be inspected as a concrete dataset: shape, columns, samples, profiles, and the script or expression that produced it.
 
-![Rime Editor table preview focused on sampled patient rows and column profile cards.](/rime-docs/editor/assets/table-scan-focus.jpg)
+![Rime Editor table preview focused on sampled patient rows and column profile cards.](/editor/assets/table-scan-focus.jpg)
 
 ## What The Preview Shows
 
@@ -60,7 +60,7 @@ Aggregate and pivot nodes usually change shape dramatically. The output column n
 
 ## Column Profiles Are Review Aids
 
-![Focused table sample showing patient identifiers, demographics, and lab columns.](/rime-docs/editor/assets/example-table-focus.jpg)
+![Focused table sample showing patient identifiers, demographics, and lab columns.](/editor/assets/example-table-focus.jpg)
 
 Column profiles are useful because they compress a lot of context:
 
@@ -69,7 +69,7 @@ Column profiles are useful because they compress a lot of context:
 - numeric distributions make outliers and impossible values visible
 - type hints show whether a field is usable in expression nodes and statistical nodes
 
-When a node uses the [expression language](/rime-docs/concepts/expressions/), profiles are often the quickest way to decide whether the formula made sense.
+When a node uses the [expression language](/concepts/expressions/), profiles are often the quickest way to decide whether the formula made sense.
 
 ## Scan Before You Script
 

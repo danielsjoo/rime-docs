@@ -146,8 +146,8 @@ desktop app.
 
 ## See Also
 
-- [Python language nodes](/rime-docs/scripts/python/) - pandas and matplotlib
-- [R language nodes](/rime-docs/scripts/r/) - R functions and plot returns
-- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB temp tables
-- [Language node reference](/rime-docs/nodes/script/) - full field list
-- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) - cross-language design
+- [Python language nodes](/scripts/python/) - pandas and matplotlib
+- [R language nodes](/scripts/r/) - R functions and plot returns
+- [SQL language nodes](/scripts/sql/) - DuckDB temp tables
+- [Language node reference](/nodes/script/) - full field list
+- [Polyglot runtime overview](/concepts/polyglot/) - cross-language design

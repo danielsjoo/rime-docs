@@ -41,4 +41,4 @@ Condense/expand UI should preserve external refs and make bindings inspectable. 
 
 ## Related
 
-- [Concepts: DAG specification](/rime-docs/concepts/dag/) - how refs and DAG boundaries work
+- [Concepts: DAG specification](/concepts/dag/) - how refs and DAG boundaries work

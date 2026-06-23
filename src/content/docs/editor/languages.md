@@ -59,4 +59,4 @@ export RIME_RSCRIPT_BIN=/usr/local/bin/Rscript
 rime run pipeline.dag.yaml
 ```
 
-For runtime behavior, see [Polyglot runtime](/rime-docs/concepts/polyglot/).
+For runtime behavior, see [Polyglot runtime](/concepts/polyglot/).
