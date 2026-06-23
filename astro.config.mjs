@@ -10,13 +10,9 @@ export default defineConfig({
     starlight({
       title: 'Rime',
       description: 'Polyglot data pipelines and reproducible narratives',
-      logo: {
-        src: './src/assets/logo.svg',
-        replacesTitle: false,
-      },
       favicon: '/favicon.svg',
       customCss: ['./src/styles/custom.css'],
-      // Top-bar nav (Docs / Editor / Examples) is rendered by SiteTitle override.
+      // Top-bar nav (Docs / Editor / Examples) is rendered beside the text title.
       components: {
         SiteTitle: './src/components/SiteTitle.astro',
       },
@@ -73,9 +69,12 @@ export default defineConfig({
         {
           label: 'Rime Editor',
           items: [
-            { label: 'Overview', slug: 'editor/overview' },
+            { label: 'Product page', link: '/rime-docs/editor/' },
+            { label: 'Getting started', slug: 'editor/getting-started' },
+            { label: 'Dataset scanning', slug: 'editor/dataset-scanning' },
+            { label: 'Reports', slug: 'editor/reports' },
+            { label: 'Example: dag-showcase', slug: 'editor/dag-showcase' },
             { label: 'Install', slug: 'editor/install' },
-            { label: 'UI tour', slug: 'editor/ui-tour' },
             { label: 'Python & R setup', slug: 'editor/languages' },
           ],
         },

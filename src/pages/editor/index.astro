@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rime Editor - Visual Data Pipeline Workbench</title>
+    <meta
+      name="description"
+      content="Rime Editor is a desktop workbench for visually authoring, running, inspecting, and reporting on Rime data pipelines."
+    />
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #0d0e12;
+        --ink-2: #171922;
+        --paper: #ffffff;
+        --paper-2: #f4f5f8;
+        --muted: #606675;
+        --line: #d8dde8;
+        --violet: #7c3cff;
+        --cyan: #08b8d9;
+        --lime: #35d07f;
+        --amber: #ffb020;
+        --pink: #ff3d8b;
+        --shadow: 0 24px 80px rgb(10 12 18 / 22%);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 64px;
+        padding: 12px clamp(18px, 4vw, 56px);
+        color: #f7f8fb;
+        background: rgb(13 14 18 / 92%);
+        border-bottom: 1px solid rgb(255 255 255 / 12%);
+        backdrop-filter: blur(18px);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 7px;
+        font-weight: 760;
+        letter-spacing: 0;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .brand-word {
+        font-size: 22px;
+        font-weight: 860;
+      }
+
+      .brand-product {
+        color: rgb(255 255 255 / 68%);
+        font-size: 15px;
+        font-weight: 680;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px 20px;
+        font-size: 14px;
+        font-weight: 680;
+      }
+
+      .nav-links a {
+        color: rgb(255 255 255 / 78%);
+        text-decoration: none;
+      }
+
+      .nav-links a:hover {
+        color: #ffffff;
+      }
+
+      .nav-cta {
+        padding: 8px 13px;
+        color: #0d0e12 !important;
+        background: #ffffff;
+        border-radius: 6px;
+      }
+
+      .hero {
+        position: relative;
+        min-height: min(860px, 86vh);
+        display: grid;
+        align-items: end;
+        overflow: hidden;
+        color: #ffffff;
+        background:
+          linear-gradient(
+            90deg,
+            rgb(7 8 12 / 96%) 0%,
+            rgb(7 8 12 / 78%) 46%,
+            rgb(7 8 12 / 28%) 100%
+          ),
+          linear-gradient(180deg, rgb(7 8 12 / 5%) 0%, rgb(7 8 12 / 80%) 100%),
+          var(--hero-image) center / cover no-repeat;
+      }
+
+      .hero::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0;
+        height: 18vh;
+        background: linear-gradient(180deg, rgb(7 8 12 / 0%), rgb(13 14 18));
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        width: min(1180px, 100%);
+        padding: 96px clamp(20px, 5vw, 72px) 64px;
+      }
+
+      .product-kicker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        width: fit-content;
+        margin-bottom: 24px;
+        color: rgb(255 255 255 / 74%);
+        font-size: 13px;
+        font-weight: 760;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 820px;
+        margin: 0;
+        font-size: clamp(58px, 12vw, 156px);
+        line-height: 0.86;
+        letter-spacing: 0;
+      }
+
+      .hero-copy {
+        max-width: 720px;
+        margin: 28px 0 0;
+        color: rgb(255 255 255 / 82%);
+        font-size: clamp(19px, 2.2vw, 28px);
+        line-height: 1.28;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 46px;
+        padding: 12px 18px;
+        border: 1px solid rgb(255 255 255 / 30%);
+        border-radius: 6px;
+        color: #ffffff;
+        font-weight: 760;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        color: #0d0e12;
+        background: #ffffff;
+        border-color: #ffffff;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(130px, 1fr));
+        gap: 1px;
+        max-width: 760px;
+        margin-top: 56px;
+        background: rgb(255 255 255 / 18%);
+        border: 1px solid rgb(255 255 255 / 18%);
+      }
+
+      .metric {
+        padding: 18px;
+        background: rgb(13 14 18 / 72%);
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 22px;
+      }
+
+      .metric span {
+        color: rgb(255 255 255 / 68%);
+        font-size: 13px;
+      }
+
+      .section {
+        padding: 86px clamp(20px, 5vw, 72px);
+      }
+
+      .section.dark {
+        color: #ffffff;
+        background: var(--ink);
+      }
+
+      .section.tight {
+        padding-top: 58px;
+      }
+
+      .section-inner {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(260px, 0.55fr);
+        gap: 42px;
+        align-items: end;
+        margin-bottom: 42px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(34px, 5vw, 72px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .lede {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.48;
+      }
+
+      .dark .lede {
+        color: rgb(255 255 255 / 68%);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .feature {
+        min-height: 250px;
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      .feature:nth-child(2) {
+        background: #f7fbff;
+      }
+
+      .feature:nth-child(3) {
+        background: #fffaf0;
+      }
+
+      .feature-topline {
+        width: 52px;
+        height: 7px;
+        margin-bottom: 28px;
+        background: var(--violet);
+      }
+
+      .feature:nth-child(2) .feature-topline {
+        background: var(--cyan);
+      }
+
+      .feature:nth-child(3) .feature-topline {
+        background: var(--amber);
+      }
+
+      .feature h3,
+      .guide h3,
+      .example-card h3 {
+        margin: 0 0 12px;
+        font-size: 22px;
+        line-height: 1.12;
+      }
+
+      .feature p,
+      .guide p,
+      .example-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .screen-wall {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      .screen-frame {
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 16%);
+        border-radius: 8px;
+        background: #171922;
+        box-shadow: var(--shadow);
+      }
+
+      .screen-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left top;
+      }
+
+      .screen-stack {
+        display: grid;
+        gap: 22px;
+      }
+
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
+        background: #2d303a;
+        border: 1px solid #2d303a;
+      }
+
+      .step {
+        min-height: 230px;
+        padding: 24px;
+        background: #151720;
+      }
+
+      .step-number {
+        display: inline-grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        margin-bottom: 30px;
+        color: #0d0e12;
+        background: var(--lime);
+        font-weight: 820;
+      }
+
+      .step:nth-child(2) .step-number {
+        background: var(--cyan);
+      }
+
+      .step:nth-child(3) .step-number {
+        background: var(--pink);
+      }
+
+      .step:nth-child(4) .step-number {
+        background: var(--amber);
+      }
+
+      .step h3 {
+        margin: 0 0 12px;
+        color: #ffffff;
+        font-size: 22px;
+      }
+
+      .step p {
+        margin: 0;
+        color: rgb(255 255 255 / 66%);
+        line-height: 1.48;
+      }
+
+      .guide-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .guide,
+      .example-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 246px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--paper);
+        text-decoration: none;
+      }
+
+      .guide:hover,
+      .example-card:hover {
+        border-color: #0d0e12;
+        transform: translateY(-2px);
+      }
+
+      .guide-link {
+        margin-top: 28px;
+        font-weight: 780;
+      }
+
+      .code-strip {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      pre {
+        margin: 0;
+        overflow: auto;
+        min-height: 100%;
+        padding: 24px;
+        color: #f8fafc;
+        background: #11131a;
+        border: 1px solid #2d303a;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      code {
+        font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+      }
+
+      .example-card {
+        color: #ffffff;
+        background:
+          linear-gradient(90deg, rgb(13 14 18 / 82%), rgb(13 14 18 / 42%)),
+          var(--example-image) center / cover no-repeat;
+        border-color: rgb(255 255 255 / 20%);
+      }
+
+      .example-card p {
+        color: rgb(255 255 255 / 72%);
+      }
+
+      .footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 34px clamp(20px, 5vw, 72px);
+        color: rgb(255 255 255 / 62%);
+        background: #0d0e12;
+        border-top: 1px solid rgb(255 255 255 / 12%);
+        font-size: 14px;
+      }
+
+      .footer a {
+        color: #ffffff;
+        text-decoration: none;
+      }
+
+      @media (max-width: 900px) {
+        .site-nav {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .nav-links {
+          justify-content: flex-start;
+        }
+
+        .hero {
+          min-height: 760px;
+          background:
+            linear-gradient(
+              180deg,
+              rgb(7 8 12 / 95%) 0%,
+              rgb(7 8 12 / 76%) 58%,
+              rgb(7 8 12 / 34%) 100%
+            ),
+            var(--hero-image) center / cover no-repeat;
+        }
+
+        .hero-metrics,
+        .feature-grid,
+        .workflow,
+        .guide-grid,
+        .screen-wall,
+        .code-strip,
+        .section-heading {
+          grid-template-columns: 1fr;
+        }
+
+        .screen-frame img {
+          height: auto;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .nav-links {
+          gap: 12px;
+        }
+
+        .hero-content {
+          padding-top: 70px;
+          padding-bottom: 44px;
+        }
+
+        .hero {
+          min-height: 66vh;
+        }
+
+        .hero-metrics {
+          display: none;
+        }
+
+        h1 {
+          font-size: clamp(56px, 18vw, 86px);
+        }
+
+        .hero-copy {
+          font-size: 19px;
+        }
+
+        .section {
+          padding-top: 62px;
+          padding-bottom: 62px;
+        }
+
+        .feature,
+        .guide,
+        .example-card,
+        .step {
+          min-height: auto;
+        }
+
+        pre {
+          overflow-x: hidden;
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="site-nav" aria-label="Rime Editor product navigation">
+      <a class="brand" href="#top" aria-label="Rime Editor home">
+        <span class="brand-word">Rime</span>
+        <span class="brand-product">Editor</span>
+      </a>
+      <div class="nav-links">
+        <a href="#workflow">Workflow</a>
+        <a href="#inside">Inside the app</a>
+        <a href="#guides">Guides</a>
+        <a href="/rime-docs/get-started/what-is-rime/">CLI docs</a>
+        <a class="nav-cta" href="https://github.com/danielsjoo/rime-editor">Repository</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section
+        class="hero"
+        aria-label="Rime Editor hero"
+        style="--hero-image: url('/rime-docs/editor/assets/hero-dag-focus.jpg')"
+      >
+        <div class="hero-content">
+          <div class="product-kicker">Desktop pipeline workbench</div>
+          <h1>Rime Editor</h1>
+          <p class="hero-copy">
+            Shape data DAGs visually, inspect every table, edit scripts in place, and ship review
+            reports from a focused desktop app built for Rime.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#inside">See the product</a>
+            <a class="button" href="#guides">Explore guides</a>
+          </div>
+          <div class="hero-metrics" aria-label="Product highlights">
+            <div class="metric">
+              <strong>DAG first</strong><span>Canvas authoring with node-level feedback.</span>
+            </div>
+            <div class="metric">
+              <strong>Data visible</strong
+              ><span>Rows, columns, nulls, profiles, and previews.</span>
+            </div>
+            <div class="metric">
+              <strong>Reports</strong><span>One-click review output for the current spec.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section tight" id="product">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2>A product surface for Rime pipelines.</h2>
+            <p class="lede">
+              The CLI stays close to runtime execution. Rime Editor is the product layer for
+              designing, debugging, and reviewing a pipeline when you need to see the data and graph
+              at the same time.
+            </p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature">
+              <div class="feature-topline"></div>
+              <h3>Author the DAG without losing the YAML.</h3>
+              <p>
+                Drag through the pipeline, select nodes, and keep the current spec visible when you
+                want the raw model.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature-topline"></div>
+              <h3>Make dataset scanning the front door.</h3>
+              <p>
+                Table previews lead with shape, null count, cardinality, column profiles, and
+                sampled rows before code.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature-topline"></div>
+              <h3>Turn runs into reviewable evidence.</h3>
+              <p>
+                The report view renders the current pipeline with graph structure, table shapes,
+                warnings, and outputs.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section dark" id="inside">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2>Feels like an IDE for pipelines.</h2>
+            <p class="lede">
+              Visual graph, right-side inspector, data grid, script source, and report preview sit
+              in one desktop workflow.
+            </p>
+          </div>
+          <div class="screen-wall">
+            <figure class="screen-frame">
+              <img
+                src="/rime-docs/editor/assets/table-scan-focus.jpg"
+                alt="Focused Rime Editor table preview with scan metrics, column profiles, and sampled rows."
+              />
+            </figure>
+            <div class="screen-stack">
+              <figure class="screen-frame">
+                <img
+                  src="/rime-docs/editor/assets/report-dag-focus.jpg"
+                  alt="Focused Rime report preview with DAG overview and output size tuples."
+                />
+              </figure>
+              <figure class="screen-frame">
+                <img
+                  src="/rime-docs/editor/assets/yaml-spec-focus.jpg"
+                  alt="Focused Rime Editor YAML spec view."
+                />
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2>From graph idea to reviewed run.</h2>
+            <p class="lede">
+              The editor is intentionally narrower than general docs. It explains the desktop
+              workflow: open a project, inspect data, adjust nodes, and review output.
+            </p>
+          </div>
+          <div class="workflow">
+            <article class="step">
+              <div class="step-number">1</div>
+              <h3>Open a Rime project</h3>
+              <p>Load the pipeline, see cached nodes, and orient around the canvas.</p>
+            </article>
+            <article class="step">
+              <div class="step-number">2</div>
+              <h3>Select and scan</h3>
+              <p>
+                Use the node panel to inspect table shape, columns, diffs, warnings, and source.
+              </p>
+            </article>
+            <article class="step">
+              <div class="step-number">3</div>
+              <h3>Edit the spec</h3>
+              <p>
+                Move between visual controls, YAML, and script source without leaving the run
+                context.
+              </p>
+            </article>
+            <article class="step">
+              <div class="step-number">4</div>
+              <h3>Generate a report</h3>
+              <p>Preview the current report in-app or open the generated file in a browser.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section dark">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2>The same DAG stays inspectable.</h2>
+            <p class="lede">
+              Rime Editor keeps the pipeline concrete: graph structure, YAML, table previews, SQL,
+              and reports all point back to the same node ids.
+            </p>
+          </div>
+          <div class="code-strip">
+            <pre><code>nodes:
+  - id: patient_lab_wide
+    kind: sql
+    in:
+      patients_source: patients_source
+      lab_agg: lab_agg
+    source: queries/patient_lab_wide.sql
+
+  - id: sql_cohort_refine
+    kind: sql
+    in:
+      repeat_visitors: repeat_visitors
+    source: queries/sql_cohort_refine.sql</code></pre>
+            <a
+              class="example-card"
+              href="dag-showcase/"
+              style="--example-image: url('/rime-docs/editor/assets/example-table-focus.jpg')"
+            >
+              <span>
+                <h3>Example: dag-showcase</h3>
+                <p>
+                  A compact project that walks through CSV and Parquet sources, SQL nodes, derived
+                  metrics, statistics, and report output.
+                </p>
+              </span>
+              <span class="guide-link">Open example</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="guides">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2>Editor guides, separate from CLI docs.</h2>
+            <p class="lede">
+              These pages stay focused on the desktop product experience. Runtime concepts can stay
+              in the Rime CLI documentation.
+            </p>
+          </div>
+          <div class="guide-grid">
+            <a class="guide" href="getting-started/">
+              <span>
+                <h3>Getting started</h3>
+                <p>Open a project, run the DAG, and learn the main editor surfaces.</p>
+              </span>
+              <span class="guide-link">Read guide</span>
+            </a>
+            <a class="guide" href="dataset-scanning/">
+              <span>
+                <h3>Dataset scanning</h3>
+                <p>
+                  Use table metrics, column profiles, row samples, and diffs while selecting nodes.
+                </p>
+              </span>
+              <span class="guide-link">Read guide</span>
+            </a>
+            <a class="guide" href="reports/">
+              <span>
+                <h3>Reports</h3>
+                <p>
+                  Preview the current report, inspect output sizes, and open the artifact in a
+                  browser.
+                </p>
+              </span>
+              <span class="guide-link">Read guide</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Rime Editor product page</span>
+      <span
+        ><a href="/rime-docs/">Rime docs</a> /
+        <a href="https://github.com/danielsjoo/rime-editor">Editor repository</a></span
+      >
+    </footer>
+  </body>
+</html>
