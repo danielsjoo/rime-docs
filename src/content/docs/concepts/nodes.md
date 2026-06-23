@@ -82,6 +82,16 @@ Most pipelines don't even need to write a custom function for common shapes. Rim
 | `sort` | Order rows by one or more expressions |
 | `aggregate` | Group + reduce, with named metrics |
 
+These nodes share Rime's [expression language](/rime-docs/concepts/expressions/). The useful pattern is to keep data-shaping logic visible as small formulas instead of hiding every operation inside a script node:
+
+```yaml
+- id: risk_index
+  kind: derive
+  inputs: [patient_lab_wide]
+  as: risk_index
+  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+```
+
 ### Multi-input combinators
 | Kind | What it does |
 |---|---|
@@ -100,6 +110,8 @@ These return a small JSON-shaped result (test statistic, p-value, etc.) rather t
 | `chi_square` | Categorical independence test |
 | `correlation` | Pearson / Spearman correlation between two columns |
 | `linear_regression` | Single-feature OLS, optional train/test split |
+
+Statistical nodes also emit assumption warnings. Those warnings show up in reports and the editor review surfaces because they are often as important as the p-value: low expected cell counts for chi-square, small or skewed groups for t-tests/ANOVA, Pearson/Spearman disagreement for correlation, and high-residual observations for linear regression.
 
 ### Composition
 | Kind | What it does |
