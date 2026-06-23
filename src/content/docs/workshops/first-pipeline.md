@@ -96,14 +96,11 @@ Rime creates:
 outputs/
 ├── manifest.json
 ├── penguins/
-│   ├── default.parquet
-│   └── default.parquet.meta.json
+│   └── default.parquet
 ├── adelie_only/
-│   ├── default.parquet
-│   └── default.parquet.meta.json
+│   └── default.parquet
 └── by_island/
-    ├── default.parquet
-    └── default.parquet.meta.json
+    └── default.parquet
 ```
 
 The final table is:

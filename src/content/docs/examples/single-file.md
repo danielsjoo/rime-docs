@@ -3,7 +3,9 @@ title: Single-file pipeline
 description: The smallest possible Rime pipeline.
 ---
 
-A minimal DAG-file-mode pipeline lives under [`examples/single-file/`](https://github.com/rimekit/rime/tree/main/examples/single-file). One YAML, one CSV, one command.
+A minimal DAG-file-mode pipeline lives under [`examples/single-file/`](https://github.com/danielsjoo/rime/tree/main/examples/single-file). One YAML, one CSV, one command.
+
+![Rime report preview showing the single-file example's DAG and output table.](../../../assets/screenshots/rime-runtime-report.png)
 
 ## What it does
 
@@ -66,3 +68,9 @@ The final aggregate is:
 ## Why start here
 
 No language nodes, no Python / R interpreters required, no companion report file. This is the smallest amount of Rime that does something interesting — useful for verifying your install or as the seed of a larger pipeline you grow into.
+
+## What To Inspect
+
+- `pipeline.dag.yaml` to see the full DAG in one file.
+- `outputs/by_island/default.parquet` to inspect the final table directly.
+- `outputs/run_report.html` to review status, cache state, output shape, and preview rows in the browser.

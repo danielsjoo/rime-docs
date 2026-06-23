@@ -27,6 +27,7 @@ export default defineConfig({
             { label: 'Two ways to use Rime', slug: 'get-started/two-ways-to-use-rime' },
             { label: 'Install', slug: 'get-started/install' },
             { label: 'Quick start', slug: 'get-started/quick-start' },
+            { label: 'Troubleshooting', slug: 'get-started/troubleshooting' },
           ],
         },
         {
@@ -63,8 +64,13 @@ export default defineConfig({
         {
           label: 'CLI',
           items: [
+            { label: 'Overview', slug: 'cli' },
             { label: 'rime validate', slug: 'cli/validate' },
+            { label: 'rime check', slug: 'cli/check' },
             { label: 'rime run', slug: 'cli/run' },
+            { label: 'rime build', slug: 'cli/build' },
+            { label: 'rime verify', slug: 'cli/verify' },
+            { label: 'rime introspect', slug: 'cli/introspect' },
           ],
         },
         {

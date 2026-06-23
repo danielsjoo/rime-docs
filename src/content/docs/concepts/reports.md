@@ -37,6 +37,8 @@ The generated report is organized by node:
 - one section per included node
 - node status, cache state, row counts, warnings, stdout, and figures shown once
 - one output cell per runtime output
+- table outputs show compact shape metadata such as rows and column count
+- object/stat outputs show key-value fields and warnings near the result
 
 For multi-output nodes, the node appears once and each output appears underneath
 it:
@@ -53,17 +55,25 @@ it:
 ```
 
 The report renders `segmented` once, then shows `detail` and `summary` as
-separate output cells. Captured stdout and figures are not duplicated.
+separate output cells. Captured stdout and figures stay at the node level so
+diagnostics are not duplicated.
 
 ## Output rendering
 
 Rime chooses a display based on the actual runtime value:
 
-- table/dataframe outputs render as schema plus preview table
+- table/dataframe outputs render as shape, schema, and preview rows
 - stat/object outputs render as key-value tables
 - `html_artifact` objects render in an iframe
 - failed or output-less nodes still render node-level status, warnings, stdout,
   and errors
+
+The report is intentionally review-first. A reader should be able to answer:
+
+- Did this node run or come from cache?
+- How many rows and columns did this output produce?
+- Are there warnings or captured logs attached to the result?
+- Is this a table, a statistical object, or a custom HTML artifact?
 
 ## Output path
 
@@ -79,7 +89,7 @@ Override it with `--out`:
 rime build pipeline.dag.yaml --out outputs/cohort_report.html
 ```
 
-## Legacy explicit reports
+## Legacy Explicit Reports
 
 Explicit report files are still accepted as a compatibility path:
 
@@ -88,4 +98,4 @@ rime build pipeline.dag.yaml --report report.yaml
 ```
 
 Use this only when you need hand-authored prose, custom section ordering, or a
-specific column list. The default workflow is DAG-driven auto-reporting.
+specific column list. The default workflow is DAG-driven report generation.

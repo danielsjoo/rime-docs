@@ -1,6 +1,6 @@
 ---
 title: HTML output
-description: Produce HTML from a Rime DAG, either with the built-in auto-report or a JavaScript html_artifact output.
+description: Produce HTML from a Rime DAG, either with the built-in report or a JavaScript html_artifact output.
 ---
 
 > **HTML is not one of Rime's four script languages.** The script enum is
@@ -10,7 +10,7 @@ description: Produce HTML from a Rime DAG, either with the built-in auto-report 
 There are two paths. Use the built-in report unless you need a fully custom
 interactive page.
 
-## Path A — auto-report
+## Path A - DAG-driven report
 
 The default path is `rime build`:
 
@@ -49,7 +49,7 @@ You get:
 
 ## Path B — JavaScript emits an HTML artifact
 
-When the auto-report layout is not enough — custom D3 visualizations, bespoke
+When the built-in report layout is not enough - custom D3 visualizations, bespoke
 layouts, embedded interactive widgets — write a JavaScript language node that
 returns an `html_artifact` object.
 
@@ -101,7 +101,7 @@ function renderHtml(rows, summary) {
 }
 ```
 
-The auto-report renders `html_artifact` objects in an iframe on that node's
+The built-in report renders `html_artifact` objects in an iframe on that node's
 output cell.
 
 ## When Path B makes sense
@@ -136,6 +136,6 @@ JS-emitted HTML is only as deterministic as your JS code:
 
 ## See also
 
-- [Concepts → Reports](/rime-docs/concepts/reports/) — auto-report behavior and `metadata.report`
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) — function signature, in-process execution model, async support
-- [Outputs & caching](/rime-docs/concepts/outputs/) — how Rime writes artifacts to disk
+- [Concepts -> Reports](/rime-docs/concepts/reports/) - report behavior and `metadata.report`
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) - `defineNode`, row inputs, and async support
+- [Outputs & caching](/rime-docs/concepts/outputs/) - how Rime writes artifacts to disk

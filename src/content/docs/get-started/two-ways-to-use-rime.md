@@ -17,6 +17,8 @@ Core nodes are the quickest way to express routine data shaping without choosing
 The syntax is intentionally close to spreadsheet formulas. Column references are wrapped in brackets:
 
 ```yaml
+specification_version: "2.1"
+
 nodes:
   - id: line_items
     kind: source
@@ -24,20 +26,19 @@ nodes:
 
   - id: paid_items
     kind: filter
-    input: line_items
-    where: "[status] == 'paid'"
+    inputs: [line_items]
+    expr: "[status] == 'paid'"
 
-  - id: enriched_items
+  - id: revenue_items
     kind: derive
-    input: paid_items
-    columns:
-      revenue: "[unit_price] * [quantity]"
-      order_year: "year([ordered_at])"
+    inputs: [paid_items]
+    as: revenue
+    expr: "[unit_price] * [quantity]"
 
   - id: review_columns
     kind: select
-    input: enriched_items
-    columns: [order_id, store_id, order_year, revenue]
+    inputs: [revenue_items]
+    columns: [order_id, store_id, revenue]
 ```
 
 This is language agnostic. You do not need pandas, dplyr, JavaScript arrays, or SQL just to say "keep paid rows," "make these new columns," or "carry forward these fields." The YAML is the contract, and the runtime decides how to execute it.
@@ -45,7 +46,7 @@ This is language agnostic. You do not need pandas, dplyr, JavaScript arrays, or 
 What to expect when you make this file:
 
 - `source` nodes read files into named tables.
-- Transform nodes point at earlier node IDs with `input` or named input maps.
+- Core transform nodes point at earlier node IDs with `inputs: [...]`.
 - Formula strings operate on columns from the input table.
 - Each node emits a named output that downstream nodes can reference.
 - `rime validate pipeline.dag.yaml` catches schema and graph mistakes before a run.
@@ -60,6 +61,8 @@ Script nodes are for everything that needs a real language: API clients, custom 
 In a script node, the YAML still declares the node and its dependencies, but the implementation lives in a script file:
 
 ```yaml
+specification_version: "2.1"
+
 nodes:
   - id: customers
     kind: source
@@ -103,6 +106,8 @@ Script nodes keep custom code focused on computation. You should not need to wri
 Most useful pipelines mix the two styles. Start with core nodes for the readable, reviewable table operations. Add script nodes where a language earns its place.
 
 ```yaml
+specification_version: "2.1"
+
 nodes:
   - id: orders
     kind: source
@@ -110,12 +115,12 @@ nodes:
 
   - id: clean_orders
     kind: filter
-    input: orders
-    where: "[status] != 'cancelled'"
+    inputs: [orders]
+    expr: "[status] != 'cancelled'"
 
   - id: model_inputs
     kind: select
-    input: clean_orders
+    inputs: [clean_orders]
     columns: [customer_id, ordered_at, subtotal, discount, region]
 
   - id: predictions

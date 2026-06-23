@@ -39,7 +39,7 @@ defaults at run time.
   metadata:                      # optional; closed schema
     label: "Friendly label"
     group: "ingest"
-    report: false                # omit or true to include in auto-report
+    report: false                # omit or true to include in generated reports
     visual_stats: ["row_count"]
     cache: false                 # boolean | { policy: ttl, seconds: N }
 ```

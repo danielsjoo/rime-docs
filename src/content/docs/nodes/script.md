@@ -69,8 +69,8 @@ nodes:
 ## See also
 
 - [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms
-- [R language nodes](/rime-docs/scripts/r/) — tibble-based transforms
-- [JavaScript language nodes](/rime-docs/scripts/javascript/) — Node-based transforms
+- [R language nodes](/rime-docs/scripts/r/) — data.frame/tibble-style transforms
+- [JavaScript language nodes](/rime-docs/scripts/javascript/) — defineNode and row-array transforms
 - [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms
 - [Concepts → Nodes](/rime-docs/concepts/nodes/) — the conceptual tour of the node system
 - [`packages/core/src/schema.ts`](https://github.com/danielsjoo/rime/blob/main/packages/core/src/schema.ts) — canonical Zod schema

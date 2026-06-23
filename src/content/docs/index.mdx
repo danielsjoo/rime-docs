@@ -26,6 +26,8 @@ import homepageDag from '../../assets/diagrams/homepage-dag.svg';
 Rime is a runtime for reproducible data work. You declare the pipeline once in `pipeline.dag.yaml`. Rime runs the graph, caches each node, captures logs, validates outputs, and writes artifacts.
 
 ```yaml
+specification_version: "2.1"
+
 nodes:
   - id: raw_orders
     kind: sql
@@ -33,9 +35,9 @@ nodes:
 
   - id: order_metrics
     kind: derive
-    input: raw_orders
-    columns:
-      revenue: "[unit_price] * [quantity]"
+    inputs: [raw_orders]
+    as: revenue
+    expr: "[unit_price] * [quantity]"
 
   - id: sales_chart
     kind: python
@@ -44,7 +46,7 @@ nodes:
       orders: order_metrics
 ```
 
-Here, SQL imports data, the derive node computes values with a simple expression syntax, and Python graphs the result. Rime captures intermediate data and loads side effects like Python plots into an organized directory, then produces a report with a runtime overview like this.
+Here, SQL imports data, the derive node computes one reviewable feature with Rime's expression language, and Python graphs the result. Rime captures intermediate data and script side effects, then produces a report with a runtime overview like this.
 
 <figure className="rime-screenshot">
   <img src={homepageDag.src} alt="A Rime DAG where a SQL node feeds a derive node, then a Python node." />
@@ -59,7 +61,7 @@ Here, SQL imports data, the derive node computes values with a simple expression
   </section>
   <section>
     <h3>🧰 One DAG, four languages</h3>
-    <p>SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders over Arrow IPC: zero-copy where possible, constant-time cast to pandas, tibble, or DuckDB table.</p>
+    <p>SQL for joins, Python for ML, R for stats, JavaScript for everything else. Same pipeline, named slots, typed boundaries. Dataframes cross language borders through Arrow-backed payloads instead of ad hoc CSV handoffs.</p>
   </section>
   <section>
     <h3>🔒 Reproducible by default</h3>
@@ -142,9 +144,9 @@ Here, SQL imports data, the derive node computes values with a simple expression
 
       - id: order_metrics
         kind: derive
-        input: raw_orders
-        columns:
-          revenue: "[unit_price] * [quantity]"
+        inputs: [raw_orders]
+        as: revenue
+        expr: "[unit_price] * [quantity]"
 
       - id: sales_chart
         kind: python

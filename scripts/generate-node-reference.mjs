@@ -579,8 +579,8 @@ const SEE_ALSO_BY_KIND = {
   linear_regression: ['- [correlation](/rime-docs/nodes/correlation/) — lighter-weight association check'],
   script: [
     '- [Python language nodes](/rime-docs/scripts/python/) — pandas-based transforms',
-    '- [R language nodes](/rime-docs/scripts/r/) — tibble-based transforms',
-    '- [JavaScript language nodes](/rime-docs/scripts/javascript/) — Node-based transforms',
+      '- [R language nodes](/rime-docs/scripts/r/) — data.frame/tibble-style transforms',
+      '- [JavaScript language nodes](/rime-docs/scripts/javascript/) — defineNode and row-array transforms',
     '- [SQL language nodes](/rime-docs/scripts/sql/) — DuckDB-backed transforms'
   ]
 };

@@ -106,7 +106,9 @@ SQL nodes share the runtime's DuckDB instance (warm — DuckDB stays loaded acro
 3. **The result is materialized as Arrow.** DuckDB exports the query result as an Arrow Table, which is then written as Parquet for downstream nodes.
 4. **Errors include the offending SQL line.** Syntax and runtime errors surface with line numbers in the run audit.
 
-Because DuckDB stays warm across SQL nodes in one run, **SQL nodes have effectively zero startup cost** — unlike Python (~200ms) or R (~500ms) cold starts.
+Because DuckDB stays warm across SQL nodes in one run, SQL nodes have very low
+startup overhead. Python and R also use warm runner sessions, but they still
+pay for language-specific imports and data conversion inside those sessions.
 
 ## When to use SQL
 

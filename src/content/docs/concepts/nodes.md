@@ -23,7 +23,7 @@ Rime inverts this. Side effects are the runtime's job; functions just compute.
 | Each task owns its own I/O | Runtime owns I/O |
 | Coordination via storage paths | Coordination via typed dataframe ports |
 | Reproducibility requires hand-rolled idempotency | Caching is automatic (content-addressed) |
-| Multi-language = orchestrating subprocess calls | Multi-language = `kind: r` in YAML; dataframes cross via Arrow IPC |
+| Multi-language = hand-wiring separate task runtimes | Multi-language = `kind: r` in YAML; dataframes cross through Rime artifacts |
 | You write the boilerplate | The runtime owns the boilerplate |
 
 This is the same intuition behind dbt's "you write the SELECT, we handle materialization" — extended past SQL into Python, R, and JavaScript.
@@ -100,7 +100,7 @@ These nodes share Rime's [expression language](/rime-docs/concepts/expressions/)
 | `pivot` | Wide-format aggregation |
 
 ### Statistical terminals
-These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. The auto-report renders them as stat-style key-value output cells.
+These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. Reports render them as stat-style key-value output cells.
 
 | Kind | What it does |
 |---|---|
@@ -133,7 +133,7 @@ Anything you can't express with the built-ins is a language node. Same functiona
     threshold: params.threshold   # scalar slot
 ```
 
-Native values per language: pandas DataFrame (Python), tibble (R), Arrow Table or row array (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
+Native values per language: pandas DataFrame (Python), data.frame/tibble-style table (R), row arrays (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
 
 ## Metadata (optional, all kinds)
 

@@ -16,6 +16,7 @@ outputs/
 │   ├── <outputName>.parquet.meta.json
 │   ├── <outputName>.json           # stat-node outputs
 │   └── <outputName>.json.meta.json
+├── manifest.json                    # artifact metadata index
 └── <reportId>.html                 # built report from `rime build`
 ```
 
@@ -33,8 +34,8 @@ Both `outputs/` and `.rime/` should be in your `.gitignore`.
 
 A node's cache key hashes:
 
-- **Node content** — `kind`, `inputs`, `expr`/`metrics`/`columns`/whatever the kind declares, `output`, and `metadata.cache`
-- **Parent output digests** — so any upstream change invalidates downstream
+- **Node content** - `kind`, `inputs` or `in`, expressions, metrics, script source refs, declared outputs, and `metadata.cache`
+- **Parent output digests** - so any upstream change invalidates downstream
 - **Spec + runtime versions**
 - **Source file digest** (for `source` nodes, the data file's content hash)
 - **Language source digest** (for `kind: python`, `kind: r`, `kind: javascript`, and `kind: sql` nodes, the source file + its declared requirements)
@@ -56,6 +57,7 @@ Useful patterns:
 - **Iterating on a script** — keep default; the engine re-runs only your changed node and its descendants
 - **Reproducing someone else's pipeline** — `--lean` to verify the result without leaving cache artifacts
 - **CI runs** — `--isolated $TMPDIR/ci-run` to keep CI outputs from polluting your local cache
+- **Checking current artifacts** — `rime verify pipeline.dag.yaml` to confirm cache keys and output digests still match
 
 ## Freezing a snapshot
 

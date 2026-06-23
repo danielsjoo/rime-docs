@@ -3,7 +3,9 @@ title: DAG showcase
 description: A multi-branch demo pipeline mixing SQL, Python, R, and built-in operators.
 ---
 
-The repo's [`examples/dag-showcase/`](https://github.com/rimekit/rime/tree/main/examples/dag-showcase) is a compact multi-branch project. It exercises file sources, SQL nodes, derive/filter/aggregate chains, terminal stat nodes, report metadata, and cache behavior.
+The repo's [`examples/dag-showcase/`](https://github.com/danielsjoo/rime/tree/main/examples/dag-showcase) is a compact multi-branch project. It exercises file sources, SQL nodes, derive/filter/aggregate chains, terminal stat nodes, report metadata, and cache behavior.
+
+![Rime Editor DAG focus screenshot showing the dag-showcase pipeline and node inspector.](/rime-docs/editor/assets/hero-dag-focus.jpg)
 
 ## What's inside
 
@@ -12,7 +14,7 @@ The repo's [`examples/dag-showcase/`](https://github.com/rimekit/rime/tree/main/
 - **Linked scripts (human-edited reference):**
   - `scripts/python_biomarker_features.py` — `n_visits ** 1.2` feature
   - `scripts/risk_adjust.R` — baseline z-score + flag
-  - `scripts/cohort_refine.sql` and `scripts/sql/patient_lab_join.sql` — kept in sync with inline SQL on the `sql_*` nodes
+  - `queries/patient_lab_wide.sql` and `queries/sql_cohort_refine.sql` — SQL source files used by the runnable DAG
 
 ## Shape
 
@@ -46,7 +48,7 @@ rime validate examples/dag-showcase/pipeline.dag.yaml
 # Run (data outputs only)
 rime run examples/dag-showcase/pipeline.dag.yaml
 
-# Build (run + render auto-report -> HTML)
+# Build (run + render the generated HTML report)
 rime build examples/dag-showcase/pipeline.dag.yaml
 ```
 
@@ -66,6 +68,14 @@ once:
 | Language-node migration pattern | `derive` nodes mirror the checked-in Python/R scripts |
 | Stat nodes | `correlation` + `chi_square` over the rolled-up site outcomes |
 | Multi-branch graph | independent feature + risk branches that converge at the site rollup |
-| Report rendering | Auto-report includes DAG nodes unless `metadata.report: false` |
+| Report rendering | Generated report includes DAG nodes unless `metadata.report: false` |
 
-If you want a smaller starting point, see [`examples/single-file/`](https://github.com/rimekit/rime/tree/main/examples/single-file).
+## What To Inspect
+
+- `pipeline.canvas.json` to see the saved editor layout for this project.
+- `queries/patient_lab_wide.sql` to see SQL named slots in action.
+- `outputs/site_outcomes/default.parquet` for the final reporting rollup.
+- `outputs/crp_vs_baseline/default.json` and `outputs/site_age_chisq/default.json` for terminal stat-node objects.
+- `outputs/run_report.html` for output sizes, warnings, and table previews.
+
+If you want a smaller starting point, see [`examples/single-file/`](https://github.com/danielsjoo/rime/tree/main/examples/single-file).
