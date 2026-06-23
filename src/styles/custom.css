@@ -1,31 +1,47 @@
-/* Palette B — Slate Mono + Electric.
- * Cool grayscale on near-white, single electric cyan accent does all the work.
- * Vibe: Vercel / Linear / modern-dev-tool. No warm tones anywhere.
+/* Rime launch tokens.
+ * Shared direction for CLI docs, Editor docs, the product page, and the app:
+ * cool slate neutrals, one cyan brand accent, semantic green/amber/red.
  */
 :root {
-  /* Accent — bright cyan-leaning, single point of color in the whole UI */
-  --sl-color-accent-low: #cffafe;
-  --sl-color-accent: #0891b2;
-  --sl-color-accent-high: #0a0e13;
+  --rime-font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --rime-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  --rime-ink: #0a0e13;
+  --rime-text: #1a202c;
+  --rime-muted: #4a5568;
+  --rime-muted-2: #718096;
+  --rime-paper: #ffffff;
+  --rime-paper-subtle: #f8fafc;
+  --rime-paper-code: #f1f5f9;
+  --rime-line: #e2e8f0;
+  --rime-line-strong: #cbd5e0;
+  --rime-accent-soft: #cffafe;
+  --rime-accent: #0891b2;
+  --rime-accent-strong: #0e7490;
+  --rime-success: #16a34a;
+  --rime-warning: #d97706;
+  --rime-danger: #dc2626;
 
-  /* Background system — very slightly cool whites */
-  --sl-color-bg: #ffffff;
-  --sl-color-bg-sidebar: #f8fafc;
-  --sl-color-bg-nav: #f8fafc;
-  --sl-color-bg-inline-code: #f1f5f9;
+  --sl-color-accent-low: var(--rime-accent-soft);
+  --sl-color-accent: var(--rime-accent);
+  --sl-color-accent-high: var(--rime-ink);
 
-  /* Text system — cool slate grays, near-black headings */
-  --sl-color-text: #1a202c;
-  --sl-color-text-accent: #0a0e13;
+  --sl-color-bg: var(--rime-paper);
+  --sl-color-bg-sidebar: var(--rime-paper-subtle);
+  --sl-color-bg-nav: var(--rime-paper-subtle);
+  --sl-color-bg-inline-code: var(--rime-paper-code);
+
+  --sl-color-text: var(--rime-text);
+  --sl-color-text-accent: var(--rime-ink);
   --sl-color-gray-1: #2d3748;
-  --sl-color-gray-2: #4a5568;
-  --sl-color-gray-3: #718096;
+  --sl-color-gray-2: var(--rime-muted);
+  --sl-color-gray-3: var(--rime-muted-2);
   --sl-color-gray-4: #a0aec0;
-  --sl-color-gray-5: #cbd5e0;
-  --sl-color-gray-6: #e2e8f0;
+  --sl-color-gray-5: var(--rime-line-strong);
+  --sl-color-gray-6: var(--rime-line);
 
-  --sl-color-hairline: #e2e8f0;
-  --sl-color-hairline-shade: #cbd5e0;
+  --sl-color-hairline: var(--rime-line);
+  --sl-color-hairline-shade: var(--rime-line-strong);
 }
 
 :root[data-theme='dark'] {
@@ -41,6 +57,16 @@
 
   --sl-color-text: #e2e8f0;
   --sl-color-text-accent: #ffffff;
+}
+
+body {
+  font-family: var(--rime-font-sans);
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--rime-font-mono);
 }
 
 /* Site chrome */
