@@ -1,35 +1,83 @@
 ---
-title: Dataset Scanning In Rime Editor
-description: Use table metrics, column profiles, row samples, and diffs while selecting nodes.
+title: Dataset scanning in Rime Editor
+description: Use table previews, shape tuples, column profiles, null counts, and source context to review each node.
 ---
 
-Dataset scanning is the quickest way to understand whether a node did what you expected.
+Dataset scanning is the editor workflow that makes Rime feel different from editing YAML alone. Every table-producing node can be inspected as a concrete dataset: shape, columns, samples, profiles, and the script or expression that produced it.
 
-## Node Scan Surface
+![Rime Editor table preview focused on sampled patient rows and column profile cards.](/rime-docs/editor/assets/table-scan-focus.jpg)
 
-When a table-producing node is selected, the Node panel should lead with:
+## What The Preview Shows
 
-- row count
-- column count
-- null cell count
-- high-cardinality column count
-- compact column profiles
-- sampled rows
-- source code or node configuration below the preview
+The selected node panel should make the output legible before you read any code:
 
-## SQL And Script Nodes
+| Surface | Why it matters |
+| --- | --- |
+| Shape tuple | The fastest signal that a node changed row or column count |
+| Cache/run state | Explains whether you are seeing fresh output or a cached artifact |
+| Column profiles | Shows type, nulls, cardinality, and distribution hints |
+| Row sample | Lets you inspect real values without opening a notebook |
+| Source/config | Keeps the SQL, script, expression, or YAML beside the data it produced |
 
-SQL and script-like nodes use named inputs. The canvas should show those inputs as real edges, and the table preview should resolve the selected node output from the current run.
+The point is not to replace analysis. The point is to make obvious pipeline mistakes visible immediately: empty cohorts, exploded joins, unexpected nulls, accidental wide pivots, or feature columns with nonsense ranges.
 
-## Review Questions
+## What To Check By Node Type
 
-- Did the row count change in the expected direction?
-- Did a transform add or remove columns intentionally?
-- Are nulls concentrated in a new or important field?
-- Do high-cardinality columns look like ids, labels, or accidental raw text?
+### Sources
 
-## Good Follow-Up Work
+Source nodes should show file path, inferred shape, sampled rows, and column profiles. For CSVs, check whether numeric-looking columns inferred correctly and whether empty strings became null.
 
-- Add column-level search and pinning.
-- Add profile deltas between selected node inputs and output.
-- Add richer previews for object/stat outputs.
+### Filters
+
+Filters should make row-count loss obvious. A filter that keeps zero rows may be logically valid, but it usually deserves a second look before downstream stats run.
+
+```yaml
+- id: repeat_visitors
+  kind: filter
+  inputs: [risk_index]
+  expr: "[n_visits] >= 1"
+```
+
+### Derives
+
+Derived columns should be easy to find in the preview. Inspect the new column's profile before trusting downstream results.
+
+```yaml
+- id: lab_load
+  kind: derive
+  inputs: [patient_lab_wide]
+  as: lab_load
+  expr: "[crp_mean] * [ldl_max] / 1000.0"
+```
+
+### Joins
+
+Joins deserve row-count attention. If an inner join unexpectedly shrinks the table, inspect key coverage. If a left join expands rows, check for many-to-many matches.
+
+### Aggregates And Pivots
+
+Aggregate and pivot nodes usually change shape dramatically. The output column names are part of the review: aliases like `[mean_risk_index]` should read like report-ready metrics.
+
+## Column Profiles Are Review Aids
+
+![Focused table sample showing patient identifiers, demographics, and lab columns.](/rime-docs/editor/assets/example-table-focus.jpg)
+
+Column profiles are useful because they compress a lot of context:
+
+- null count can reveal failed joins or missing source values
+- cardinality distinguishes IDs from low-cardinality groups
+- numeric distributions make outliers and impossible values visible
+- type hints show whether a field is usable in expression nodes and statistical nodes
+
+When a node uses the [expression language](/rime-docs/concepts/expressions/), profiles are often the quickest way to decide whether the formula made sense.
+
+## Scan Before You Script
+
+A good Rime workflow is:
+
+1. Use core nodes for visible transformations.
+2. Scan each output as it changes.
+3. Drop to SQL/Python/R/JavaScript only when the core-node expression would be harder to review than code.
+4. Return to the scan surface after the script node runs.
+
+The editor is not trying to hide code. It is trying to keep code and data side by side.

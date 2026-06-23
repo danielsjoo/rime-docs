@@ -1,29 +1,83 @@
 ---
-title: "Example: Dag Showcase"
-description: The editor launch sample used for screenshot and walkthrough validation.
+title: "Example: dag-showcase"
+description: A small Rime Editor walkthrough with sources, SQL, expression nodes, dataset scanning, statistical nodes, and report preview.
 ---
 
-`dag-showcase` is the editor launch sample used for screenshot and walkthrough validation.
+`dag-showcase` is the best first project to open in Rime Editor because it is small enough to understand in one sitting and broad enough to show the product.
 
-## What It Demonstrates
+![Rime Editor canvas focused on the dag-showcase DAG.](/rime-docs/editor/assets/hero-dag-focus.jpg)
 
-- CSV and Parquet sources
-- aggregate nodes
-- named-input SQL nodes
-- derived feature nodes
-- statistics nodes
-- table scanning
-- generated report preview
+## Project Shape
+
+The example starts with patient demographics and longitudinal lab visits:
+
+```yaml
+- id: patients_source
+  kind: source
+  path: data/patients.csv
+
+- id: labs_source
+  kind: source
+  path: data/lab_visits.parquet
+```
+
+It then rolls labs up per patient, joins demographics to lab features with SQL, builds expression-derived risk features, and ends with report-friendly statistical nodes.
+
+## Why It Shows The Editor Well
+
+| Workflow | Where to look |
+| --- | --- |
+| File ingress | `patients_source`, `labs_source` |
+| Expression language | `lab_load`, `risk_index`, `repeat_visitors` |
+| SQL with named inputs | `patient_lab_wide`, `sql_cohort_refine` |
+| Dataset scanning | `patient_lab_wide`, `risk_index`, `site_outcomes` |
+| Statistical outputs | `crp_vs_baseline`, `site_age_chisq` |
+| Report preview | the generated report tab |
 
 ## Walkthrough
 
-1. Open the `dag-showcase` project.
+1. Open `examples/dag-showcase`.
 2. Run the DAG.
 3. Select `patient_lab_wide`.
-4. Confirm the table preview shows `(6, 8)` and the SQL source beneath it.
-5. Open Report.
-6. Confirm the report DAG shows output sizes in tuple notation.
+4. Confirm the preview shows a joined patient/lab table and the SQL source.
+5. Select `lab_load` and inspect the derived feature column.
+6. Select `site_outcomes` and check that the aggregate output is one row per site.
+7. Open the report preview and inspect the output sizes and statistical sections.
 
-## Why This Example Matters
+![Rime Editor table preview for the joined patient/lab dataset.](/rime-docs/editor/assets/table-scan-focus.jpg)
 
-It is small enough to scan quickly, but it touches the workflows that make the editor feel like a product instead of a YAML viewer.
+## What To Notice
+
+The point of the example is not the medical story. The point is the review loop:
+
+- graph structure tells you where data came from
+- table previews show what each step produced
+- YAML/spec remains available when visual controls are not enough
+- statistical nodes produce reportable object outputs
+- the report collects the same run evidence into a shareable artifact
+
+## Expression Nodes In The Demo
+
+The feature-building nodes are deliberately readable:
+
+```yaml
+- id: risk_index
+  kind: derive
+  inputs: [lab_load]
+  as: risk_index
+  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+```
+
+This is a good dividing line for Rime Editor: if a formula is readable in the [expression language](/rime-docs/concepts/expressions/), keep it as a core node so reviewers can inspect it directly. If it becomes multi-step logic, promote it to SQL/Python/R/JavaScript.
+
+## Report Output
+
+![Rime Editor report preview for dag-showcase.](/rime-docs/editor/assets/report-dag-focus.jpg)
+
+The report should make the pipeline reviewable without reopening the editor:
+
+- DAG overview with output sizes
+- table sections for data-producing nodes
+- stat blocks for object-producing nodes
+- warnings near statistical results
+- browser-openable HTML artifact

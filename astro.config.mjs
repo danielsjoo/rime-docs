@@ -40,6 +40,7 @@ export default defineConfig({
           items: [
             { label: 'DAG specification', slug: 'concepts/dag' },
             { label: 'Nodes', slug: 'concepts/nodes' },
+            { label: 'Expression language', slug: 'concepts/expressions' },
             { label: 'Polyglot runtime', slug: 'concepts/polyglot' },
             { label: 'Outputs & caching', slug: 'concepts/outputs' },
             { label: 'Reports', slug: 'concepts/reports' },
