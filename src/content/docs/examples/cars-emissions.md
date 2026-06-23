@@ -130,12 +130,22 @@ rime build \
 
 The run writes:
 
-- `outputs/js_feature_build/default.parquet`
+- `outputs/js_co2_fetch/co2_by_year.parquet`
+- `outputs/js_feature_build/features.parquet`
 - `outputs/python_umap_embed/default.parquet`
 - `outputs/r_efficiency_trends/default.parquet`
 - `outputs/t_test_us_vs_japan/default.json`
 - `outputs/anova_cylinders/default.json`
+- `outputs/d3_umap_scatter/default.html`
 - `outputs/cars-emissions-narrative-report.html`
+
+## What To Inspect
+
+- `scripts/sql_cars_source.sql` for DuckDB URL ingress.
+- `scripts/js_co2_fetch.js` for a JavaScript API/CSV fetch node.
+- `scripts/python_umap.py` for a Python diagnostic transform.
+- `scripts/r_efficiency_trends.R` for an R statistical transform.
+- `report.yaml` to see the compatibility path for hand-authored report prose and ordering.
 
 ## Requirements
 

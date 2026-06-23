@@ -23,7 +23,7 @@ Rime inverts this. Side effects are the runtime's job; functions just compute.
 | Each task owns its own I/O | Runtime owns I/O |
 | Coordination via storage paths | Coordination via typed dataframe ports |
 | Reproducibility requires hand-rolled idempotency | Caching is automatic (content-addressed) |
-| Multi-language = orchestrating subprocess calls | Multi-language = `kind: r` in YAML; dataframes cross via Arrow IPC |
+| Multi-language = hand-wiring separate task runtimes | Multi-language = `kind: r` in YAML; dataframes cross through Rime artifacts |
 | You write the boilerplate | The runtime owns the boilerplate |
 
 This is the same intuition behind dbt's "you write the SELECT, we handle materialization" — extended past SQL into Python, R, and JavaScript.
@@ -82,6 +82,16 @@ Most pipelines don't even need to write a custom function for common shapes. Rim
 | `sort` | Order rows by one or more expressions |
 | `aggregate` | Group + reduce, with named metrics |
 
+These nodes share Rime's [expression language](/rime-docs/concepts/expressions/). The useful pattern is to keep data-shaping logic visible as small formulas instead of hiding every operation inside a script node:
+
+```yaml
+- id: risk_index
+  kind: derive
+  inputs: [patient_lab_wide]
+  as: risk_index
+  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+```
+
 ### Multi-input combinators
 | Kind | What it does |
 |---|---|
@@ -90,7 +100,7 @@ Most pipelines don't even need to write a custom function for common shapes. Rim
 | `pivot` | Wide-format aggregation |
 
 ### Statistical terminals
-These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. The auto-report renders them as stat-style key-value output cells.
+These return a small JSON-shaped result (test statistic, p-value, etc.) rather than a table. Reports render them as stat-style key-value output cells.
 
 | Kind | What it does |
 |---|---|
@@ -100,6 +110,8 @@ These return a small JSON-shaped result (test statistic, p-value, etc.) rather t
 | `chi_square` | Categorical independence test |
 | `correlation` | Pearson / Spearman correlation between two columns |
 | `linear_regression` | Single-feature OLS, optional train/test split |
+
+Statistical nodes also emit assumption warnings. Those warnings show up in reports and the editor review surfaces because they are often as important as the p-value: low expected cell counts for chi-square, small or skewed groups for t-tests/ANOVA, Pearson/Spearman disagreement for correlation, and high-residual observations for linear regression.
 
 ### Composition
 | Kind | What it does |
@@ -121,7 +133,7 @@ Anything you can't express with the built-ins is a language node. Same functiona
     threshold: params.threshold   # scalar slot
 ```
 
-Native values per language: pandas DataFrame (Python), tibble (R), Arrow Table or row array (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
+Native values per language: pandas DataFrame (Python), data.frame/tibble-style table (R), row arrays (JS), temp table (SQL). See [Polyglot runtime](/rime-docs/concepts/polyglot/) for the per-language details.
 
 ## Metadata (optional, all kinds)
 

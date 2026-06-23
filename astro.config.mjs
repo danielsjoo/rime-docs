@@ -27,6 +27,7 @@ export default defineConfig({
             { label: 'Two ways to use Rime', slug: 'get-started/two-ways-to-use-rime' },
             { label: 'Install', slug: 'get-started/install' },
             { label: 'Quick start', slug: 'get-started/quick-start' },
+            { label: 'Troubleshooting', slug: 'get-started/troubleshooting' },
           ],
         },
         {
@@ -40,6 +41,7 @@ export default defineConfig({
           items: [
             { label: 'DAG specification', slug: 'concepts/dag' },
             { label: 'Nodes', slug: 'concepts/nodes' },
+            { label: 'Expression language', slug: 'concepts/expressions' },
             { label: 'Polyglot runtime', slug: 'concepts/polyglot' },
             { label: 'Outputs & caching', slug: 'concepts/outputs' },
             { label: 'Reports', slug: 'concepts/reports' },
@@ -62,8 +64,13 @@ export default defineConfig({
         {
           label: 'CLI',
           items: [
+            { label: 'Overview', slug: 'cli' },
             { label: 'rime validate', slug: 'cli/validate' },
+            { label: 'rime check', slug: 'cli/check' },
             { label: 'rime run', slug: 'cli/run' },
+            { label: 'rime build', slug: 'cli/build' },
+            { label: 'rime verify', slug: 'cli/verify' },
+            { label: 'rime introspect', slug: 'cli/introspect' },
           ],
         },
         {

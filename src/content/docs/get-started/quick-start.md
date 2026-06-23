@@ -82,14 +82,11 @@ Rime writes artifacts next to the DAG:
 examples/single-file/outputs/
 ├── manifest.json
 ├── penguins/
-│   ├── default.parquet
-│   └── default.parquet.meta.json
+│   └── default.parquet
 ├── adelie_only/
-│   ├── default.parquet
-│   └── default.parquet.meta.json
+│   └── default.parquet
 └── by_island/
-    ├── default.parquet
-    └── default.parquet.meta.json
+    └── default.parquet
 ```
 
 The final table has three rows:
@@ -112,8 +109,8 @@ rime build examples/single-file/pipeline.dag.yaml
 examples/single-file/outputs/run_report.html
 ```
 
-Open that file to inspect node status, cache state, schemas, preview rows, and
-the final aggregate output.
+Open that file to inspect node status, cache state, output sizes, schemas,
+preview rows, and the final aggregate output.
 
 ## Hide Noisy Nodes
 

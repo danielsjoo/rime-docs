@@ -9,6 +9,8 @@ Rime examples are complete projects: DAGs, scripts, data, and the expected
 artifacts they write. Use this section as a cookbook after the
 [quick start](/rime-docs/get-started/quick-start/).
 
+![Rime report preview showing the DAG overview, cached nodes, and persisted table outputs.](../../../assets/screenshots/rime-runtime-report.png)
+
 ## Choose an Example
 
 | If you want to learn... | Start with |
@@ -74,3 +76,7 @@ Each example page follows the same format:
 3. The important DAG nodes.
 4. How to validate, run, and build.
 5. Which artifacts to inspect.
+
+When evaluating an example, open both the DAG and the generated report. The DAG
+shows the contract; the report shows whether the contract produced the expected
+tables, stats, warnings, and cache behavior.

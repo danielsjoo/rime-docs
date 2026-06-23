@@ -1,13 +1,13 @@
 ---
 title: JavaScript language nodes
-description: How JavaScript language nodes work in Rime — defineNode helper, Arrow tables or row arrays in, dataframes out, runs in-process in Node 22+.
+description: How JavaScript language nodes work in Rime, including defineNode, row inputs, async support, and outputs.
 ---
 
-A JavaScript language node uses `kind: javascript`. You write a function via the `defineNode(...)` helper exported from `@rimekit/runtime`; the runtime invokes it with named arguments and captures the return value.
+A JavaScript language node uses `kind: javascript`. Scripts export a
+`defineNode(...)` bundle from `@rimekit/runtime`; Rime reads the manifest and
+calls `run(...)` with named slot values.
 
-JavaScript language nodes run **in-process** with the runtime — no subprocess spawn. This makes them the cheapest of the four languages.
-
-## Minimum example
+## Minimum Example
 
 ```yaml
 - id: enriched
@@ -23,132 +23,131 @@ JavaScript language nodes run **in-process** with the runtime — no subprocess 
 import { defineNode } from '@rimekit/runtime'
 
 export default defineNode({
-  in:  { cohort: 'table', threshold: 'any' },
+  in: { cohort: 'table', threshold: 'any' },
   out: { default: 'table' },
   run: async ({ cohort, threshold }) => {
-    return cohort.rows.map((r) => ({
-      ...r,
-      flag: r.score > Number(threshold),
+    return cohort.rows.map((row) => ({
+      ...row,
+      flag: row.score > Number(threshold),
     }))
   },
 })
 ```
 
-The `defineNode(...)` call wires your function into the runtime's named-slot protocol. Argument names in the destructured object must match the YAML's `in:` keys.
+The manifest's `in` keys should match the YAML `in:` slot keys. Bare default
+functions are rejected in Rime 2.1.
 
-## Function signature
+## Function Signature
 
-The runtime passes a single argument: a destructurable object containing your slot values.
+The runtime passes a single object to `run`.
 
-| YAML `in:` slot | Native JS shape |
+| YAML `in:` slot | JavaScript value |
 |---|---|
-| Upstream node ID (e.g. `cohort: features`) | **`{ schema, rows }`** — `rows` is an array of plain objects; `schema` is the Arrow schema |
-| `params.<name>` | Native JS scalar (`number`, `string`, `boolean`, `Array`, plain object) |
+| Upstream node ref, for example `cohort: features` | `{ rows: Array<Record<string, unknown>> }` |
+| Param ref, for example `threshold: params.threshold` | native JS scalar/array/object |
 
-`cohort.rows` is the most ergonomic way to consume the data. If you need columnar access or zero-copy access to the Arrow buffer, you can also import the Arrow JS library and work with `cohort.table` (the underlying `arrow.Table`).
+```js
+run: ({ cohort, threshold }) => {
+  for (const row of cohort.rows) {
+    ...
+  }
+}
+```
 
 ## Outputs
 
-### Single output (default)
+### Single Output
 
-Return an array of plain objects (row-oriented) or an Arrow `Table` (columnar). The runtime accepts both and serializes to Parquet for the next node.
+Return an array of plain row objects:
 
 ```js
 export default defineNode({
-  in:  { orders: 'table' },
+  in: { orders: 'table' },
   out: { default: 'table' },
-  run: ({ orders }) => orders.rows.filter((r) => r.total > 0),
+  run: ({ orders }) => orders.rows.filter((row) => row.total > 0),
 })
 ```
 
-### Multiple named outputs
+### Multiple Outputs
 
-Return an object whose keys are output names. Each value can be a row array or an Arrow Table:
-
-```js
-export default defineNode({
-  in:  { cohort: 'table' },
-  out: { train: 'table', test: 'table' },
-  run: ({ cohort }) => {
-    const all = cohort.rows
-    const n   = Math.floor(all.length * 0.8)
-    return {
-      train: all.slice(0, n),
-      test:  all.slice(n),
-    }
-  },
-})
-```
-
-YAML must declare matching outputs:
+Declare named outputs in the manifest and YAML, then return an object with
+matching keys:
 
 ```yaml
 - id: split
   kind: javascript
   source: scripts/split.mjs
-  in:  { cohort: features }
+  in: { cohort: features }
   out: { train: table, test: table }
 ```
 
-Downstream references: `split.train`, `split.test`.
-
-### Non-tabular outputs
-
-For scalars or structured JSON (e.g. an API response, a computed value), declare `out: { result: 'any' }` and return whatever you want — it gets JSON-serialized.
-
 ```js
 export default defineNode({
-  in:  { config: 'any' },
-  out: { result: 'any' },
-  run: async ({ config }) => {
-    const resp = await fetch(config.endpoint)
-    return await resp.json()
+  in: { cohort: 'table' },
+  out: { train: 'table', test: 'table' },
+  run: ({ cohort }) => {
+    const pivot = Math.floor(cohort.rows.length * 0.8)
+    return {
+      train: cohort.rows.slice(0, pivot),
+      test: cohort.rows.slice(pivot),
+    }
   },
 })
 ```
 
-This is the canonical pattern for external API fetches (e.g. the `JS fetch CO2` node in the cars-emissions example).
+Downstream refs are `split.train` and `split.test`.
 
-## What happens under the hood
+### Non-Tabular Output
 
-JavaScript is the special case among the four languages — it runs **in-process** with the Node runtime that's already executing Rime:
+Use `any` for JSON-like values such as API responses or metadata:
 
-1. **Inputs stay as Arrow buffers in memory.** No subprocess spawn, no serialization across processes. The Arrow Table is passed directly to your `run(...)` function.
-2. **Row materialization is on-demand.** `cohort.rows` is a lazy getter — the first access materializes the row array from the Arrow columns. For 1k-row tables this is ~microseconds; for million-row tables, you might want to use `cohort.table` and iterate columnwise instead.
-3. **`cohort.table` is the raw Arrow JS `Table` object.** Use this for zero-copy columnar access:
-   ```js
-   const ages = cohort.table.getChild('age').toArray()  // typed array, no allocation
-   ```
-4. **Your function runs.** Errors propagate to the runtime's audit trail with full stack traces.
-5. **Outputs are converted back to Arrow** and written to Parquet for downstream nodes.
+```js
+export default defineNode({
+  in: { config: 'any' },
+  out: { result: 'any' },
+  run: async ({ config }) => {
+    const response = await fetch(config.endpoint)
+    return response.json()
+  },
+})
+```
 
-Because JavaScript runs in-process, **error stack traces are first-class** — you get full line numbers and source-mapped locations in the run audit. This is the language with the tightest developer feedback loop.
+## Runtime Model
 
-## Async support
+JavaScript nodes run in a Node child process per node. The subprocess imports
+your script, verifies the `defineNode` bundle, calls `run(...)`, and sends the
+result back to the runtime.
 
-`run` can be `async`. The runtime awaits it. Use this for external API calls, file I/O outside the DAG, or any IO-bound work:
+This keeps script execution separate from the main CLI/editor process while
+still using the same Node version that launched Rime. JavaScript is a good fit
+for API fetches, row-level reshaping, and logic that already belongs close to a
+web/product codebase.
+
+## Async Support
+
+`run` can be `async`; the runtime awaits it.
 
 ```js
 run: async ({ config }) => {
-  const resp = await fetch(config.endpoint)
-  const data = await resp.json()
-  return data.rows.map((r) => ({ ts: r.timestamp, value: r.measurement }))
+  const response = await fetch(config.endpoint)
+  const data = await response.json()
+  return data.rows.map((row) => ({ ts: row.timestamp, value: row.measurement }))
 }
 ```
 
+Avoid nondeterministic values such as `Date.now()` or `Math.random()` unless
+they are passed in through `params`, because params become part of the cache
+contract.
+
 ## Environment
 
-Required: Node 22+ (the same runtime that powers the Rime CLI; nothing extra to install).
+Required: Node 22+, supplied by the same environment that runs the Rime CLI or
+desktop app.
 
-JavaScript language nodes are the recommended default for:
-- External API fetches
-- Lightweight reshaping (row maps, filters, column derives) where SQL would be overkill
-- Anything you'd otherwise write a one-off Python script for, but want zero cold-start cost
+## See Also
 
-## See also
-
-- [Python language nodes](/rime-docs/scripts/python/) — same protocol, pandas DataFrame native
-- [R language nodes](/rime-docs/scripts/r/) — same protocol, tibble native
-- [SQL language nodes](/rime-docs/scripts/sql/) — runs against DuckDB
-- [Language node reference](/rime-docs/nodes/script/) — full field list
-- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) — the cross-cutting design
+- [Python language nodes](/rime-docs/scripts/python/) - pandas and matplotlib
+- [R language nodes](/rime-docs/scripts/r/) - R functions and plot returns
+- [SQL language nodes](/rime-docs/scripts/sql/) - DuckDB temp tables
+- [Language node reference](/rime-docs/nodes/script/) - full field list
+- [Polyglot runtime overview](/rime-docs/concepts/polyglot/) - cross-language design

@@ -7,7 +7,9 @@ description: Execute a DAG and persist outputs.
 rime run <pipeline.dag.yaml> [options]
 ```
 
-Run the DAG end-to-end. Reads cache where keys match, executes nodes whose inputs have changed, and persists outputs under `outputs/`. Does not render a report — use [`rime build`](#related-commands) for that.
+Run the DAG end-to-end. Reads cache where keys match, executes nodes whose
+inputs have changed, and persists outputs under `outputs/`. It does not render
+a report; use [`rime build`](/rime-docs/cli/build/) for that.
 
 ## Common usage
 
@@ -63,22 +65,32 @@ See [Outputs & caching](/rime-docs/concepts/outputs/) for the full semantics.
 
 ## Output
 
-Per-node progress is streamed to stdout:
+Per-node lifecycle events are streamed to stdout, followed by a summary table:
 
 ```
-[run] patients          source       ✓  loaded 1247 rows from data/patients.csv
-[run] adults            filter       ✓  848 rows
-[run] features          script:python ✓  848 rows, captured 12 lines of stdout
-[run] by_site           aggregate    ✓  6 rows
-[run] complete in 1.3s
+penguins: pending
+penguins: planning
+penguins: cached cache=hit elapsedMs=24
+penguins: success cache=hit rowsOut=10
+Run started: 2026-06-23T06:21:48.068Z
+Run completed: 2026-06-23T06:21:48.124Z
+Run summary:
+Node         Status   Cache  Rows In  Rows Out
+-----------  -------  -----  -------  --------
+penguins     SUCCESS  hit    -        10
+adelie_only  SUCCESS  hit    10       5
+by_island    SUCCESS  hit    5        3
 ```
 
-Cached nodes show `(cache hit)`; failures abort the run and print the subprocess traceback.
+Failures abort the run and print the relevant validation error, script
+traceback, or executor error to stderr.
 
 ## Related commands
 
 - [`rime validate`](/rime-docs/cli/validate/) — pre-flight checks without executing
-- `rime build` — `rime run` + render the DAG-driven HTML report, atomic
+- [`rime check`](/rime-docs/cli/check/) — pre-flight checks plus optional report spec validation
+- [`rime build`](/rime-docs/cli/build/) — `rime run` plus render the DAG-driven HTML report
+- [`rime verify`](/rime-docs/cli/verify/) — check whether existing cached outputs are still current
 - `rime freeze` — snapshot the current `outputs/` for archival
 
 ## Exit codes

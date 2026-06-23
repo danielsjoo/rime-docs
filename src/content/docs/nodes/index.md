@@ -1,36 +1,74 @@
 ---
 title: Node reference
-description: Field reference for Rime core nodes and language nodes.
+description: Field reference and review guidance for Rime core nodes, statistical nodes, subgraphs, and language nodes.
 ---
 
-Rime nodes are typed DAG steps. Core nodes cover common table operations and statistical checks; language nodes let you write custom Python, R, JavaScript, or SQL when a built-in does not fit.
+Rime nodes are typed DAG steps. Some shape tables, some produce statistical objects, and language nodes let you drop into Python, R, JavaScript, or SQL when a built-in is not enough.
 
-## Core transforms
+## How To Read These Pages
 
-- [source](/rime-docs/nodes/source/) — file-based ingress for CSV, JSON, NDJSON, and Parquet
-- [filter](/rime-docs/nodes/filter/) — keep rows matching a boolean expression
-- [derive](/rime-docs/nodes/derive/) — add one computed column
-- [aggregate](/rime-docs/nodes/aggregate/) — group rows and compute metrics
-- [select](/rime-docs/nodes/select/) — keep a named subset of columns
-- [sort](/rime-docs/nodes/sort/) — order rows by one or more expressions
-- [join](/rime-docs/nodes/join/) — inner or left join on column keys
-- [pivot](/rime-docs/nodes/pivot/) — wide-format aggregation
-- [concat](/rime-docs/nodes/concat/) — stack tables row-wise
-- [subgraph](/rime-docs/nodes/subgraph/) — embed another DAG as a node
+Each node page explains:
 
-## Statistical checks
+- the mental model
+- when to use the node
+- required fields
+- input and output shape
+- expression-language behavior when relevant
+- editor/report behavior
+- warnings, assumptions, and modeling notes
 
-- [t_test](/rime-docs/nodes/t_test/) — two-sample t-test
-- [anova](/rime-docs/nodes/anova/) — one-way analysis of variance
-- [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) — non-parametric two-sample test
-- [chi_square](/rime-docs/nodes/chi_square/) — test independence between categorical columns
-- [correlation](/rime-docs/nodes/correlation/) — Pearson or Spearman correlation
-- [linear_regression](/rime-docs/nodes/linear_regression/) — single-feature ordinary least squares regression
+For transform formulas, start with [Expression language](/rime-docs/concepts/expressions/). For script-backed custom logic, start with [language nodes](/rime-docs/nodes/script/).
 
-## Language nodes
+## Source And Table Transforms
 
-- [language nodes](/rime-docs/nodes/script/) — shared fields for Python, R, JavaScript, and SQL nodes
-- [Python](/rime-docs/scripts/python/) — pandas-based transforms
-- [R](/rime-docs/scripts/r/) — tibble-based transforms
-- [JavaScript](/rime-docs/scripts/javascript/) — Node-based transforms
-- [SQL](/rime-docs/scripts/sql/) — DuckDB-backed transforms
+| Node | Use it for | Watch for |
+| --- | --- | --- |
+| [source](/rime-docs/nodes/source/) | CSV, JSON, NDJSON, Parquet ingress | inferred types, missing paths, report noise |
+| [filter](/rime-docs/nodes/filter/) | row-level cohort gates | unexpected row loss |
+| [derive](/rime-docs/nodes/derive/) | one new feature column | null behavior, unreadable formulas |
+| [aggregate](/rime-docs/nodes/aggregate/) | grouped or global metrics | metric aliases, collapsed row counts |
+| [select](/rime-docs/nodes/select/) | schema narrowing | accidental column drops |
+| [sort](/rime-docs/nodes/sort/) | review/report ordering | invisible changes when only row order changes |
+
+## Combining Tables
+
+| Node | Use it for | Watch for |
+| --- | --- | --- |
+| [join](/rime-docs/nodes/join/) | enriching a left table from a right table | many-to-many row expansion |
+| [pivot](/rime-docs/nodes/pivot/) | long-to-wide summaries | high-cardinality column explosion |
+| [concat](/rime-docs/nodes/concat/) | stacking peer tables into one tidy table | schema mode and added group labels |
+
+## Statistical Nodes
+
+Statistical nodes return object outputs. They are report-friendly terminals and can emit assumption warnings.
+
+| Node | Use it for | Warning surface |
+| --- | --- | --- |
+| [t_test](/rime-docs/nodes/t_test/) | two-group mean comparison | small/skewed groups, outliers, high variance ratio |
+| [anova](/rime-docs/nodes/anova/) | multi-group mean comparison | small/skewed groups, outliers, high variance ratio |
+| [mann_whitney_u](/rime-docs/nodes/mann_whitney_u/) | rank-based two-group comparison | group validity; node-specific warnings are not emitted yet |
+| [chi_square](/rime-docs/nodes/chi_square/) | categorical independence | low expected cell counts |
+| [correlation](/rime-docs/nodes/correlation/) | pairwise numeric association | small n, Pearson/Spearman disagreement |
+| [linear_regression](/rime-docs/nodes/linear_regression/) | single-predictor OLS | small n, high residual outliers |
+
+## Composition And Escape Hatches
+
+| Node | Use it for |
+| --- | --- |
+| [subgraph](/rime-docs/nodes/subgraph/) | wrapping an external DAG behind explicit bindings and outputs |
+| [language nodes](/rime-docs/nodes/script/) | custom Python, R, JavaScript, or SQL logic |
+
+## Shared Node Fields
+
+Every node has an `id`, `kind`, and optional `metadata`.
+
+```yaml
+metadata:
+  label: "Friendly node label"
+  group: "feature_engineering"
+  report: false
+  visual_stats: ["row_count"]
+  cache: false
+```
+
+Use `metadata.label` generously. Labels are what reviewers see on the editor canvas and in report DAGs, so they should explain the intent, not just repeat the node id.

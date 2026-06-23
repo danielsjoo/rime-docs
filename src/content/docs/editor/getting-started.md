@@ -1,30 +1,71 @@
 ---
-title: Rime Editor Getting Started
-description: Open a project, run the DAG, and learn the main editor surfaces.
+title: Rime Editor getting started
+description: Open a Rime project, run the DAG, inspect node outputs, and preview the report.
 ---
 
-Rime Editor is the desktop product surface for Rime pipelines. The CLI docs explain runtime concepts; this guide explains the app workflow.
+Rime Editor is the visual workbench for the same `pipeline.dag.yaml` the CLI runs. The app is not a separate project format: it opens a Rime folder, renders the DAG, lets you inspect every node output, and keeps the YAML/spec close enough that you can always drop back to files.
 
-## Open A Project
+![Rime Editor showing the dag-showcase pipeline canvas and selected node inspector.](/rime-docs/editor/assets/hero-dag-focus.jpg)
 
-1. Start the app with `npm run dev`.
-2. Choose a recent Rime project or open a project folder.
-3. Confirm the DAG canvas renders and the status pill shows the latest run state.
+## The First Five Minutes
 
-## First Pass
+1. Open a Rime project folder.
+2. Run the DAG or let the editor use the latest cached outputs.
+3. Click a source or transform node.
+4. Read the selected node panel: shape, cached/run state, table preview, column profiles, and source/config.
+5. Open the report preview and use `View in browser` when you want the generated HTML artifact.
 
-- Use the canvas to orient around sources, transforms, scripts, statistics, and report nodes.
-- Select a node to open the Node panel.
-- Switch to Spec when you want to inspect or edit the YAML directly.
-- Switch to Report when you want to preview the current run report.
+The fastest demo project is [`examples/dag-showcase`](https://github.com/danielsjoo/rime/tree/main/examples/dag-showcase). It has CSV and Parquet sources, expression nodes, SQL, aggregate rollups, statistical terminals, and a report.
 
-## What To Check First
+## What You Are Looking At
 
-- Source nodes show expected row and column counts.
-- SQL/script nodes show named input edges.
-- The selected node panel shows table metrics and source code together.
-- The report preview reflects the current spec and can open in a browser.
+The canvas is the pipeline:
 
-## Where CLI Docs Still Belong
+- source nodes at the top bring files into the DAG
+- core transform nodes shape the tables
+- SQL/script nodes show named input edges
+- statistical nodes produce object outputs for reports
+- selected nodes open a right-side inspector
 
-Keep runtime flags, package installation, and CLI execution reference in the main Rime docs. Keep editor screenshots, app navigation, and product walkthroughs here.
+![Focused Rime Editor DAG canvas with table-producing and statistical nodes.](/rime-docs/editor/assets/table-scan-focus.jpg)
+
+The inspector is where the editor earns its keep. It should answer:
+
+- Did this node run, cache, fail, or skip?
+- What shape did it output?
+- Which columns changed?
+- Are nulls, high-cardinality columns, or warnings worth investigating?
+- What expression, YAML, SQL, or script produced this output?
+
+## Read The Spec Without Leaving Context
+
+The editor keeps the YAML visible because the spec is still the source of truth.
+
+![Rime Editor showing the selected node YAML/spec view.](/rime-docs/editor/assets/yaml-spec-focus.jpg)
+
+Use the spec view when:
+
+- a visual control does not expose the field you need yet
+- you want to inspect named slots like `in:` and `out:`
+- a review comment needs an exact YAML diff
+- you are moving from editor exploration to CLI/CI execution
+
+## Preview The Report
+
+Reports are generated from the current run. The editor preview is for review; the browser view is the artifact you can share or archive.
+
+![Rime Editor report preview with the report DAG and node output sections.](/rime-docs/editor/assets/report-dag-focus.jpg)
+
+Report preview is especially useful after statistical nodes, because warnings and assumptions sit next to the result instead of being buried in logs.
+
+## Where The CLI Still Fits
+
+Use the editor to design, inspect, and debug. Use the CLI when you need repeatable automation:
+
+```bash
+rime validate pipeline.dag.yaml
+rime run pipeline.dag.yaml
+rime build pipeline.dag.yaml
+```
+
+Both surfaces consume the same files and produce the same outputs.

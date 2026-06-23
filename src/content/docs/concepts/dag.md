@@ -39,7 +39,7 @@ defaults at run time.
   metadata:                      # optional; closed schema
     label: "Friendly label"
     group: "ingest"
-    report: false                # omit or true to include in auto-report
+    report: false                # omit or true to include in generated reports
     visual_stats: ["row_count"]
     cache: false                 # boolean | { policy: ttl, seconds: N }
 ```
@@ -128,18 +128,18 @@ For one-off DAGs, drop the marker; everything resolves relative to the DAG file.
 
 Each has its own reference page under [Node Reference](/rime-docs/nodes/).
 
-## Expression DSL
+## Expression language
 
-`filter.expr`, `derive.expr`, `aggregate.metrics[]`, `aggregate.groupBy[]`, and `sort.by[].expr` use a small expression DSL. Column refs go in `[brackets]`; literals are plain values.
+`filter.expr`, `derive.expr`, `aggregate.metrics[]`, `aggregate.groupBy[]`, `sort.by[].expr`, and expression join keys use Rime's small [expression language](/rime-docs/concepts/expressions/). Column refs go in `[brackets]`; literals are plain values.
 
 ```yaml
 expr: "[age] >= 18 and [status] == 'active'"
 metrics:
   - "[mean_age] = [age].mean()"
-  - "[median_score] = [score].median()"
+  - "[max_score] = [score].max()"
 ```
 
-Supported operators: arithmetic (`+`, `-`, `*`, `/`, `%`), comparison (`==`, `!=`, `<`, `>`, `<=`, `>=`), boolean (`and`, `or`, `not`), and a small library of column-method calls (`.mean()`, `.median()`, `.sum()`, `.count()`, `.min()`, `.max()`, `.std()`).
+Supported operators include arithmetic (`+`, `-`, `*`, `/`), comparison (`==`, `!=`, `<`, `>`, `<=`, `>=`), boolean (`and`, `or`, `not`), membership (`in (...)`), function calls like `coalesce(...)`, and column methods like `.mean()`, `.sum()`, `.count()`, `.lowercase()`, and `.to_float()`.
 
 ## Report Inclusion
 

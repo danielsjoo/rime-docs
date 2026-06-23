@@ -3,54 +3,79 @@ title: Install
 description: Install the Rime CLI and its language sidecars.
 ---
 
-Rime ships in two flavors: a single-file binary (no Node required) and a set of npm packages (for programmatic use). Pick whichever fits your workflow.
+Rime is still pre-release. The supported path today is to run the CLI from a
+local checkout. Tagged binaries and published npm packages are planned, but
+they are not available yet.
 
-## Binary (recommended for end users)
-
-Release binaries are not published yet. Once the first tagged build exists, the
-install paths will be:
-
-```bash
-# macOS / Linux (Homebrew)
-brew install rimekit/tap/rime
-
-# Manual download
-curl -L https://github.com/rimekit/rime/releases/latest/download/rime-$(uname -s)-$(uname -m) -o /usr/local/bin/rime
-chmod +x /usr/local/bin/rime
-```
-
-## npm (for programmatic use)
-
-Use the npm packages when you are embedding Rime or running from a Node-based
-environment:
+## Current Source Install
 
 ```bash
-npm install @rimekit/core         # DAG schema + engine
-npm install @rimekit/lineage      # lineage utilities
-npm install @rimekit/runtime      # CLI + script executors (provides the `rime` bin)
+git clone https://github.com/danielsjoo/rime
+cd rime
+npm install
+npm run build:all
 ```
 
-After installing `@rimekit/runtime`, the `rime` command will be available via `npx`:
+Run the built CLI with Node:
 
 ```bash
-npx rime --help
+node packages/runtime/dist/cli.js validate examples/single-file/pipeline.dag.yaml
 ```
 
-## Language sidecars
+Expected output:
 
-If your DAG includes Python or R language nodes, you need a working interpreter on PATH (or pointed at via `--python-bin` / `--rscript-bin`) with the required packages installed.
+```text
+Root: /path/to/rime/examples/single-file
+Spec: /path/to/rime/examples/single-file/pipeline.dag.yaml
+Sources resolved: 1
+Validation OK
+```
+
+For day-to-day local work, add a shell alias:
+
+```bash
+alias rime="node /path/to/rime/packages/runtime/dist/cli.js"
+```
+
+Then verify the alias:
+
+```bash
+rime validate examples/single-file/pipeline.dag.yaml
+rime check examples/single-file/pipeline.dag.yaml
+```
+
+## Planned Release Installs
+
+The intended release channels are:
+
+- a single-file CLI binary for macOS, Linux, and Windows
+- published `@rimekit/*` npm packages for programmatic use
+- packaged Rime Editor builds that bundle the compatible runtime
+
+Until those channels exist, avoid docs, scripts, or deployment steps that assume
+Homebrew, published runtime packages, or version-reporting CLI flags work from
+a clean machine.
+
+## Language Sidecars
+
+Core nodes and SQL nodes work after the Node build. If your DAG includes Python
+or R language nodes, point Rime at an interpreter with the required packages
+installed.
 
 ### Python
 
-Minimum: Python 3.11. Required packages: `pyarrow` (data interchange), plus whatever your scripts import.
+Minimum: Python 3.11. Required packages: `pyarrow` and `pandas`, plus whatever
+your scripts import.
 
 ```bash
-# Recommended: use uv to manage an isolated environment
 uv venv .venv
 source .venv/bin/activate
 uv pip install pyarrow pandas
+```
 
-# Or stock pip
+Or with stock `venv`:
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install pyarrow pandas
@@ -66,7 +91,8 @@ export RIME_PYTHON_BIN=$(pwd)/.venv/bin/python
 
 ### R
 
-Minimum: R 4.0. Required packages: `arrow`, `jsonlite`, plus whatever your scripts use.
+Minimum: R 4.0. Required packages: `arrow`, `jsonlite`, and `tibble`, plus
+whatever your scripts import.
 
 ```r
 install.packages(c("arrow", "jsonlite", "tibble"))
@@ -75,17 +101,19 @@ install.packages(c("arrow", "jsonlite", "tibble"))
 Point Rime at it:
 
 ```bash
-rime run pipeline.dag.yaml --rscript-bin $(which Rscript)
+rime run pipeline.dag.yaml --rscript-bin "$(which Rscript)"
 # or
-export RIME_RSCRIPT_BIN=$(which Rscript)
+export RIME_RSCRIPT_BIN="$(which Rscript)"
 ```
 
-## Verifying the install
+## Smoke Test
+
+After the source install, use the smallest checked-in example:
 
 ```bash
-rime --help
-rime --version
 rime validate examples/single-file/pipeline.dag.yaml
+rime build examples/single-file/pipeline.dag.yaml --out /tmp/rime-single-file-report.html
 ```
 
-If all three succeed, move on to the [Quick start](/rime-docs/get-started/quick-start/).
+If both commands succeed, continue to the
+[Quick start](/rime-docs/get-started/quick-start/).

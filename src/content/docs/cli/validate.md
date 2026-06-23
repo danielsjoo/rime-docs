@@ -7,7 +7,7 @@ description: Validate a DAG (or DAG + report) without running it.
 rime validate <pipeline.dag.yaml> [--source source_id=path]
 ```
 
-Parse the DAG, verify the schema, and check graph integrity (no cycles, all input refs resolve). No execution.
+Parse the DAG, verify the schema, and check graph integrity. No nodes execute.
 
 ## What it checks
 
@@ -17,7 +17,7 @@ Parse the DAG, verify the schema, and check graph integrity (no cycles, all inpu
 4. **Input ref resolution** — every `inputs:` ref points at a known node (`nodeId` or `nodeId.outputName`)
 5. **Acyclic** — no cycles; if one is found, the offending node id is in the error
 6. **Source paths** — `kind: source` `path:` must be resolvable from the DAG directory (unless overridden by `--source`)
-7. **Report metadata** — node `metadata.report` values are checked by the closed DAG schema
+7. **Report metadata** - node `metadata.report` values are checked by the closed DAG schema
 
 ## Flags
 
@@ -28,13 +28,16 @@ Parse the DAG, verify the schema, and check graph integrity (no cycles, all inpu
 
 ## Output
 
-On success, prints a one-line summary:
+On success:
 
 ```
-✅ pipeline.dag.yaml validated (14 nodes, 0 warnings)
+Root: /path/to/project
+Spec: /path/to/project/pipeline.dag.yaml
+Sources resolved: 1
+Validation OK
 ```
 
-On failure, structured errors:
+On failure, structured errors use stable prefixes:
 
 ```
 [V2_DAG_SCHEMA pipeline.dag.yaml:nodes[3].kind]
@@ -46,6 +49,11 @@ On failure, structured errors:
 ```
 
 Error codes have stable prefixes: `V2_DAG_SCHEMA`, `V2_DAG_GRAPH`, `V2_REPORT_REF`, `V2_PARAM`.
+
+## Related Commands
+
+- [`rime check`](/rime-docs/cli/check/) - validate DAG plus optional report wiring.
+- [`rime run`](/rime-docs/cli/run/) - execute the DAG after validation passes.
 
 ## Exit codes
 
