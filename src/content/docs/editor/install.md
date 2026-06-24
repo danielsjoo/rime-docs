@@ -1,69 +1,33 @@
 ---
-title: Editor Install
-description: How to run and package Rime Editor during the beta.
+title: Editor Availability
+description: Rime Editor is coming soon. Public downloads and installers are not available yet.
 ---
 
-Rime Editor is currently a source-built Electron app. Public downloads and
-signed installers are not published yet.
+Rime Editor is coming soon. Public downloads, signed installers, and packaged
+desktop builds are not available yet.
 
-## Current Dev Install
+Use the [Rime CLI](/get-started/install/) for supported workflows today. The
+Editor pages in this section preview the intended desktop workflow so the
+product surface and runtime model can stay aligned while the app is being
+prepared.
 
-Clone `rime` and `rime-editor` next to each other:
+## Planned Release Channels
 
-```bash
-mkdir rime-workspace
-cd rime-workspace
+The intended release path is:
 
-git clone https://github.com/danielsjoo/rime
-git clone https://github.com/danielsjoo/rime-editor
+- packaged desktop downloads for macOS, Windows, and Linux
+- a bundled compatible Rime runtime
+- signed builds before public install instructions are published
+- documented update behavior after it has been tested
 
-cd rime-editor
-npm install
-npm run dev
-```
+## What To Use Today
 
-On `npm run dev`, the editor runs `scripts/prepare-rime-link.cjs`. That script
-links the local `@rimekit/core`, `@rimekit/lineage`, and `@rimekit/runtime`
-packages, rebuilds them, and links the Python/R sidecar runtimes used by the
-desktop app.
+Until the Editor is publicly available:
 
-If your checkouts are not siblings, set `RIME_REPO_ROOT`:
+- install the CLI from source
+- author and run `pipeline.dag.yaml` directly
+- use `rime build` to generate the HTML report
+- treat the Editor screenshots and guides as product previews
 
-```bash
-RIME_REPO_ROOT=/path/to/rime npm run dev
-```
-
-## Build App Bundles
-
-The packaging commands also prepare the local Rime runtime before building:
-
-```bash
-npm run build:mac
-npm run build:win
-npm run build:linux
-```
-
-For an unsigned local macOS build:
-
-```bash
-npm run dist-no-sign
-```
-
-## Verifying
-
-Open the app and load a folder that contains `pipeline.dag.yaml`. The first
-useful smoke test is the checked-in DAG showcase:
-
-```text
-/path/to/rime/examples/dag-showcase
-```
-
-The editor should show the DAG canvas, node inspector, dataset preview, and
-report preview without requiring Python or R sidecars because that example uses
-core nodes for its runnable path.
-
-## Planned Release Installs
-
-The intended release path is packaged desktop downloads for macOS, Windows, and
-Linux, with the compatible Rime runtime bundled. Auto-update behavior should
-only be documented once signed public builds are available and tested.
+Avoid docs, scripts, or deployment steps that assume public Editor downloads
+exist.

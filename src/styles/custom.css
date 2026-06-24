@@ -2,7 +2,10 @@
  * Shared direction for CLI docs, Editor docs, the product page, and the app:
  * cool slate neutrals, one cyan brand accent, semantic green/amber/red.
  */
-:root {
+:root,
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  color-scheme: light;
   --rime-font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --rime-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
@@ -42,21 +45,6 @@
 
   --sl-color-hairline: var(--rime-line);
   --sl-color-hairline-shade: var(--rime-line-strong);
-}
-
-:root[data-theme='dark'] {
-  /* Dark variant: near-black bg, bright cyan accent stays the same */
-  --sl-color-accent-low: #164e63;
-  --sl-color-accent: #22d3ee;
-  --sl-color-accent-high: #ecfeff;
-
-  --sl-color-bg: #0a0e13;
-  --sl-color-bg-sidebar: #11161d;
-  --sl-color-bg-nav: #11161d;
-  --sl-color-bg-inline-code: #1a202c;
-
-  --sl-color-text: #e2e8f0;
-  --sl-color-text-accent: #ffffff;
 }
 
 body {
@@ -130,10 +118,6 @@ header.header {
   transform: translateY(-1px);
 }
 
-:root[data-theme='dark'] .sl-link-card:hover {
-  box-shadow: 0 14px 34px rgb(0 0 0 / 28%);
-}
-
 .sl-link-card .title {
   color: var(--sl-color-text-accent);
 }
@@ -171,10 +155,6 @@ header.header {
   font-size: 1.02rem;
   line-height: 1.7;
   margin: 0;
-}
-
-:root[data-theme='dark'] .rime-why-list p {
-  color: var(--sl-color-gray-3);
 }
 
 .rime-compare-panel {

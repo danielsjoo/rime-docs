@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rime Editor - Visual Data Pipeline Workbench</title>
+    <title>Rime Editor - Coming Soon</title>
     <meta
       name="description"
-      content="Rime Editor is a desktop workbench for visually authoring, running, inspecting, and reporting on Rime data pipelines."
+      content="Rime Editor is the upcoming desktop workbench for visually authoring, running, inspecting, and reporting on Rime data pipelines."
     />
     <link rel="icon" href="data:," />
     <style>
@@ -141,6 +141,19 @@
         color: #ffffff !important;
         background: var(--accent);
         border-radius: 6px;
+      }
+
+      .availability-pill {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        padding: 8px 12px;
+        color: var(--ink);
+        background: var(--accent-soft);
+        border: 1px solid rgb(8 145 178 / 24%);
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 650;
       }
 
       .hero {
@@ -646,7 +659,7 @@
         <a href="#inside">Inside the app</a>
         <a href="#guides">Guides</a>
         <a href="https://docs.rimekit.dev/cli/">CLI docs</a>
-        <a class="nav-cta" href="https://github.com/danielsjoo/rime-editor">Repository</a>
+        <a class="nav-cta" href="#availability">Coming soon</a>
       </div>
     </nav>
 
@@ -657,14 +670,15 @@
         style="--hero-image: url('/editor/assets/hero-dag-focus.jpg')"
       >
         <div class="hero-content">
-          <div class="product-kicker">Desktop pipeline workbench</div>
+          <div class="product-kicker">Coming soon</div>
           <h1>Rime Editor</h1>
           <p class="hero-copy">
-            Shape data DAGs visually, inspect every table, edit scripts in place, and ship review
-            reports from a focused desktop app built for Rime.
+            The visual desktop workbench for Rime pipelines is not publicly available yet. It is
+            planned as the place to shape DAGs, inspect tables, edit scripts, and review reports
+            without leaving the project.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#inside">See the product</a>
+            <a class="button primary" href="#availability">Availability</a>
             <a class="button" href="#guides">Explore guides</a>
           </div>
           <div class="hero-metrics" aria-label="Product highlights">
@@ -682,16 +696,17 @@
         </div>
       </section>
 
-      <section class="section tight" id="product">
+      <section class="section tight" id="availability">
         <div class="section-inner">
           <div class="section-heading">
-            <h2>A product surface for Rime pipelines.</h2>
+            <h2>Rime Editor is coming soon.</h2>
             <p class="lede">
-              The CLI stays close to runtime execution. Rime Editor is the product layer for
-              designing, debugging, and reviewing a pipeline when you need to see the data and graph
-              at the same time.
+              Public downloads are not available yet. The CLI is the supported way to run Rime
+              today; this page previews the intended desktop workflow and keeps the Editor guides in
+              one place while the product is being prepared.
             </p>
           </div>
+          <p class="availability-pill">Not available for download yet</p>
           <div class="feature-grid">
             <article class="feature">
               <div class="feature-topline"></div>
@@ -850,7 +865,7 @@
             <a class="guide" href="getting-started/">
               <span>
                 <h3>Getting started</h3>
-                <p>Open a project, run the DAG, and learn the main editor surfaces.</p>
+                <p>Preview the planned project workflow and main editor surfaces.</p>
               </span>
               <span class="guide-link">Read guide</span>
             </a>

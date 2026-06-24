@@ -1,16 +1,16 @@
 ---
 title: Rime
-description: The fastest way to author polyglot data pipelines. The Editor is the front door; the CLI and YAML are the underlying truth.
+description: The fastest way to author polyglot data pipelines. The CLI and YAML are available today; the Editor is coming soon.
 template: splash
 hero:
   tagline: "dbt-style pipelines across Python, R, JavaScript, and SQL. Declare your data retrievals and transforms in one file; Rime handles caching, logs, validation, outputs, and reports."
   actions:
-    - text: Open the Editor
-      link: https://editor.rimekit.dev/
-      icon: right-arrow
     - text: Read the docs
-      link: https://docs.rimekit.dev/cli/
+      link: /cli/
       icon: open-book
+    - text: Editor coming soon
+      link: /editor/
+      icon: right-arrow
       variant: minimal
     - text: View on GitHub
       link: https://github.com/danielsjoo/rime
@@ -192,13 +192,13 @@ Here, SQL imports data, the derive node computes one reviewable feature with Rim
 
 ## Choose your surface
 
-The Editor and the CLI both consume the same `pipeline.dag.yaml`. Start visually, drop to YAML, or run the same project in CI.
+The CLI consumes `pipeline.dag.yaml` today. The Editor will use the same file format when it is ready, so projects you build now will carry forward.
 
 <CardGrid>
   <LinkCard
-    title="Rime Editor"
-    description="Visual DAG authoring, live table previews, data diffs, and no-code core-node workflows."
-    href="https://editor.rimekit.dev/"
+    title="Rime Editor (coming soon)"
+    description="The upcoming visual surface for DAG authoring, live table previews, data diffs, and no-code core-node workflows."
+    href="/editor/"
   />
   <LinkCard
     title="What is Rime?"

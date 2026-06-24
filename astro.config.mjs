@@ -14,6 +14,8 @@ export default defineConfig({
       // Top-bar nav (Docs / Editor / Examples) is rendered beside the text title.
       components: {
         SiteTitle: './src/components/SiteTitle.astro',
+        ThemeProvider: './src/components/ThemeProvider.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/danielsjoo/rime' },
@@ -73,14 +75,14 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Rime Editor',
+          label: 'Rime Editor (coming soon)',
           items: [
-            { label: 'Product page', link: 'https://editor.rimekit.dev/' },
+            { label: 'Coming soon', link: '/editor/' },
             { label: 'Getting started', slug: 'editor/getting-started' },
             { label: 'Dataset scanning', slug: 'editor/dataset-scanning' },
             { label: 'Reports', slug: 'editor/reports' },
             { label: 'Example: dag-showcase', slug: 'editor/dag-showcase' },
-            { label: 'Install', slug: 'editor/install' },
+            { label: 'Availability', slug: 'editor/install' },
             { label: 'Python & R setup', slug: 'editor/languages' },
           ],
         },

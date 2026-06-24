@@ -1,7 +1,10 @@
 ---
 title: Rime Editor getting started
-description: Open a Rime project, run the DAG, inspect node outputs, and preview the report.
+description: Preview the planned Rime Editor workflow for opening a project, inspecting node outputs, and reviewing a report.
 ---
+
+Rime Editor is coming soon. This guide previews the intended desktop workflow;
+the supported way to run Rime today is the [CLI](/get-started/install/).
 
 Rime Editor is the visual workbench for the same `pipeline.dag.yaml` the CLI runs. The app is not a separate project format: it opens a Rime folder, renders the DAG, lets you inspect every node output, and keeps the YAML/spec close enough that you can always drop back to files.
 

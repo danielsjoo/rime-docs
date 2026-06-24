@@ -1,9 +1,13 @@
 ---
 title: "Example: dag-showcase"
-description: A mid-scale Rime Editor walkthrough with sources, SQL, expression nodes, dataset scanning, statistical nodes, and report preview.
+description: A preview of how the coming Rime Editor should review the dag-showcase project.
 ---
 
-`dag-showcase` is the best first project to open in Rime Editor because it is small enough to understand in one sitting and real enough to show the product. The checked-in synthetic cohort has 720 patients, 3,037 longitudinal lab visits, six sites, demographic groups, missing lab coverage, and report-ready statistical outputs.
+Rime Editor is coming soon. When it is available, `dag-showcase` should be the
+best first project to open because it is small enough to understand in one
+sitting and real enough to show the product. The checked-in synthetic cohort has
+720 patients, 3,037 longitudinal lab visits, six sites, demographic groups,
+missing lab coverage, and report-ready statistical outputs.
 
 ![Rime Editor canvas focused on the dag-showcase DAG.](/editor/assets/hero-dag-focus.jpg)
 
@@ -36,7 +40,7 @@ It then rolls labs up per patient, joins demographics to lab features with SQL, 
 
 ## Walkthrough
 
-1. Open `examples/dag-showcase`.
+1. Open `examples/dag-showcase` in the Editor.
 2. Run the DAG.
 3. Select `patient_lab_wide`.
 4. Confirm the preview shows a joined patient/lab table and the SQL source.
