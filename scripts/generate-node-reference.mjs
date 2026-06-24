@@ -195,12 +195,24 @@ const KINDS = [
     ],
   },
   {
+    kind: 'html',
+    blurb: 'Package an authored HTML file as a cached `html_artifact` and embed it in the generated report.',
+    inputs: 'Variable — declare named data slots in `in:`. `params.*` refs are injected into the payload but do not draw DAG edges.',
+    outputs: '`default`: an HTML artifact written as `outputs/<nodeId>/default.html` and rendered in report output cells.',
+    whenToUse: 'When the last mile is a custom browser-side chart, D3/Observable/Vega page, bespoke interactive widget, or hand-authored HTML narrative that should live alongside the DAG outputs.',
+    pitfalls: [
+      'Rime does not execute or screenshot browser-side JavaScript during the run. It injects data and writes HTML; the browser renders it later.',
+      'The authored file participates in cache keys. Editing the HTML source reruns the node and descendants.',
+      'Keep the HTML deterministic when reproducibility matters: avoid ambient timestamps, random values, or network-only assets.',
+    ],
+  },
+  {
     kind: 'script',
     title: 'language nodes',
     blurb: 'Custom logic in Python, R, JavaScript, or SQL. Use `kind: python`, `kind: r`, `kind: javascript`, or `kind: sql` when no core node fits.',
     inputs: 'Variable — declare named slots in `in:`. Each slot can be a dataframe ref or a `params.*` reference.',
     outputs: '`default` by default, or multiple named outputs declared in `out:`.',
-    whenToUse: 'When the 14 core nodes don\'t cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.',
+    whenToUse: 'When the built-in table, statistical, and artifact nodes don\'t cover your transform. See the per-language pages — [Python](/scripts/python/), [R](/scripts/r/), [JavaScript](/scripts/javascript/), [SQL](/scripts/sql/) — for function-signature details.',
     pitfalls: [
       'Multi-output nodes (`out:`) require the language function to return a dict / list / object whose keys match.',
       'No `params.*` slots → no params at all. To pass a top-level param to a language node, you must wire it through the YAML.',
@@ -315,6 +327,12 @@ const FIELD_ROWS_BY_KIND = {
     ['`bindings`', 'no', 'Map from inner slot name to outer input ref.'],
     ['`outputs`', 'no', 'Map from exposed output name to inner node ref.'],
     ['`inputs`', 'derived', 'Optional compatibility field; bindings are the real contract.']
+  ],
+  html: [
+    ['`source`', 'yes', 'Project-relative HTML file, usually under `reportsDir/` such as `reports/chart.html`.'],
+    ['`in`', 'no', 'Named slot map: slot name to `nodeId`, `nodeId.output`, or `params.name`.'],
+    ['`inputs`', 'derived', 'Synthesized from `in:` for DAG traversal; do not write it by hand.'],
+    ['`metadata.report`', 'no', '`true` by default; set `false` when you want the artifact on disk but out of the auto report.']
   ],
   script: [
     ['`kind`', 'yes', '`python`, `r`, `javascript`, or `sql`. Legacy `kind: script` also carries `language`.'],
@@ -833,6 +851,47 @@ const NODE_PAGE_SECTIONS = {
     {
       type: 'related',
       links: ['- [Concepts: DAG specification](/concepts/dag/) - how refs and DAG boundaries work']
+    }
+  ],
+  html: [
+    {
+      paragraphs: [
+        '`html` packages a project HTML file as a cached output. Rime does not render the page during the run; it injects a JSON payload, writes the HTML artifact, and lets the generated report embed it in an iframe.',
+        'Use it when the report needs a custom browser-side visualization or interactive narrative, but the data and cache boundary should still be owned by the DAG.'
+      ]
+    },
+    { type: 'fields', title: 'Artifact contract' },
+    {
+      title: 'Input payload',
+      paragraphs: [
+        '`in` is a named map from payload slot to a node ref, named output ref, or `params.name` scalar. Table refs become arrays of row objects; scalar params keep their scalar values.',
+        'The runtime injects one inert JSON script tag into the HTML: `<script type="application/json" id="rime-inputs">...</script>`. Browser-side code reads and parses that tag when the report or artifact opens.'
+      ]
+    },
+    {
+      title: 'Output behavior',
+      bullets: [
+        '`default` is an `html_artifact` written to `outputs/<nodeId>/default.html`.',
+        'Auto reports render the artifact in an iframe output cell.',
+        'The HTML source file is part of the cache key, so editing markup, CSS, or browser-side JS reruns the node.'
+      ]
+    },
+    {
+      title: 'When not to use it',
+      bullets: [
+        'Use `rime build` alone when the standard DAG report is enough.',
+        'Use a JavaScript language node when the HTML itself must be generated programmatically from code instead of authored as a file.',
+        'Use an external browser test when you need accessibility, visual regression, or screenshot assertions; Rime only writes the artifact.'
+      ]
+    },
+    { type: 'example' },
+    {
+      type: 'related',
+      links: [
+        '- [HTML output](/scripts/html/) - report output paths and JavaScript-generated alternatives',
+        '- [Reports](/concepts/reports/) - how `html_artifact` outputs render in reports',
+        '- [Outputs & caching](/concepts/outputs/) - where artifact files are written'
+      ]
     }
   ],
   script: [

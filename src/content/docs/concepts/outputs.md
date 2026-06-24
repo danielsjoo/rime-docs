@@ -15,6 +15,7 @@ outputs/
 │   ├── <outputName>.parquet        # tabular outputs
 │   ├── <outputName>.parquet.meta.json
 │   ├── <outputName>.json           # stat-node outputs
+│   ├── <outputName>.html           # HTML artifact outputs
 │   └── <outputName>.json.meta.json
 ├── manifest.json                    # artifact metadata index
 └── <reportId>.html                 # built report from `rime build`
@@ -38,7 +39,7 @@ A node's cache key hashes:
 - **Parent output digests** - so any upstream change invalidates downstream
 - **Spec + runtime versions**
 - **Source file digest** (for `source` nodes, the data file's content hash)
-- **Language source digest** (for `kind: python`, `kind: r`, `kind: javascript`, and `kind: sql` nodes, the source file + its declared requirements)
+- **File-backed node source digest** (for `kind: python`, `kind: r`, `kind: javascript`, `kind: sql`, and `kind: html`, the source file + language requirements where applicable)
 
 Two runs produce identical cache keys iff they would produce identical outputs. Outputs are content-addressable.
 

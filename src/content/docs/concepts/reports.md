@@ -64,7 +64,7 @@ Rime chooses a display based on the actual runtime value:
 
 - table/dataframe outputs render as shape, schema, and preview rows
 - stat/object outputs render as key-value tables
-- `html_artifact` objects render in an iframe
+- `html_artifact` outputs from `kind: html` or JavaScript nodes render in an iframe
 - failed or output-less nodes still render node-level status, warnings, stdout,
   and errors
 
@@ -74,6 +74,10 @@ The report is intentionally review-first. A reader should be able to answer:
 - How many rows and columns did this output produce?
 - Are there warnings or captured logs attached to the result?
 - Is this a table, a statistical object, or a custom HTML artifact?
+
+For authored browser-side visuals, add a [`kind: html` node](/nodes/html/). The
+report embeds its persisted `default.html` artifact without running a browser at
+build time.
 
 ## Output path
 

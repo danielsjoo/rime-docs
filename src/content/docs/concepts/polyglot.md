@@ -52,7 +52,7 @@ run.
 - **[Python language nodes](/scripts/python/)** - pandas DataFrame entrypoints and matplotlib capture
 - **[R language nodes](/scripts/r/)** - `run`/`transform` functions, data.frames, and plot-return capture
 - **[JavaScript language nodes](/scripts/javascript/)** - `defineNode`, row arrays, async support
-- **[HTML output](/scripts/html/)** - custom HTML artifacts returned from a JavaScript node
+- **[HTML output](/scripts/html/)** - authored HTML artifact nodes and JavaScript-generated HTML
 
 ## Interpreter Resolution
 
