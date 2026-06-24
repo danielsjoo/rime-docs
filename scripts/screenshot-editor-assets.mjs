@@ -62,7 +62,7 @@ const html = String.raw`<!doctype html>
       body {
         margin: 0;
         min-width: 1800px;
-        background: #111827;
+        background: #eef2f7;
         color: var(--text);
       }
 
@@ -75,8 +75,9 @@ const html = String.raw`<!doctype html>
       .shot {
         overflow: hidden;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 18px;
         background: var(--paper);
+        box-shadow: 0 20px 60px rgb(15 23 42 / 14%);
       }
 
       .mono {
@@ -512,8 +513,10 @@ const html = String.raw`<!doctype html>
       .report-node .row {
         display: flex;
         justify-content: space-between;
+        gap: 12px;
         color: var(--muted);
-        font-size: 13px;
+        font-size: 12px;
+        white-space: nowrap;
       }
 
       .report-node.selected {
@@ -690,28 +693,28 @@ const html = String.raw`<!doctype html>
           </svg>
           <article class="node n1">
             <div class="node-title"><span>Demographics (CSV)</span><span class="node-kind">source</span></div>
-            <div class="node-meta mono"><span>(6, 5)</span><span>10ms</span></div>
+            <div class="node-meta mono"><span>(720, 11)</span><span>18ms</span></div>
           </article>
           <article class="node n2">
             <div class="node-title"><span>Longitudinal labs</span><span class="node-kind">source</span></div>
-            <div class="node-meta mono"><span>(8, 4)</span><span>1ms</span></div>
+            <div class="node-meta mono"><span>(3,037, 10)</span><span>25ms</span></div>
           </article>
           <article class="node n3 success">
             <div class="node-title"><span>Per-patient lab rollups</span><span class="node-kind">aggregate</span></div>
-            <div class="node-meta mono"><span>(6, 4)</span><span>47ms</span></div>
+            <div class="node-meta mono"><span>(681, 8)</span><span>47ms</span></div>
           </article>
           <article class="node n4 selected">
             <div class="node-title"><span>Patients x lab features</span><span class="node-kind">sql</span></div>
-            <div class="node-meta mono"><span>(6, 8)</span><span>77ms</span></div>
+            <div class="node-meta mono"><span>(720, 18)</span><span>600ms</span></div>
           </article>
           <article class="node n5 warning">
-            <div class="node-title"><span>Interaction-style lab burden</span><span class="node-kind">derive</span></div>
-            <div class="node-meta mono"><span>(6, 9)</span><span>5ms</span></div>
-            <div class="node-code mono">[n_visits] &gt;= 1</div>
+            <div class="node-title"><span>Composite lab burden</span><span class="node-kind">derive</span></div>
+            <div class="node-meta mono"><span>(720, 19)</span><span>9ms</span></div>
+            <div class="node-code mono">coalesce([crp_mean], 0)</div>
           </article>
           <article class="node n6 selected">
-            <div class="node-title"><span>Polars SQL refinement</span><span class="node-kind">sql</span></div>
-            <div class="node-meta mono"><span>(4, 10)</span><span>16ms</span></div>
+            <div class="node-title"><span>Refined risk cohort</span><span class="node-kind">sql</span></div>
+            <div class="node-meta mono"><span>(386, 20)</span><span>16ms</span></div>
           </article>
         </div>
         <aside class="inspector">
@@ -720,17 +723,17 @@ const html = String.raw`<!doctype html>
             <p>SQL node with joined patient demographics and longitudinal lab aggregates.</p>
           </div>
           <div class="metrics">
-            <div class="metric"><span>Rows</span><strong>6</strong></div>
-            <div class="metric"><span>Columns</span><strong>8</strong></div>
-            <div class="metric"><span>Null cells</span><strong>0</strong></div>
+            <div class="metric"><span>Rows</span><strong>720</strong></div>
+            <div class="metric"><span>Columns</span><strong>18</strong></div>
+            <div class="metric"><span>Null cells</span><strong>273</strong></div>
           </div>
           <table class="mini-table">
             <thead><tr><th>Column</th><th>Profile</th></tr></thead>
             <tbody>
-              <tr><td>patient_id</td><td>6 distinct</td></tr>
-              <tr><td>site</td><td>3 groups</td></tr>
-              <tr><td>crp_mean</td><td>numeric</td></tr>
-              <tr><td>ldl_max</td><td>numeric</td></tr>
+              <tr><td>patient_id</td><td>720 distinct</td></tr>
+              <tr><td>site</td><td>6 groups</td></tr>
+              <tr><td>risk_tier</td><td>3 groups</td></tr>
+              <tr><td>crp_mean</td><td>681 numeric</td></tr>
             </tbody>
           </table>
           <div style="padding: 0 18px 18px">
@@ -749,12 +752,12 @@ const html = String.raw`<!doctype html>
         <span class="pill"><span class="dot success"></span> current output</span>
       </div>
       <div class="table-summary">
-        <div class="metric"><span>Rows</span><strong>6</strong></div>
-        <div class="metric"><span>Columns</span><strong>8</strong></div>
-        <div class="metric"><span>Null cells</span><strong>0</strong></div>
+        <div class="metric"><span>Rows</span><strong>720</strong></div>
+        <div class="metric"><span>Columns</span><strong>18</strong></div>
+        <div class="metric"><span>Null cells</span><strong>273</strong></div>
       </div>
       <div class="table-main">
-        <p class="added">(+3 columns)</p>
+        <p class="added">(+7 lab aggregate columns)</p>
         <div class="tabs">
           <div class="tab active">Output</div>
           <div class="tab">Differences</div>
@@ -763,27 +766,27 @@ const html = String.raw`<!doctype html>
           <div class="col-head">
             <span class="badge">Categorical</span>
             <h3>patient_id</h3>
-            <div class="muted">0 null · 6 distinct</div>
+            <div class="muted">0 null · 720 distinct</div>
             <div class="profile"></div>
           </div>
           <div class="col-head">
             <span class="badge">Categorical</span>
             <h3>site</h3>
-            <div class="muted">0 null · 3 distinct</div>
-            <div style="margin-top:13px;line-height:1.55"><strong>North:</strong> 2 (33%)<br /><strong>South:</strong> 2 (33%)<br /><strong>East:</strong> 2 (33%)</div>
+            <div class="muted">0 null · 6 distinct</div>
+            <div style="margin-top:13px;line-height:1.55"><strong>North Ridge:</strong> 120<br /><strong>South Harbor:</strong> 120<br /><strong>West Valley:</strong> 120</div>
           </div>
           <div class="col-head">
-            <span class="badge">Datetime</span>
-            <h3>enrollment_date</h3>
-            <div class="muted">0 null · 6 dates</div>
-            <div class="profile"></div>
+            <span class="badge">Categorical</span>
+            <h3>risk_tier</h3>
+            <div class="muted">0 null · 3 distinct</div>
+            <div style="margin-top:13px;line-height:1.55"><strong>stable:</strong> 378<br /><strong>guarded:</strong> 242<br /><strong>elevated:</strong> 100</div>
           </div>
-          <div class="cell mono">P001</div><div class="cell">North</div><div class="cell mono">2024-01-15</div>
-          <div class="cell mono">P002</div><div class="cell">North</div><div class="cell mono">2024-02-09</div>
-          <div class="cell mono">P003</div><div class="cell">South</div><div class="cell mono">2024-01-28</div>
-          <div class="cell mono">P004</div><div class="cell">East</div><div class="cell mono">2024-03-04</div>
-          <div class="cell mono">P005</div><div class="cell">South</div><div class="cell mono">2024-02-16</div>
-          <div class="cell mono">P006</div><div class="cell">East</div><div class="cell mono">2024-01-30</div>
+          <div class="cell mono">PT-0001</div><div class="cell">North Ridge</div><div class="cell">stable</div>
+          <div class="cell mono">PT-0002</div><div class="cell">Lakeview</div><div class="cell">elevated</div>
+          <div class="cell mono">PT-0003</div><div class="cell">South Harbor</div><div class="cell">stable</div>
+          <div class="cell mono">PT-0004</div><div class="cell">East Metro</div><div class="cell">guarded</div>
+          <div class="cell mono">PT-0005</div><div class="cell">West Valley</div><div class="cell">stable</div>
+          <div class="cell mono">PT-0006</div><div class="cell">Central</div><div class="cell">elevated</div>
         </div>
       </div>
     </section>
@@ -802,23 +805,23 @@ const html = String.raw`<!doctype html>
         </svg>
         <article class="report-node r1">
           <h3><span class="dot" style="display:inline-block;background:#94a3b8;margin-right:8px"></span>Demographics (CSV)</h3>
-          <div class="row mono"><span>patients_source (6, 5)</span><span>source</span></div>
+          <div class="row mono"><span>patients_source (720x11)</span><span>source</span></div>
         </article>
         <article class="report-node r2">
           <h3><span class="dot" style="display:inline-block;background:#94a3b8;margin-right:8px"></span>Longitudinal labs</h3>
-          <div class="row mono"><span>labs_source (8, 4)</span><span>source</span></div>
+          <div class="row mono"><span>labs_source (3,037x10)</span><span>source</span></div>
         </article>
         <article class="report-node r3 selected">
           <h3><span class="dot success" style="display:inline-block;margin-right:8px"></span>Per-patient lab rollups</h3>
-          <div class="row mono"><span>lab_agg (6, 4)</span><span>aggregate</span></div>
+          <div class="row mono"><span>lab_agg (681x8)</span><span>aggregate</span></div>
         </article>
         <article class="report-node r4 selected">
           <h3><span class="dot success" style="display:inline-block;margin-right:8px"></span>Patients x lab features</h3>
-          <div class="row mono"><span>patient_lab_wide (6, 8)</span><span>sql</span></div>
+          <div class="row mono"><span>patient_lab_wide (720x18)</span><span>sql</span></div>
         </article>
         <article class="report-node r5">
-          <h3><span class="dot warning" style="display:inline-block;margin-right:8px"></span>Interaction-style lab burden</h3>
-          <div class="row mono"><span>lab_load (6, 9)</span><span>derive</span></div>
+          <h3><span class="dot warning" style="display:inline-block;margin-right:8px"></span>Composite lab burden</h3>
+          <div class="row mono"><span>lab_load (720x19)</span><span>derive</span></div>
         </article>
       </div>
     </section>
@@ -830,7 +833,7 @@ const html = String.raw`<!doctype html>
         <span class="pill" style="margin-left:auto">pipeline.dag.yaml</span>
       </div>
       <div class="editor-grid">
-        <div class="line-numbers">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br />21</div>
+        <div class="line-numbers">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br />21<br />22<br />23<br />24<br />25<br />26</div>
         <pre>specification_version: "2.1"
 nodes:
   - id: patients_source
@@ -848,6 +851,8 @@ nodes:
     metrics:
       - "[crp_mean] = [crp].mean()"
       - "[ldl_max] = [ldl].max()"
+      - "[hba1c_mean] = [hba1c].mean()"
+      - "[n_visits] = [crp].count()"
 
   - id: patient_lab_wide
     kind: sql
@@ -861,16 +866,16 @@ nodes:
     <section id="example" class="shot example-shot">
       <div class="example-card">
         <div class="example-head">
-          <h2>dag-showcase output sample</h2>
-          <span class="pill"><span class="dot success"></span> 8 columns</span>
+          <h2>refined risk cohort sample</h2>
+          <span class="pill"><span class="dot success"></span> 386 rows</span>
         </div>
         <div class="example-grid">
-          <div class="h">patient_id</div><div class="h">site</div><div class="h">crp_mean</div><div class="h">ldl_max</div><div class="h">risk_index</div>
-          <div class="mono">P001</div><div>North</div><div class="mono">3.2</div><div class="mono">122</div><div class="mono">0.42</div>
-          <div class="mono">P002</div><div>North</div><div class="mono">5.7</div><div class="mono">141</div><div class="mono">0.61</div>
-          <div class="mono">P003</div><div>South</div><div class="mono">2.4</div><div class="mono">117</div><div class="mono">0.31</div>
-          <div class="mono">P004</div><div>East</div><div class="mono">4.8</div><div class="mono">136</div><div class="mono">0.58</div>
-          <div class="mono">P005</div><div>South</div><div class="mono">3.9</div><div class="mono">128</div><div class="mono">0.47</div>
+          <div class="h">patient_id</div><div class="h">site</div><div class="h">risk_tier</div><div class="h">crp_mean</div><div class="h">risk_index</div>
+          <div class="mono">PT-0549</div><div>South Harbor</div><div>elevated</div><div class="mono">11.13</div><div class="mono">116.61</div>
+          <div class="mono">PT-0256</div><div>East Metro</div><div>elevated</div><div class="mono">11.13</div><div class="mono">110.62</div>
+          <div class="mono">PT-0627</div><div>South Harbor</div><div>elevated</div><div class="mono">11.14</div><div class="mono">109.32</div>
+          <div class="mono">PT-0045</div><div>South Harbor</div><div>elevated</div><div class="mono">10.40</div><div class="mono">107.86</div>
+          <div class="mono">PT-0599</div><div>West Valley</div><div>elevated</div><div class="mono">11.29</div><div class="mono">107.07</div>
         </div>
         <div class="sparkline">
           <svg viewBox="0 0 1180 210" fill="none">

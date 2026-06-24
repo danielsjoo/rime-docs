@@ -145,6 +145,7 @@ header.header {
 .rime-screenshot img {
   display: block;
   width: 100%;
+  border-radius: 8px;
 }
 
 .rime-why-list {

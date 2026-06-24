@@ -38,7 +38,7 @@ Type-specific fields are **at the top level on the node**, not in a `params:` ba
   kind: derive
   inputs: [patient_lab]         # length 1
   as: lab_load                   # new column name
-  expr: "[crp_mean] * [ldl_max] / 1000.0"
+  expr: "coalesce([crp_mean], 0) * 1.6 + coalesce([ldl_max], 0) * 0.035"
 ```
 
 ## `aggregate` — group + reduce

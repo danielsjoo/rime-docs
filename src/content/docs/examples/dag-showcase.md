@@ -3,16 +3,17 @@ title: DAG showcase
 description: A multi-branch demo pipeline mixing SQL, Python, R, and built-in operators.
 ---
 
-The repo's [`examples/dag-showcase/`](https://github.com/danielsjoo/rime/tree/main/examples/dag-showcase) is a compact multi-branch project. It exercises file sources, SQL nodes, derive/filter/aggregate chains, terminal stat nodes, report metadata, and cache behavior.
+The repo's [`examples/dag-showcase/`](https://github.com/danielsjoo/rime/tree/main/examples/dag-showcase) is a compact multi-branch project over a mid-scale synthetic cohort: 720 patients and 3,037 lab visits. It exercises file sources, SQL nodes, derive/filter/aggregate chains, terminal stat nodes, report metadata, and cache behavior.
 
 ![Rime Editor DAG focus screenshot showing the dag-showcase pipeline and node inspector.](/editor/assets/hero-dag-focus.jpg)
 
 ## What's inside
 
-- **Sources:** `data/patients.csv` (demographics) and `data/lab_visits.parquet` (longitudinal labs), wired inline on each source node via `path:` in `pipeline.dag.yaml`
-- **DAG:** multi-branch pipeline - aggregate labs per patient, join to patients in SQL, derive lab/risk features, refine the cohort, roll up by site, and finish with correlation and chi-square statistics
+- **Sources:** `data/patients.csv` (720 demographic rows) and `data/lab_visits.parquet` (3,037 longitudinal lab rows), wired inline on each source node via `path:` in `pipeline.dag.yaml`
+- **DAG:** multi-branch pipeline - aggregate labs per patient, join to patients in SQL, derive composite lab/risk features, refine the cohort, roll up by site, and finish with correlation and chi-square statistics
 - **Linked scripts (human-edited reference):**
-  - `scripts/python_biomarker_features.py` — `n_visits ** 1.2` feature
+  - `scripts/generate_demo_data.mjs` — deterministic synthetic data generator
+  - `scripts/python_biomarker_features.py` — visit-intensity feature
   - `scripts/risk_adjust.R` — baseline z-score + flag
   - `queries/patient_lab_wide.sql` and `queries/sql_cohort_refine.sql` — SQL source files used by the runnable DAG
 
@@ -63,16 +64,16 @@ once:
 |---|---|
 | Multiple source kinds | `patients` (CSV) + `lab_visits` (Parquet) |
 | Built-in transforms | `filter` / `derive` / `aggregate` chains |
-| SQL nodes (with inputs) | `sql_patient_lab` joining cohort + labs |
-| SQL nodes (ingress-only) | `sql_cohort_refine` reading from parquet directly |
+| SQL nodes (with inputs) | `patient_lab_wide` joining cohort + labs, `sql_cohort_refine` sorting the analysis cohort |
 | Language-node migration pattern | `derive` nodes mirror the checked-in Python/R scripts |
-| Stat nodes | `correlation` + `chi_square` over the rolled-up site outcomes |
+| Stat nodes | `correlation` + `chi_square` over the refined cohort |
 | Multi-branch graph | independent feature + risk branches that converge at the site rollup |
 | Report rendering | Generated report includes DAG nodes unless `metadata.report: false` |
 
 ## What To Inspect
 
 - `pipeline.canvas.json` to see the saved editor layout for this project.
+- `scripts/generate_demo_data.mjs` to see how the synthetic cohort is produced.
 - `queries/patient_lab_wide.sql` to see SQL named slots in action.
 - `outputs/site_outcomes/default.parquet` for the final reporting rollup.
 - `outputs/crp_vs_baseline/default.json` and `outputs/site_age_chisq/default.json` for terminal stat-node objects.
