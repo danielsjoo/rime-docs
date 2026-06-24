@@ -1,9 +1,9 @@
 ---
 title: "Example: dag-showcase"
-description: A small Rime Editor walkthrough with sources, SQL, expression nodes, dataset scanning, statistical nodes, and report preview.
+description: A mid-scale Rime Editor walkthrough with sources, SQL, expression nodes, dataset scanning, statistical nodes, and report preview.
 ---
 
-`dag-showcase` is the best first project to open in Rime Editor because it is small enough to understand in one sitting and broad enough to show the product.
+`dag-showcase` is the best first project to open in Rime Editor because it is small enough to understand in one sitting and real enough to show the product. The checked-in synthetic cohort has 720 patients, 3,037 longitudinal lab visits, six sites, demographic groups, missing lab coverage, and report-ready statistical outputs.
 
 ![Rime Editor canvas focused on the dag-showcase DAG.](/editor/assets/hero-dag-focus.jpg)
 
@@ -21,7 +21,7 @@ The example starts with patient demographics and longitudinal lab visits:
   path: data/lab_visits.parquet
 ```
 
-It then rolls labs up per patient, joins demographics to lab features with SQL, builds expression-derived risk features, and ends with report-friendly statistical nodes.
+It then rolls labs up per patient, joins demographics to lab features with SQL, builds expression-derived risk features, filters to a 386-patient analysis cohort, and ends with report-friendly statistical nodes.
 
 ## Why It Shows The Editor Well
 
@@ -65,7 +65,7 @@ The feature-building nodes are deliberately readable:
   kind: derive
   inputs: [lab_load]
   as: risk_index
-  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+  expr: coalesce([baseline_score], 0) * 0.55 + coalesce([lab_load], 0) * 1.4 + coalesce([prior_event], 0) * 4.0
 ```
 
 This is a good dividing line for Rime Editor: if a formula is readable in the [expression language](/concepts/expressions/), keep it as a core node so reviewers can inspect it directly. If it becomes multi-step logic, promote it to SQL/Python/R/JavaScript.

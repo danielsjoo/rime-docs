@@ -89,7 +89,7 @@ These nodes share Rime's [expression language](/concepts/expressions/). The usef
   kind: derive
   inputs: [patient_lab_wide]
   as: risk_index
-  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+  expr: "coalesce([baseline_score], 0) * 0.55 + coalesce([lab_load], 0) * 1.4"
 ```
 
 ### Multi-input combinators

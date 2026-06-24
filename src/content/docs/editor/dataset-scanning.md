@@ -35,7 +35,7 @@ Filters should make row-count loss obvious. A filter that keeps zero rows may be
 - id: repeat_visitors
   kind: filter
   inputs: [risk_index]
-  expr: "[n_visits] >= 1"
+  expr: "[n_visits] >= 2"
 ```
 
 ### Derives
@@ -47,7 +47,7 @@ Derived columns should be easy to find in the preview. Inspect the new column's 
   kind: derive
   inputs: [patient_lab_wide]
   as: lab_load
-  expr: "[crp_mean] * [ldl_max] / 1000.0"
+  expr: coalesce([crp_mean], 0) * 1.6 + coalesce([ldl_max], 0) * 0.035
 ```
 
 ### Joins

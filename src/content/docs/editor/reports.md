@@ -26,7 +26,7 @@ The report DAG is a compact map of the run. Nodes should show:
 - node label and id
 - kind
 - status color
-- output size tuple such as `(6, 8)`
+- output size tuple such as `(720, 18)`
 - multiple outputs as `(...), (...)`
 - warning state when assumption checks fire
 

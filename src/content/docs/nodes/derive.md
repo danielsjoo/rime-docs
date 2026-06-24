@@ -34,7 +34,7 @@ The preview should make the new column easy to find. For numeric features, a dis
   kind: derive
   inputs: [patient_lab]         # length 1
   as: lab_load                   # new column name
-  expr: "[crp_mean] * [ldl_max] / 1000.0"
+  expr: "coalesce([crp_mean], 0) * 1.6 + coalesce([ldl_max], 0) * 0.035"
 ```
 
 ## Related

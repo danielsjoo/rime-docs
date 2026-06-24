@@ -49,7 +49,7 @@ Supported operator groups:
 Parentheses work for grouping.
 
 ```yaml
-expr: "([crp_mean] * 2.0 + [ldl_max] * 0.05) / [n_visits]"
+expr: "coalesce([baseline_score], 0) * 0.55 + coalesce([lab_load], 0) * 1.4"
 ```
 
 ## Function Calls
@@ -70,7 +70,7 @@ Example:
   kind: derive
   inputs: [lab_load]
   as: risk_index
-  expr: "coalesce([crp_mean], 0) * 2.0 + coalesce([ldl_max], 0) * 0.05"
+  expr: "coalesce([baseline_score], 0) * 0.55 + coalesce([lab_load], 0) * 1.4"
 ```
 
 ## Column Methods
@@ -110,7 +110,7 @@ Use aliases in `aggregate.metrics`. For `derive`, prefer `as:` instead:
 - id: lab_load
   kind: derive
   as: lab_load
-  expr: "[crp_mean] * [ldl_max] / 1000.0"
+  expr: "coalesce([crp_mean], 0) * 1.6 + coalesce([ldl_max], 0) * 0.035"
 ```
 
 ## Practical Patterns
