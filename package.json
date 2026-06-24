@@ -1,7 +1,7 @@
 {
   "name": "rime-docs",
   "type": "module",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "generate:nodes": "node scripts/generate-node-reference.mjs",
     "check:docs": "npm run generate:nodes && node scripts/check-docs-quality.mjs",
