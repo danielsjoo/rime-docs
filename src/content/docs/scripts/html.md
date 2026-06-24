@@ -1,13 +1,13 @@
 ---
 title: HTML output
-description: Produce HTML from a Rime DAG, either with the built-in report or a JavaScript html_artifact output.
+description: Produce HTML from a Rime DAG with the built-in report, an HTML artifact node, or a JavaScript html_artifact output.
 ---
 
 > **HTML is not one of Rime's four script languages.** The script enum is
-> strictly `python | r | javascript | sql`. This page covers how to produce HTML
-> artifacts from a Rime pipeline.
+> strictly `python | r | javascript | sql`. Use `kind: html` when you have an
+> authored HTML file that should become a DAG artifact.
 
-There are two paths. Use the built-in report unless you need a fully custom
+There are three paths. Use the built-in report unless you need a custom
 interactive page.
 
 ## Path A - DAG-driven report
@@ -47,11 +47,82 @@ You get:
 - Multi-output nodes rendered as one node with multiple output cells
 - Reproducible output driven by the DAG and cached artifacts
 
-## Path B — JavaScript emits an HTML artifact
+## Path B - HTML artifact node
 
-When the built-in report layout is not enough - custom D3 visualizations, bespoke
-layouts, embedded interactive widgets — write a JavaScript language node that
-returns an `html_artifact` object.
+Use `kind: html` when the custom page already exists as an HTML file. Rime will
+not render it during the run. It injects DAG inputs as JSON, writes the artifact,
+and the report embeds it in an iframe.
+
+```yaml
+params:
+  caption: { type: string, default: "Revenue by region" }
+
+nodes:
+  - id: by_region
+    kind: aggregate
+    inputs: [clean_events]
+    groupBy: ["[region]"]
+    metrics:
+      - "[revenue] = [revenue].sum()"
+
+  - id: region_chart
+    kind: html
+    source: reports/region_chart.html
+    in:
+      rows: by_region
+      caption: params.caption
+```
+
+Rime writes:
+
+```text
+outputs/region_chart/default.html
+```
+
+Inside `reports/region_chart.html`, read the injected payload from
+`#rime-inputs`:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Region chart</title>
+  </head>
+  <body>
+    <h1 id="title"></h1>
+    <div id="chart"></div>
+
+    <script>
+      const payload = JSON.parse(document.getElementById('rime-inputs').textContent)
+      document.getElementById('title').textContent = payload.inputs.caption
+      renderChart(payload.inputs.rows)
+    </script>
+  </body>
+</html>
+```
+
+The injected payload has this shape:
+
+```ts
+{
+  version: 1,
+  nodeId: "region_chart",
+  inputRefs: { rows: "by_region", caption: "params.caption" },
+  inputs: {
+    rows: [{ region: "West", revenue: 1234 }],
+    caption: "Revenue by region"
+  }
+}
+```
+
+The HTML file itself participates in the cache key. Changing markup, CSS, or
+browser-side JavaScript reruns the node.
+
+## Path C - JavaScript emits an HTML artifact
+
+Use a JavaScript language node when the HTML must be generated programmatically
+instead of authored as a file.
 
 ```yaml
 - id: d3_narrative
@@ -76,35 +147,12 @@ export default defineNode({
     return { type: 'html_artifact', html }
   },
 })
-
-function renderHtml(rows, summary) {
-  return `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Narrative</title>
-<style>
-  body { font: 16px/1.5 system-ui; max-width: 720px; margin: 2rem auto; }
-  table { border-collapse: collapse; width: 100%; }
-  th, td { padding: 6px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-  .stat { font-variant-numeric: tabular-nums; }
-</style></head>
-<body>
-  <h1>Site summary</h1>
-  <p>t-statistic: <span class="stat">${summary.t_statistic.toFixed(3)}</span></p>
-  <table>
-    <thead><tr><th>Site</th><th>Mean age</th><th>n</th></tr></thead>
-    <tbody>${rows.map(r => `<tr>
-      <td>${r.site}</td>
-      <td class="stat">${r.mean_age.toFixed(2)}</td>
-      <td class="stat">${r.n}</td>
-    </tr>`).join('')}</tbody>
-  </table>
-</body></html>`
-}
 ```
 
 The built-in report renders `html_artifact` objects in an iframe on that node's
 output cell.
 
-## When Path B makes sense
+## When custom HTML makes sense
 
 - D3 / Observable Plot / Vega visualizations
 - custom layouts that do not fit the node-card report
@@ -126,7 +174,7 @@ open http://localhost:8000/run_report.html
 
 ## Reproducibility caveats for custom HTML
 
-JS-emitted HTML is only as deterministic as your JS code:
+Custom HTML is only as deterministic as its source and browser-side code:
 
 - avoid `Date.now()`, `Math.random()`, unsorted `Object.keys(...)`, or other
   nondeterministic inputs
@@ -136,6 +184,7 @@ JS-emitted HTML is only as deterministic as your JS code:
 
 ## See also
 
+- [html node](/nodes/html/) - node contract and payload shape
 - [Concepts -> Reports](/concepts/reports/) - report behavior and `metadata.report`
 - [JavaScript language nodes](/scripts/javascript/) - `defineNode`, row inputs, and async support
 - [Outputs & caching](/concepts/outputs/) - how Rime writes artifacts to disk

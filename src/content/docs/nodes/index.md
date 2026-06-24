@@ -3,7 +3,7 @@ title: Node reference
 description: Field reference and review guidance for Rime core nodes, statistical nodes, subgraphs, and language nodes.
 ---
 
-Rime nodes are typed DAG steps. Some shape tables, some produce statistical objects, and language nodes let you drop into Python, R, JavaScript, or SQL when a built-in is not enough.
+Rime nodes are typed DAG steps. Some shape tables, some produce statistical objects, some package artifacts, and language nodes let you drop into Python, R, JavaScript, or SQL when a built-in is not enough.
 
 ## How To Read These Pages
 
@@ -50,6 +50,7 @@ Statistical nodes return object outputs. They are report-friendly terminals and 
 | Node | Use it for |
 | --- | --- |
 | [subgraph](/nodes/subgraph/) | wrapping an external DAG behind explicit bindings and outputs |
+| [html](/nodes/html/) | packaging authored HTML as a cached report artifact |
 | [language nodes](/nodes/script/) | custom Python, R, JavaScript, or SQL logic |
 
 ## Shared Node Fields

@@ -60,7 +60,7 @@ Switch `kind: python` to `kind: r` and write the same function in R — same pro
 
 ## Built-in node kinds
 
-Most pipelines don't even need to write a custom function for common shapes. Rime ships 14 built-in kinds that cover the things you'd otherwise re-write every project:
+Most pipelines don't even need to write a custom function for common shapes. Rime ships built-in node kinds that cover the things you'd otherwise re-write every project:
 
 ### Source
 | Kind | What it does |
@@ -117,8 +117,14 @@ Statistical nodes also emit assumption warnings. Those warnings show up in repor
 | Kind | What it does |
 |---|---|
 | `subgraph` | Embed an external `.dag.yaml` file with named bindings + outputs |
+| `html` | Package authored HTML as a cached artifact and report iframe |
 
 Subgraphs are opaque from the outside; their `bindings:` map outer node refs to inner slot names, and their `outputs:` map exposed names to inner refs.
+
+HTML nodes are terminal artifact nodes. They use a named `in:` map like language
+nodes, inject those inputs into `#rime-inputs`, and write
+`outputs/<nodeId>/default.html`. Use them for custom browser-side charts or
+interactive report panels when the standard report layout is not enough.
 
 ## The language node — the escape hatch
 

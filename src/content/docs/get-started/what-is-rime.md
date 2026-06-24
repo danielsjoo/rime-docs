@@ -17,12 +17,14 @@ can render the run as an HTML report.
 | Cache | A node reruns only when its definition, source code, inputs, or runtime version changes. |
 | Report | `rime build` turns the run into `outputs/run_report.html`. |
 
-Most projects mix two node styles:
+Most projects mix a few node styles:
 
 - **Core nodes** for ordinary table work: `filter`, `derive`, `aggregate`,
   `join`, `pivot`, `select`, `sort`, `concat`, and built-in statistical tests.
 - **Language nodes** for custom work in SQL, Python, R, or JavaScript. You write
   the function or query; Rime owns dataframe handoff and artifact writing.
+- **HTML nodes** for custom browser-side artifacts that should be cached and
+  embedded in the generated report.
 
 ## A Tiny Pipeline
 
