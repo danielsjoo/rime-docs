@@ -1,7 +1,10 @@
 ---
 title: Dataset scanning in Rime Editor
-description: Use table previews, shape tuples, column profiles, null counts, and source context to review each node.
+description: Preview the planned Rime Editor table review workflow with shape tuples, column profiles, null counts, and source context.
 ---
+
+Rime Editor is coming soon. This page previews the intended dataset scanning
+workflow; public downloads are not available yet.
 
 Dataset scanning is the editor workflow that makes Rime feel different from editing YAML alone. Every table-producing node can be inspected as a concrete dataset: shape, columns, samples, profiles, and the script or expression that produced it.
 

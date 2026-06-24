@@ -91,8 +91,8 @@ Researchers, data journalists, analysts, and small data teams who want to:
 
 ## Next
 
-- [Open Rime Editor](/editor/) — the recommended start
+- [Quick start](/get-started/quick-start/) — the best place to start today
 - [Install the CLI](/get-started/install/)
-- [Quick start](/get-started/quick-start/)
+- [Rime Editor](/editor/) — coming soon
 - [Workshop: build a first pipeline](/workshops/first-pipeline/)
 - [Concepts: nodes](/concepts/nodes/)

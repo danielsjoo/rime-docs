@@ -34,7 +34,7 @@ Production domains:
 
 - `rimekit.dev` serves the current homepage from `/`.
 - `docs.rimekit.dev` is the CLI/docs surface and redirects `/` to `/cli/`.
-- `editor.rimekit.dev` serves the Rime Editor landing page at `/` and rewrites guide paths to the existing `/editor/*` pages.
+- `editor.rimekit.dev` serves the Rime Editor coming-soon landing page at `/` and rewrites guide paths to the existing `/editor/*` pages.
 - `www.rimekit.dev` redirects to `rimekit.dev`.
 
 The checked-in `vercel.json` implements these host rules for Vercel. If this site is deployed on Cloudflare Pages or Netlify instead, add equivalent host redirects/rewrites in that provider and attach all three custom domains to the same static build.

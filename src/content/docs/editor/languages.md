@@ -1,7 +1,11 @@
 ---
 title: Editor Python and R setup
-description: How Rime Editor resolves Python and R interpreters for script nodes.
+description: Preview how the coming Rime Editor should resolve Python and R interpreters for script nodes.
 ---
+
+Rime Editor is coming soon. This page previews the intended interpreter
+configuration model; use CLI flags or environment variables for Python and R
+selection today.
 
 Rime Editor uses the same interpreter model as the CLI. Python and R nodes run through configured local interpreters; SQL and JavaScript run through the built-in runtime paths.
 

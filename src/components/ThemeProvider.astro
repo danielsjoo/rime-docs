@@ -1,0 +1,16 @@
+{/* Light-only theme provider. */}
+<script is:inline>
+  (() => {
+    document.documentElement.dataset.theme = 'light';
+
+    try {
+      localStorage.setItem('starlight-theme', 'light');
+    } catch {
+      // Ignore storage errors in private browsing or locked-down contexts.
+    }
+
+    window.StarlightThemeProvider = {
+      updatePickers() {},
+    };
+  })();
+</script>

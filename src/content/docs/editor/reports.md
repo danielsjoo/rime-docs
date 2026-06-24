@@ -1,7 +1,10 @@
 ---
 title: Reports in Rime Editor
-description: Preview the current generated report, inspect output sizes, warnings, and open the HTML artifact in a browser.
+description: Preview the planned Rime Editor report review workflow for generated reports, output sizes, warnings, and HTML artifacts.
 ---
+
+Rime Editor is coming soon. This page previews the intended report review
+workflow; use `rime build` from the CLI for generated reports today.
 
 The Report tab is the editor-facing view of the current generated report. It should feel like evidence, not a second authoring format: one current spec, one current run, one report preview.
 
